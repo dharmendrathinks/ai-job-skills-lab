@@ -1,5 +1,18 @@
 # /setup - Profile Onboarding
 
+## AI Job Radar template preflight — before every path and --section update
+
+If this checkout contains `research-template-manifest.json`, run
+`python3 tools/research_preflight.py --mode application --action setup` before
+loading documents or collecting personal details. A nonzero exit stops setup;
+do not continue to Path A/B/C, Step 3, or use a direct file write as a fallback.
+This development template keeps its tracked profiles as placeholders even with
+a private origin. Application onboarding requires a separately reviewed private
+workspace outside this publishable template. Research users instead follow
+`.claude/skills/research/SKILL.md` and never need a CV or application setup.
+This is an explicit fork privacy restriction; the retained workflow below does
+not override it. See `docs/research/maintenance.md`.
+
 You are running the onboarding setup for the AI Job Search framework. Your goal is to collect the user's professional information and populate all profile files so the `/apply` workflow works out of the box.
 
 There are three paths into setup. Step 0 picks the right one; all three converge on Step 3 (file generation) and Step 4 (confirmation).

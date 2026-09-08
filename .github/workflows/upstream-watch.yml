@@ -1,4 +1,6 @@
-# Weekly upstream triage. Reports only - it NEVER merges, pushes, or edits code.
+# Research fork: manual, explicitly opted-in upstream issue reporting only.
+# No schedule runs by default. Local triage helpers remain available read-only.
+# Reports only - it NEVER merges, pushes, or edits code.
 #
 # It fetches the upstream template, runs tools/upstream_triage.py to sort the
 # commits this fork lacks into "worth reviewing" vs "probably skip" (dropping
@@ -16,30 +18,33 @@
 # This is the commit-level companion to tools/check_upstream_updates.py, which
 # tracks personalized-file version stamps. Two tools, two questions.
 #
-# Runs only on forks (guarded below), so the upstream template never triggers
-# it against itself - GitHub also leaves inherited workflows disabled on a fork
-# until the owner enables Actions, so the guard is a second fence, not the only
-# one. Token is the built-in GITHUB_TOKEN, scoped to reading contents and
-# writing issues in this repo only: the digest can never be written outside the
-# fork.
+# Runs only on manual dispatch with explicit issue-write consent and a repository
+# opt-in variable. The destination may be an independently created repository,
+# not a GitHub-network fork; do not rely on GitHub disabling inherited Actions.
 
 name: Upstream watch
 
 on:
-  schedule:
-    - cron: "0 8 * * 1" # 08:00 UTC every Monday
   workflow_dispatch:
+    inputs:
+      publish_issue:
+        description: 'Explicitly authorize creating/updating the upstream digest issue'
+        type: boolean
+        required: true
+        default: false
 
 permissions:
   contents: read
-  issues: write
 
 jobs:
   triage:
     name: Triage upstream commits
     # No-op on the upstream template itself. Pinned by
     # tests/test_upstream_triage.py so a template clone never runs it by surprise.
-    if: github.repository != 'MadsLorentzen/ai-job-search'
+    if: github.event_name == 'workflow_dispatch' && inputs.publish_issue && vars.AI_JOB_RADAR_ENABLE_UPSTREAM_ISSUES == 'true' && github.repository != 'MadsLorentzen/ai-job-search'
+    permissions:
+      contents: read
+      issues: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4

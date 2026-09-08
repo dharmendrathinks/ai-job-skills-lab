@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "upstream_commit": "8c81edc330b98db0473dcb016e34db835c2fd378",
+  "review_note": "Approved public placeholder content only. Two CLAUDE.md hashes allow upstream and fork routing headers; never automatically rebaseline personal content.",
+  "files": {
+    "CLAUDE.md": [
+      "64b28491710841945fce7b6f0f444fce854bc001568923ecb63b64bbb3d68f56",
+      "9b46325800dafccb3ec3357fba6da4626d1b1e366d405f18bad88b8478081f98"
+    ],
+    "cv/main_example.tex": [
+      "e29c4832c8d9e7ac3087967a9debb94f3746c4a927eb45401332ca018925ac3d"
+    ],
+    "cover_letters/cover_example.tex": [
+      "b6408a865d110a63ebaf032a7a8bd403b5d1183f6835e0e886c5f2a042960628"
+    ],
+    ".claude/skills/job-application-assistant/01-candidate-profile.md": [
+      "a948b9361f00aafb12cb76c8b519808576ea6cc3e6e72ebd8026a81745f924f0"
+    ],
+    ".claude/skills/job-application-assistant/02-behavioral-profile.md": [
+      "e7731231d76ae2ce18740422744fe78821df34ef1dc2e1bcdb90dcb567070a97"
+    ],
+    ".claude/skills/job-application-assistant/03-writing-style.md": [
+      "d76148b7bc803ff2954a0bcd839c0fca2999af1349ece3f020e70d2048a30f9f"
+    ],
+    ".claude/skills/job-application-assistant/04-job-evaluation.md": [
+      "0c48d15890c9c24d7cdfcad048f4c35a75efe42f23b42a9a44128e5d672c0b9f"
+    ],
+    ".claude/skills/job-application-assistant/05-cv-templates.md": [
+      "93ffc9a9ec813d4b8499f1ea7c364abe1cb7fe8526ed2329e142b9eaa483c158"
+    ],
+    ".claude/skills/job-application-assistant/06-cover-letter-templates.md": [
+      "48500354d76490ea9cd48a0fd5be54d02496d8df297a2e4086c6e4e6bcacda78"
+    ],
+    ".claude/skills/job-application-assistant/07-interview-prep.md": [
+      "6d371db47d52c4c2521a931c9b19c9b7944a2053108dc266aa12bb9c6713741d"
+    ],
+    ".claude/skills/job-application-assistant/08-application-forms.md": [
+      "cbf4b833b6d4e9357b0128237d72c601414e375b55d17531f3fa3313a0ae81df"
+    ],
+    ".claude/skills/job-application-assistant/09-web-research.md": [
+      "1cb3bfd980dffe3db2fb30e396fbd3d223fef7d55bfb8a66e3710790f9e1f497"
+    ],
+    ".claude/skills/job-application-assistant/SKILL.md": [
+      "c8b624e90a77850c73cedd529c70997af7fdf3b1e49046d01581231b17db3a42"
+    ]
+  }
+}

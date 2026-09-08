@@ -36,6 +36,14 @@ Optional arguments:
 
 ## Execution Steps
 
+### Research routing — before Step 0
+
+If the request explicitly selects research (including `/scrape research`), load
+`.claude/skills/research/SKILL.md` and stop this application workflow before
+reading or creating any profile/tracker/seen-jobs state. P1 has no enabled
+research collector; report that collection is pending P2. Ordinary `/scrape`
+keeps the application behavior below. No research-to-application fallback.
+
 ### Step 0: Load State
 
 1. Read `job_scraper/seen_jobs.json` (create if missing - start with `{"seen": {}}`)
@@ -58,7 +66,7 @@ If this fails (bun not installed), skip to **1c (WebSearch fallback)** for all p
 
 #### 1b. Run CLI tools (primary — run these in parallel where possible)
 
-Discover all installed portal CLI skills by reading every `SKILL.md` found under `.agents/skills/*/SKILL.md`. Each file documents that portal's exact CLI flags and usage examples. **Use each portal's own documented interface — do not guess flags.** This approach automatically includes any new portals added via `/add-portal` without requiring changes to this file.
+Discover portal CLI skills under `.agents/skills/*/SKILL.md` only when the same skill directory has `cli/package.json` and `cli/src/cli.ts`. The research pointer is not a portal. Each portal file documents its exact CLI flags and usage examples. **Use each portal's own documented interface — do not guess flags.** This includes qualifying portals added via `/add-portal` without naming them individually.
 
 **Honor the `enabled` toggle.** A portal is enabled unless its `SKILL.md` frontmatter sets `enabled: false` (a missing key means enabled — the default). Skip each disabled portal and record it for the Step 5 summary. A fork can thus keep a portal installed but sit out a run without deleting its directory.
 

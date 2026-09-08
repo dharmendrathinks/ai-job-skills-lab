@@ -1,11 +1,9 @@
 # CI for the framework itself: LaTeX smoke compiles, skill/command lint,
-# CLI typechecks, and (upstream only) placeholder integrity.
+# CLI typechecks, and public-template integrity in this research fork.
 #
-# Fork-friendly by design: forks personalize CLAUDE.md, the skill files, and
-# cv/main_example.tex via /setup, so the placeholder-integrity job and the
-# exact page-count/content assertions run only on the upstream template repo.
-# Compile success, lint correctness, and an extractable PDF text layer are
-# asserted everywhere.
+# This research fork keeps tracked templates public-safe even with a private
+# origin. Placeholder and reviewed-byte checks run here before personal setup.
+# Exact LaTeX assertions retain upstream scope; research does not require LaTeX.
 #
 # Deliberately NOT here: live smoke tests of the job-portal CLIs. They hit
 # real portals (network-flaky, and the linkedin-search skill is personal-use
@@ -27,7 +25,7 @@ name: CI
 
 on:
   push:
-    branches: [master]
+    branches: [master, main, 'research/**']
   pull_request:
   workflow_dispatch:
 
@@ -47,8 +45,7 @@ jobs:
           python-version: "3.12"
       - run: pip install pyyaml
       - run: python tools/lint_skills.py
-      - name: Framework version guard (upstream template only)
-        if: github.repository == 'MadsLorentzen/ai-job-search'
+      - name: Framework version guard
         run: python tools/check_framework_version.py
 
   security-guards:
@@ -60,6 +57,8 @@ jobs:
         with:
           python-version: "3.12"
       - run: python tools/security_guards.py
+      - name: Research public-template and configuration boundary
+        run: python tools/research_preflight.py --mode research --action status
 
   python-tests:
     name: Python tool tests (Python ${{ matrix.python-version }})
@@ -226,8 +225,7 @@ jobs:
         working-directory: .agents/skills/${{ matrix.tool }}/cli
 
   placeholder-integrity:
-    name: Placeholder integrity (upstream template only)
-    if: github.repository == 'MadsLorentzen/ai-job-search'
+    name: Placeholder integrity (public research template)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4

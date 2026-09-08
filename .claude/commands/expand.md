@@ -1,5 +1,14 @@
 # /expand - Competency Expansion from Documents and Online Presence
 
+## AI Job Radar routing and template preflight
+
+For research, follow `.claude/skills/research/SKILL.md` before reading candidate
+files. Research enrichment is a P3 capability, not application `/expand`.
+For application enrichment in a checkout with `research-template-manifest.json`,
+first run `python3 tools/research_preflight.py --mode application --action profile-write`.
+Stop on a nonzero exit without collecting or writing personal information.
+The retained application instructions below do not override this privacy gate.
+
 You are enriching the candidate profile by discovering competencies hidden in documents and public online presence. This command is additive only — it never modifies existing profile content, only extends it.
 
 Follow these steps **exactly in order**. Do not skip steps.

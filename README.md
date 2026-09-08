@@ -2,9 +2,46 @@
   <img src="assets/mascot/pip_flight_loop.gif" alt="Pip, the courier bird" width="200">
 </p>
 
-# AI Job Search
+# AI Job Radar
 
-*The job search that runs on your machine.*
+Global AI engineering research built by extending
+[MadsLorentzen/ai-job-search](https://github.com/MadsLorentzen/ai-job-search),
+starting at `8c81edc330b98db0473dcb016e34db835c2fd378`. Upstream Markdown workflows,
+portal tools, state helpers, templates and tests are the implementation foundation.
+The original MIT copyright and license remain intact; upstream author accounts
+and results below describe Mads Lorentzen's application workflow, not this fork.
+
+**Active roadmap:** [PLAN_RESEARCH.md](PLAN_RESEARCH.md). Phase 1 establishes
+research routing, safe configuration, public-template guards and runtime
+qualification requirements. Collection/extraction and recommendations are not
+implemented yet. The tool-free Codex extraction boundary is explicitly blocked
+pending qualification; no paid API fallback is selected.
+
+For research, ask Codex to use the `research` skill, or run this read-only check
+with Python 3.10+:
+
+```sh
+python3 tools/research_preflight.py --mode research --action configure
+```
+
+The check creates no profile or runtime data. Personal research storage defaults
+outside the checkout, configurable with an absolute `AI_JOB_RADAR_HOME` path.
+All research sources start disabled. No CV, LaTeX, application tracker, Gmail,
+Notion, extra model subscription, or paid data service is required. Model usage
+is limited to the existing Codex plan; exhausted allowances defer work.
+
+See [runtime boundaries](docs/research/runtime.md),
+[contracts](docs/research/contracts.md), and
+[provenance and maintenance](docs/research/maintenance.md).
+The application instructions below are retained for explicit application mode.
+This publishable development template blocks `/setup` and `/expand` profile
+writes; use a separately reviewed private application workspace for personal
+onboarding. Adding a tracked profile to `.gitignore` does not make it private.
+
+## Retained upstream application workflow
+
+*Upstream's job search workflow runs on your machine; hosted models still receive
+the content sent to them. This is not a local-data-only guarantee.*
 
 <p align="center">
   <a href="https://trendshift.io/repositories/43622?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-43622" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/43622/daily" alt="MadsLorentzen%2Fai-job-search | Trendshift" width="250" height="55"/></a>

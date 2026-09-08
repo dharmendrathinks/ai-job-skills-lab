@@ -1,5 +1,10 @@
 # Job Application Assistant for [YOUR_NAME]
 
+> AI Job Radar research requests route first to
+> [.claude/skills/research/SKILL.md](.claude/skills/research/SKILL.md).
+> The candidate details and fit rules below apply only to explicit application
+> work. Never run `/setup` for research or populate public tracked templates.
+
 <!-- SETUP: This file is populated by running /setup -->
 <!-- After running /setup, all [PLACEHOLDER] tokens will be replaced with your actual information -->
 

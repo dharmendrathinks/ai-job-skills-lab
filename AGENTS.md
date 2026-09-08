@@ -1,14 +1,27 @@
 ---
-framework_version: 1.0.0
+framework_version: 1.0.1
 ---
 
 # Agent Guidelines: AI Job Search
+
+## Research fork routing — read before loading candidate data
+
+This is AI Job Radar, extending MadsLorentzen/ai-job-search. The active roadmap is
+[PLAN_RESEARCH.md](PLAN_RESEARCH.md). Research requests use the canonical
+[research specification](.claude/skills/research/SKILL.md) before any application
+profile, tracker, or fit rule is loaded. Research is the default product mode;
+explicit application commands retain their upstream application semantics.
+Do not run application setup for research. Public-template profile writes are
+blocked by the research preflight even when the GitHub repository is private.
+Use only this checkout for development; keep personal research state outside it.
+See [the runtime decision](docs/research/runtime.md) for enforced checks versus
+instruction-level safeguards and the unresolved tool-free extraction boundary.
 
 This workspace is structured to manage job search activities, scraper tools, CVs, cover letters, and interview preparation.
 
 ## Thin-Pointer Design (Single Source of Truth)
 
-To prevent duplication and configuration drift across different AI agent frameworks (Claude Code, Google Antigravity, Codex, Cursor, Gemini CLI, etc.), this workspace uses a unified thin-pointer design. All agent runtimes should load the canonical specifications and candidate profiles from the files and directories below:
+To prevent duplication and configuration drift across different AI agent frameworks (Claude Code, Google Antigravity, Codex, Cursor, Gemini CLI, etc.), this workspace uses a unified thin-pointer design. All agent runtimes should load canonical specifications and, only in application mode, candidate profiles from the files and directories below:
 
 1. **Personal Candidate Profile:**
    - The candidate profile, contact details, education, and target preferences are defined in [CLAUDE.md](CLAUDE.md) and the individual profile methodology files under [.claude/skills/job-application-assistant/](.claude/skills/job-application-assistant/) (specifically `01-*.md` etc.).

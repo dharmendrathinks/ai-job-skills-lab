@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "example_only": true,
+  "mode": "research",
+  "domain": "ai-engineering",
+  "interests": [],
+  "segments": {},
+  "report_language": "en",
+  "retain_original_language": true,
+  "sources_enabled": [],
+  "state_path_environment": "AI_JOB_RADAR_HOME",
+  "inference": {
+    "authentication": "existing_codex_subscription",
+    "additional_spending_inr": 0,
+    "paid_fallback": false,
+    "qualification": "unverified",
+    "enabled": false
+  }
+}
