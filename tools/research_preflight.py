@@ -103,7 +103,7 @@ def assess(root: Path, mode: str, action: str,
             blockers.append("public_template_profile_write_blocked")
         elif action != "status":
             blockers.append("use_explicit_upstream_application_command")
-    elif action in ("import", "collect", "analyze", "refresh"):
+    elif action in ("import", "collect", "analyze", "refresh", "brief"):
         pass  # Readiness only; execution checks qualification and current source policy.
     elif action == "export":
         blockers.append("unmanaged_exports_not_supported")
@@ -131,6 +131,10 @@ def assess(root: Path, mode: str, action: str,
                     "live_collection": "jobicy_explicit_invocation_with_current_policy",
                     "model_analysis": "requires_matching_runtime_qualification_and_source_permission",
                     "completion": "see_phase2_validation_record"},
+        "phase_3": {"draft_briefs": "four_types_require_qualified_evidence",
+                    "context": "reviewed_import_or_explicit_bounded_acquisition",
+                    "radar_import": "selected_schema_3_0_report_only",
+                    "profile": "proposal_and_explicit_review_no_application_writes"},
         "installed_portal_skills": portal_skills(root),
         "inference": {"authentication": "existing_codex_subscription",
                       "additional_spending_inr": 0, "paid_fallback": False},

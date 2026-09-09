@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "brief": "bb32396061a68307f3c88ef911f3cfb130c5b8511daa8a7f14cde8a71a4a7acb",
+  "disposition": "contribute",
+  "versions": {
+    "schema": "brief/1",
+    "prompt": "e7095b4a4c95bc2553ae5252c04b56679c970752f5ae72754400da69782c8601",
+    "runtime": {
+      "runtime": "codex-cli 0.153.4",
+      "binary_sha256": "b973d440acac501fd2594a43e7ca9ce41e0a65b9dfb28d0d7a7837c99e1261e3",
+      "model": "gpt-5.5",
+      "model_metadata_sha256": "7935feee7a55829ad98ac4b2311f14607a04ef84f77584d2f6dd370c1d07be63",
+      "source_commit": "3d2ee51ca2d5db578f328aa75e20aa22c0197c9a",
+      "boundary_config_sha256": "8985e495b46ca446694283362856f594c9a4b5cf1a8bd45d0fdc7b6343e7c884",
+      "client_sha256": "b07ae8f0727b335f38c03d88b1f2b77173268b4a4b0c131b83f1576653883e4f",
+      "boundary_test_sha256": "cddebec6a2ae8c0e03f611516cc526d46f1052d8388fa552a9b08d9746f0757a"
+    },
+    "validator": "dc965d099b87421fb3d5e375bc43d88a21eaf7f9acf851b0c3ccc994499e0008",
+    "output_schema": "e129428bc362004e8ed70bfd7e311d5ec688a994215159d4c98f5adf42b03f93"
+  },
+  "human_review": "pending",
+  "context_count": 5,
+  "source_revision": "29cca75",
+  "added_inspection": [
+    "tools/evaluate_research.py",
+    "tests/fixtures/research/heldout-v1.json"
+  ],
+  "latency_seconds": 56.129,
+  "reported_tokens": 21427,
+  "limitations": [
+    "Assistant-led inspection and structural validation, not human usefulness approval.",
+    "Absence from selected files is not evidence of repository-wide absence."
+  ]
+}

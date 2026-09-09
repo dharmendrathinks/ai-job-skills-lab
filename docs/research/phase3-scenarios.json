@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "results": [
+    {
+      "case": "known-skill-deepening",
+      "brief": "b8113af330228c34e2fe6f4ded2cc453a974d245164eb0ac9c7fb69637648fc9",
+      "disposition": "propose",
+      "structural_checks": "passed",
+      "human_review": "pending",
+      "versions": {
+        "schema": "brief/1",
+        "prompt": "e7095b4a4c95bc2553ae5252c04b56679c970752f5ae72754400da69782c8601",
+        "runtime": {
+          "runtime": "codex-cli 0.153.4",
+          "binary_sha256": "b973d440acac501fd2594a43e7ca9ce41e0a65b9dfb28d0d7a7837c99e1261e3",
+          "model": "gpt-5.5",
+          "model_metadata_sha256": "7935feee7a55829ad98ac4b2311f14607a04ef84f77584d2f6dd370c1d07be63",
+          "source_commit": "3d2ee51ca2d5db578f328aa75e20aa22c0197c9a",
+          "boundary_config_sha256": "8985e495b46ca446694283362856f594c9a4b5cf1a8bd45d0fdc7b6343e7c884",
+          "client_sha256": "b07ae8f0727b335f38c03d88b1f2b77173268b4a4b0c131b83f1576653883e4f",
+          "boundary_test_sha256": "cddebec6a2ae8c0e03f611516cc526d46f1052d8388fa552a9b08d9746f0757a"
+        },
+        "validator": "dc965d099b87421fb3d5e375bc43d88a21eaf7f9acf851b0c3ccc994499e0008",
+        "output_schema": "3ef9bc7d5b45aafe3e7b3b9fcf2f018e25c20bae17788789319319cec4fae514"
+      }
+    },
+    {
+      "case": "missing-alternatives",
+      "brief": "dc50330ccbd27ed1a18258baed2bf61024462d083582f49e365dda3c17c91a53",
+      "disposition": "insufficient-evidence",
+      "structural_checks": "passed",
+      "human_review": "pending",
+      "versions": {
+        "schema": "brief/1",
+        "prompt": "e7095b4a4c95bc2553ae5252c04b56679c970752f5ae72754400da69782c8601",
+        "runtime": {
+          "runtime": "codex-cli 0.153.4",
+          "binary_sha256": "b973d440acac501fd2594a43e7ca9ce41e0a65b9dfb28d0d7a7837c99e1261e3",
+          "model": "gpt-5.5",
+          "model_metadata_sha256": "7935feee7a55829ad98ac4b2311f14607a04ef84f77584d2f6dd370c1d07be63",
+          "source_commit": "3d2ee51ca2d5db578f328aa75e20aa22c0197c9a",
+          "boundary_config_sha256": "8985e495b46ca446694283362856f594c9a4b5cf1a8bd45d0fdc7b6343e7c884",
+          "client_sha256": "b07ae8f0727b335f38c03d88b1f2b77173268b4a4b0c131b83f1576653883e4f",
+          "boundary_test_sha256": "cddebec6a2ae8c0e03f611516cc526d46f1052d8388fa552a9b08d9746f0757a"
+        },
+        "validator": "dc965d099b87421fb3d5e375bc43d88a21eaf7f9acf851b0c3ccc994499e0008",
+        "output_schema": "e2eed386edac9512a40244401e5421097b6721c548e3751bcee48def13fd5609"
+      }
+    }
+  ],
+  "limitations": [
+    "Fictional source/profile; no actual market or user capability claims.",
+    "Live model output inspected structurally; human usefulness review remains pending."
+  ]
+}

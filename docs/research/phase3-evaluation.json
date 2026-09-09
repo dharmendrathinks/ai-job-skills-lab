@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "recorded_date": "2026-09-09",
+  "human_review": "pending",
+  "scope": "One live draft per workflow, same retained job snapshot, selected same-repository context. No source text or private profile.",
+  "results": [
+    {
+      "brief": "6652ac54d95a8862658eb49531eec13250a51bc22b4b85d2112c5e8db51f3243",
+      "kind": "learning",
+      "status": "draft-human-review",
+      "disposition": "propose",
+      "source_statement_count": 4,
+      "context_quote_count": 3,
+      "alternative_reference_count": 3,
+      "distinct_alternative_sources": 1,
+      "commercial_judgment": "unknown",
+      "video_judgment": "unknown",
+      "latency_seconds": 31.802,
+      "reported_tokens": 17198,
+      "versions": {
+        "schema": "brief/1",
+        "prompt": "b3fcee53b264debb35b53587c01663977546be3d97da4a17ee908b8361b2debb",
+        "runtime": {
+          "runtime": "codex-cli 0.153.4",
+          "binary_sha256": "b973d440acac501fd2594a43e7ca9ce41e0a65b9dfb28d0d7a7837c99e1261e3",
+          "model": "gpt-5.5",
+          "model_metadata_sha256": "7935feee7a55829ad98ac4b2311f14607a04ef84f77584d2f6dd370c1d07be63",
+          "source_commit": "3d2ee51ca2d5db578f328aa75e20aa22c0197c9a",
+          "boundary_config_sha256": "8985e495b46ca446694283362856f594c9a4b5cf1a8bd45d0fdc7b6343e7c884",
+          "client_sha256": "b07ae8f0727b335f38c03d88b1f2b77173268b4a4b0c131b83f1576653883e4f",
+          "boundary_test_sha256": "cddebec6a2ae8c0e03f611516cc526d46f1052d8388fa552a9b08d9746f0757a"
+        },
+        "validator": "f6d14853513b353c86a234ed7aa18d636fba577fe01495458c94cd05d74f75d4",
+        "output_schema": "dbf8a3716ac7c02f92a1abe171305fa7b2301f85a793ce013e83d8d651dc42e6"
+      }
+    },
+    {
+      "brief": "df5d37cd7e33533387a2576af331f20816be9452d4fa94cb7904c4fbcd5b9a00",
+      "kind": "youtube",
+      "status": "draft-human-review",
+      "disposition": "propose",
+      "source_statement_count": 3,
+      "context_quote_count": 3,
+      "alternative_reference_count": 3,
+      "distinct_alternative_sources": 1,
+      "commercial_judgment": "unknown",
+      "video_judgment": "unknown",
+      "latency_seconds": 42.818,
+      "reported_tokens": 17452,
+      "versions": {
+        "schema": "brief/1",
+        "prompt": "b3fcee53b264debb35b53587c01663977546be3d97da4a17ee908b8361b2debb",
+        "runtime": {
+          "runtime": "codex-cli 0.153.4",
+          "binary_sha256": "b973d440acac501fd2594a43e7ca9ce41e0a65b9dfb28d0d7a7837c99e1261e3",
+          "model": "gpt-5.5",
+          "model_metadata_sha256": "7935feee7a55829ad98ac4b2311f14607a04ef84f77584d2f6dd370c1d07be63",
+          "source_commit": "3d2ee51ca2d5db578f328aa75e20aa22c0197c9a",
+          "boundary_config_sha256": "8985e495b46ca446694283362856f594c9a4b5cf1a8bd45d0fdc7b6343e7c884",
+          "client_sha256": "b07ae8f0727b335f38c03d88b1f2b77173268b4a4b0c131b83f1576653883e4f",
+          "boundary_test_sha256": "cddebec6a2ae8c0e03f611516cc526d46f1052d8388fa552a9b08d9746f0757a"
+        },
+        "validator": "f6d14853513b353c86a234ed7aa18d636fba577fe01495458c94cd05d74f75d4",
+        "output_schema": "2864b7a9e1d8bb26e5e648f64a9b031289c8fdd1fbcfe2bc96c1e56553763e6c"
+      }
+    },
+    {
+      "brief": "9b7c772345c7437719eac00bffb97720789ff0094f1491b6a35bce0aed898e0e",
+      "kind": "product",
+      "status": "draft-human-review",
+      "disposition": "propose",
+      "source_statement_count": 3,
+      "context_quote_count": 3,
+      "alternative_reference_count": 3,
+      "distinct_alternative_sources": 1,
+      "commercial_judgment": "unknown",
+      "video_judgment": "unknown",
+      "latency_seconds": 70.57,
+      "reported_tokens": 17629,
+      "versions": {
+        "schema": "brief/1",
+        "prompt": "12834b139a8c8f9ab7a8fc08edb66b87b86bac747c7d7ddf7107deb8745c438d",
+        "runtime": {
+          "runtime": "codex-cli 0.153.4",
+          "binary_sha256": "b973d440acac501fd2594a43e7ca9ce41e0a65b9dfb28d0d7a7837c99e1261e3",
+          "model": "gpt-5.5",
+          "model_metadata_sha256": "7935feee7a55829ad98ac4b2311f14607a04ef84f77584d2f6dd370c1d07be63",
+          "source_commit": "3d2ee51ca2d5db578f328aa75e20aa22c0197c9a",
+          "boundary_config_sha256": "8985e495b46ca446694283362856f594c9a4b5cf1a8bd45d0fdc7b6343e7c884",
+          "client_sha256": "b07ae8f0727b335f38c03d88b1f2b77173268b4a4b0c131b83f1576653883e4f",
+          "boundary_test_sha256": "cddebec6a2ae8c0e03f611516cc526d46f1052d8388fa552a9b08d9746f0757a"
+        },
+        "validator": "dc965d099b87421fb3d5e375bc43d88a21eaf7f9acf851b0c3ccc994499e0008",
+        "output_schema": "6c989416ea51bcc5d5b02c3874ec87af08eb9c3e6b1a42550959ad8403b8e086"
+      }
+    },
+    {
+      "brief": "75936e92400042a2e5304816fce9fe8aca56186a0bef5124c64930ca1d006007",
+      "kind": "project",
+      "status": "draft-human-review",
+      "disposition": "contribute",
+      "source_statement_count": 3,
+      "context_quote_count": 3,
+      "alternative_reference_count": 1,
+      "distinct_alternative_sources": 1,
+      "commercial_judgment": "unknown",
+      "video_judgment": "unknown",
+      "latency_seconds": 82.319,
+      "reported_tokens": 13359,
+      "versions": {
+        "schema": "brief/1",
+        "prompt": "12834b139a8c8f9ab7a8fc08edb66b87b86bac747c7d7ddf7107deb8745c438d",
+        "runtime": {
+          "runtime": "codex-cli 0.153.4",
+          "binary_sha256": "b973d440acac501fd2594a43e7ca9ce41e0a65b9dfb28d0d7a7837c99e1261e3",
+          "model": "gpt-5.5",
+          "model_metadata_sha256": "7935feee7a55829ad98ac4b2311f14607a04ef84f77584d2f6dd370c1d07be63",
+          "source_commit": "3d2ee51ca2d5db578f328aa75e20aa22c0197c9a",
+          "boundary_config_sha256": "8985e495b46ca446694283362856f594c9a4b5cf1a8bd45d0fdc7b6343e7c884",
+          "client_sha256": "b07ae8f0727b335f38c03d88b1f2b77173268b4a4b0c131b83f1576653883e4f",
+          "boundary_test_sha256": "cddebec6a2ae8c0e03f611516cc526d46f1052d8388fa552a9b08d9746f0757a"
+        },
+        "validator": "dc965d099b87421fb3d5e375bc43d88a21eaf7f9acf851b0c3ccc994499e0008",
+        "output_schema": "7e28d52e80321ab42b48ef73d1a58289256dd8bbe025eb257158bce4e82913f8"
+      }
+    }
+  ],
+  "limitations": [
+    "Prompt and validator versions differ across diagnostic runs; hashes preserved.",
+    "Structural validity is not semantic usefulness.",
+    "Three file references are one repository, not three independent alternatives.",
+    "No customer/problem or dated audience evidence, so these judgments remain unknown."
+  ]
+}

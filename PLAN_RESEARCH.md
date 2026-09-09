@@ -2,7 +2,7 @@
 
 **Planning date:** 8 September 2026.
 
-**Status:** Active approved roadmap, implementation evidence updated 2026-09-09. Phase 1 commit `d102a88` was pushed to `origin/main` after approval. Phase 2's collection/import, qualified subscription extraction, validation, private lifecycle controls and capability snapshots are implemented on `research/phase2`; [measured validation and pending human acceptance](docs/research/phase2-validation.md). One permitted Jobicy request captured 20 observations; six real descriptions and baseline comparisons were exercised. Human evaluation review remains open; no production-quality claim is made. The approved fork-first direction and seven-phase capability map are unchanged. `PLAN.md` remains local history; no personal application setup was performed.
+**Status:** Active approved roadmap, implementation evidence updated 2026-09-09. Phase 1 commit `d102a88` was pushed to `origin/main` after approval. Phase 2's collection/import, qualified subscription extraction, validation, private lifecycle controls and capability snapshots were committed as `29cca75`; [measured validation and pending human acceptance](docs/research/phase2-validation.md). One permitted Jobicy request captured 20 observations; six real descriptions and baseline comparisons were exercised. Human evaluation review remains open; no production-quality claim is made. Phase 3 implementation on `research/phase3` adds four managed draft types, bounded context acquisition, read-only Radar conversion and reviewed profile proposals; [P3 evidence and limits](docs/research/phase3-validation.md). The approved fork-first direction and seven-phase capability map are unchanged. `PLAN.md` remains local history; no personal application setup was performed.
 
 ## 1. Product vision and boundaries
 
@@ -639,6 +639,8 @@ Phase 5 branches directly from Phase 2 and can progress alongside Phases 3–4. 
 
 ### Phase 3 — Four decision workflows and evidence-aware personalization
 
+**Implementation status:** Implemented on `research/phase3`; [commands/contracts](docs/research/decision-operations.md) and [validation record](docs/research/phase3-validation.md). Engineering completion includes live known-skill/abstention scenarios and policy-checked brief inspection; the [six-case human review](docs/research/phase3-review.md) remains pending. Generated briefs remain drafts pending human semantic review. No acceptance, customer demand or audience-success result is inferred from generation.
+
 - **Purpose:** Turn capability findings into useful learning, contribution, product-validation and experiment decisions.
 - **Prerequisites:** Phase 2 validated observations/aggregates, lifecycle and execution controls; optional reviewed direction profile. Evidence-dependent claims need inspected context; AI Trend Radar reports and Phase 5 providers are not prerequisites.
 - **Reuse/change:** Research branch of upskill; expand’s repository discovery/review; `09-web-research.md` fetched-page verification/canonical-source patterns under the stricter research access policy; existing Markdown/JSON conventions. Reuse P2 receipts, private manifests and lifecycle controls.
@@ -706,14 +708,14 @@ Phase 5 branches directly from Phase 2 and can progress alongside Phases 3–4. 
 | Identity, deduplication, revisions and vacancy/history separation | P2; comparisons P5 | Source observations and completeness receipts |
 | AI responsibility classification | P2 | Validated descriptions and taxonomy |
 | Evidence-grounded LLM extraction and capability aggregation | P2 | Qualified real extraction, exact spans, versioned cache and modality counts implemented; provisional baseline results recorded, human review pending |
-| Learning priorities | P3 | P2 capability map and optional evidence profile |
-| Bounded non-job evidence acquisition and storage | P3 | Upstream research reuse; acquisition requests, receipts and ContextEvidence; P2 lifecycle controls |
-| Open-source project/contribution briefs | P3 | Pinned alternatives with inspected paths/content, tests and feasibility; explicit evidence limitations |
-| Product/monetization hypotheses | P3 | Inspected product/problem evidence, contradictory observations and validation criteria; no invented pain |
-| YouTube experiment briefs | P3; full context/outcome exchange P4 | Demonstrable experiment, dated inspected discussion/trend evidence or explicit abstention |
-| Reviewed evidence profile | P3; outcome updates P4 | Declarations, inspected work and demonstrated results |
+| Learning priorities | P3 | Implemented draft schema: prerequisites/practice/deepening; optional reviewed evidence profile; human usefulness review pending |
+| Bounded non-job evidence acquisition and storage | P3 | Implemented explicit URL/Git-object acquisition and reviewed context bundles; shared receipt/policy/lifecycle controls |
+| Open-source project/contribution briefs | P3 | Implemented contribution/new/no-project draft paths with inspected context IDs, bounded tests/design and explicit limitations; human review pending |
+| Product/monetization hypotheses | P3 | Implemented hypothetical workflow/validation schema with support/contradiction and unknown commercial judgment when context is missing |
+| YouTube experiment briefs | P3; full context/outcome exchange P4 | Implemented experiment draft schema; dated discussion window gate and explicit unknown audience suitability |
+| Reviewed evidence profile | P3; outcome updates P4 | Implemented proposal/review actions, separate declaration/inspection/demonstration levels and lifecycle links; no automatic promotion |
 | Feedback, corrections and repetition control | P4 | Stable briefs, revisions and outcome ledger |
-| Read-only AI Trend Radar report import | P3 deliverable; optional acquisition route | Selected schema-3.0 files, original lineage/content/dates and limitations; no runtime/database dependency |
+| Read-only AI Trend Radar report import | P3 deliverable; optional acquisition route | Implemented selected schema-3.0 conversion; imported assessments remain separate, original quote lineage/withdrawal preserved; no runtime/database dependency |
 | Full AI Trend Radar Markdown/JSON interchange and outcomes | P4 | Reuse P3 conversion; independent repositories, lineage, export/withdrawal controls |
 | Global source/language expansion | P5, branching from P2 alongside P3–4 | Measured gaps, permission, lifecycle and quality gates; conditional adapters do not block unrelated capabilities |
 | Stable-source/time-window analysis | P5 | P2 receipts and accumulated observations |
@@ -726,7 +728,7 @@ Phase 5 branches directly from Phase 2 and can progress alongside Phases 3–4. 
 
 ## 12. Concrete next phase and unresolved evidence
 
-**Current implementation phase: Phase 2 acceptance review.** The approved source-to-analysis implementation is delivered in the required folder. Resolve the pending human evaluation labels/adjudication recorded in `phase2-validation.md`; do not describe provisional model scores as human-validated accuracy. P3 four-workflow intelligence and P5 measured source expansion can follow independently. Future visibility/fork-metadata changes remain explicit external-write steps.
+**Current implementation phase: Phase 3 implementation and acceptance review.** The approved source-to-analysis implementation is delivered in the required folder. Resolve the pending human evaluation labels/adjudication recorded in `phase2-validation.md`; do not describe provisional model scores as human-validated accuracy. P3 four-workflow intelligence is implemented with its human review still pending; P5 measured source expansion remains an independent branch. Future visibility/fork-metadata changes remain explicit external-write steps.
 
 Genuine blockers or unresolved evidence:
 
@@ -734,9 +736,9 @@ Genuine blockers or unresolved evidence:
 - Human review of the six provisional synthetic labels and real extraction/comparison examples remains pending. The 120-description/40-employer and precision targets are not achieved; preserve these targets and withhold broad quality claims. The pinned runtime boundary passed, but upgrades require requalification.
 - Freehire’s documented API is a strong reuse candidate, but research retention, source provenance, current service quality and measured coverage need validation.
 - Some sources need permission or clarification for the exact method, analysis, hosted disclosure/retention, evaluation or export use. Enabled paths must also meet storage/deletion obligations from P2, including derivatives and runtime histories. Incompatible deadlines, uncontrolled copies or unresolved terms block only affected paths; P6 is not a retention grace period.
-- Current extraction, recommendation, multilingual, local-inference and operating-cost performance is unmeasured.
+- Narrow extraction/brief execution metrics and failures are recorded; broad human-reviewed recommendation usefulness, multilingual accuracy and local-inference performance remain unestablished.
 - Time comparisons require accumulated comparable observations; no historical market-growth result exists.
-- P3 briefs may lack inspected repository alternatives, product/problem evidence or dated discussions; missing evidence requires per-dimension limitations or abstention. The narrow P3 AI Trend Radar report importer and P4 full interchange remain unimplemented; report availability is optional and imported summaries cannot substitute for inspected source content.
+- P3 briefs may lack inspected repository alternatives, product/problem evidence or dated discussions; missing evidence requires per-dimension limitations or abstention. The narrow P3 AI Trend Radar report importer is implemented; P4 full interchange remains unimplemented; report availability is optional and imported summaries cannot substitute for inspected source content.
 - Unattended subscription compatibility, disclosure/retention and usage limits require evidence. No additional spending, paid API worker, credit purchase or automatic paid fallback is authorized. A dashboard must still earn its complexity through demonstrated need.
 
 The direction changes from personal job matching to **global, source-grounded AI engineering research built by extending the upstream fork**.
@@ -745,4 +747,4 @@ The complete dependency sequence is:
 
 **P1 fork/privacy/runtime foundation → P2 evidence and capability analysis → P3 four decision workflows → P4 outcomes and interchange → P6 continuous operation → P7 broader IT domains. P5 global/longitudinal expansion branches from P2 alongside P3–4; its cohort contracts support P6 longitudinal reporting. Conditional providers do not block unrelated capabilities.**
 
-The planning exercise itself completed no implementation phase. Subsequent authorized work completed and pushed P1 and delivered the P2 implementation and automated validation above. Human evaluation acceptance is still open; P3–7 remain unimplemented.
+The planning exercise itself completed no implementation phase. Subsequent authorized work completed and pushed P1 and delivered the P2 implementation and automated validation above. Human evaluation acceptance is still open. P3 implementation is recorded above; P4–7 remain unimplemented.

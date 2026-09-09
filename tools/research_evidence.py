@@ -95,7 +95,7 @@ def validate_policy(policy, now):
     for key in ("source", "reviewed_by", "permission_basis", "permission_reference"):
         text(policy[key])
     require(timestamp(policy["reviewed_at"]) <= now, "future policy review")
-    require(policy["method"] in ("reviewed-local-import", "jobicy-api-v2"), "collector not qualified")
+    require(policy["method"] in ("reviewed-local-import", "jobicy-api-v2", "reviewed-context"), "collector not qualified")
     require(policy["local_processing"] is True and policy["audit_hashes"] is True,
             "processing and minimal withdrawal hashes require permission")
     require(type(policy["hosted_disclosure"]) is bool and policy["export"] is False,
@@ -117,7 +117,7 @@ def validate_receipt(receipt, source, now):
                      "completeness", "limitations"])
     require(receipt["schema_version"] == VERSION and receipt["source"] == source,
             "receipt schema or source mismatch")
-    require(receipt["kind"] in ("synthetic", "job"), "unsupported receipt kind")
+    require(receipt["kind"] in ("synthetic", "job", "context"), "unsupported receipt kind")
     text(receipt["query"])
     for key in ("requested_filters", "effective_filters"):
         require(isinstance(receipt[key], dict), "filters must be objects")
@@ -175,7 +175,7 @@ def validate_observation(row, now):
 
 def extraction_gate():
     # No user-supplied qualification boolean can enable a model invocation.
-    raise EvidenceError("automated extraction blocked: complete tool-free Codex boundary unverified")
+    raise EvidenceError("automated extraction blocked: provide --id for an observation and a matching runtime qualification")
 
 
 class Store:
@@ -234,12 +234,22 @@ class Store:
 
     def remove(self, state, ids):
         removed = set(ids)
+        contexts = {a['payload']['content'] for key, a in state['artifacts'].items()
+                    if key in removed and a['kind'] == 'context' and a['payload']['content'] is not None}
+        fingerprints = {f for key, a in state['artifacts'].items() if key in removed and a['kind'] == 'context'
+                        for f in a['payload'].get('content_fingerprints', [])}
         bodies = {a["payload"]["description"] for key, a in state["artifacts"].items()
                   if key in removed and a["kind"] == "observation" and a["payload"]["description"] is not None}
         while True:
             descendants = {i for i, a in state["artifacts"].items()
                            if set(a["dependencies"]) & removed or
-                           (a["kind"] == "observation" and a["payload"]["description"] in bodies)}
+                           (a["kind"] == "observation" and a["payload"]["description"] in bodies) or
+                           (a['kind'] == 'context' and (a['payload']['content'] in contexts or
+                            fingerprints.intersection(a['payload'].get('content_fingerprints', []))))}
+            contexts |= {a['payload']['content'] for key, a in state['artifacts'].items()
+                         if key in descendants and a['kind'] == 'context' and a['payload']['content'] is not None}
+            fingerprints |= {f for key, a in state['artifacts'].items() if key in descendants and a['kind'] == 'context'
+                             for f in a['payload'].get('content_fingerprints', [])}
             bodies |= {a["payload"]["description"] for key, a in state["artifacts"].items()
                        if key in descendants and a["kind"] == "observation" and a["payload"]["description"] is not None}
             if descendants <= removed:
@@ -247,6 +257,9 @@ class Store:
             removed |= descendants
         for key in removed:
             artifact = state["artifacts"].pop(key, None)
+            if artifact and artifact['kind'] == 'context' and artifact['payload']['content'] is not None:
+                state['withdrawn'].append(digest(['withdrawn-context', artifact['payload']['content']]))
+                state['withdrawn'].extend(artifact['payload'].get('content_fingerprints', []))
             if artifact and artifact["kind"] == "observation":
                 # Independent of receipt/capture metadata: revised envelopes cannot
                 # restore the same withdrawn description under a fresh artifact ID.
@@ -281,6 +294,7 @@ class Store:
         now = self.clock()
         validate_policy(bundle["policy"], now)
         validate_receipt(bundle["receipt"], bundle["policy"]["source"], now)
+        require(bundle['receipt']['kind'] in ('job', 'synthetic'), 'use context importer for context receipts')
         rows = bundle["observations"]
         require(isinstance(rows, list) and len(rows) <= 100, "import limited to 100 observations")
         for row in rows:

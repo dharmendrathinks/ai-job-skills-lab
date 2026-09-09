@@ -1,4 +1,4 @@
-# Research contracts v1 — Phase 2 implementation status
+# Research contracts v1 — Phases 2–3 implementation status
 
 The table remains the full target. Reviewed local imports, span validation,
 snapshots and logical lifecycle operations are implemented in
@@ -7,6 +7,8 @@ Execution records, qualified automated extraction and bounded Jobicy acquisition
 are implemented. Real permitted observations live outside the checkout; the
 checked-in configuration and test fixtures remain synthetic. Human quality review
 is pending; do not equate structural validation with semantic correctness.
+Phase 3 context requests/receipts, reviewed profile proposals, four draft types and
+read-only Radar conversion are implemented; see [decision contracts](decision-operations.md).
 The normative capability/lifecycle requirements remain in `PLAN_RESEARCH.md`.
 
 | Contract | Required responsibilities |
@@ -49,7 +51,10 @@ Policy validation cannot independently verify an operator's permission claim.
 No source with an unsupported hard deletion deadline is enabled. P6 adds
 scheduled cleanup/monitoring and broader recovery; it is not a grace period.
 
-P3 context shares the same storage and receipts. Its optional read-only
+Implemented P3 context shares the same storage and receipt schema. `context-receipt`
+artifacts keep non-job evidence out of corpus counts. Exact content and original
+imported-quote fingerprints prevent wrapper-based resurrection; generated briefs
+and profile proposals inherit all dependencies. Its optional read-only
 schema-3.0 AI Trend Radar importer consumes selected report files, separates
 source evidence from assessments, and preserves missing dates/content as limits.
 No database access, shared state or repository mutation. P4 reuses that conversion
