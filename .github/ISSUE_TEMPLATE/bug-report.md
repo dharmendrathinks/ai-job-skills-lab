@@ -1,22 +1,23 @@
 ---
 name: Bug report or improvement
-about: A defect or improvement in the framework itself — not your personal job search
+about: A reproducible defect or focused improvement in AI Job Radar
 ---
 
-<!-- Heads-up before you file: if you are working in a personalized fork,
-     note that the gh CLI points issue creation at this UPSTREAM repo by
-     default (`gh repo fork --clone` sets it as the default repository).
-     Personal application tracking, job evaluations, and incident logs
-     belong in YOUR fork or private repo - this tracker is public. Run
-     `gh repo set-default <your-username>/ai-job-search` in your clone to
-     keep your own automation pointed home (SETUP.md, section 2). -->
+<!-- Target dharmendrathinks/ai-job-radar, not the upstream repository.
+Do not include private profiles, descriptions, credentials or runtime state.
+For security findings follow SECURITY.md. Use owned, sanitized fixtures. -->
 
-## Description
+## Problem and expected behavior
 
-## Steps to Reproduce
+## Steps to reproduce
 
-## Expected Behavior
+## Actual result and impact
 
-## Actual Behavior
+## Environment
 
-## Impact
+<!-- Release/commit, OS, Python; Bun or qualified runtime identity if relevant.
+Do not include tokens or account details. -->
+
+## Evidence and limitations
+
+<!-- What was executed, what was only inspected, and a minimal permitted example. -->

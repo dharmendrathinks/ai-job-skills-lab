@@ -1,15 +1,16 @@
-<!-- Heads-up before you publish: if you built this in a personalized fork
-     (your profile data, your market's job portals, another AI runtime),
-     note that GitHub points new PRs at the UPSTREAM repo by default.
-     Those adaptations live in forks - see CONTRIBUTING.md - and get
-     discovered via the pinned "Community forks & adaptations" discussion (#78).
-     Check the "base repository" dropdown above before you continue. -->
+<!-- Confirm base repository: dharmendrathinks/ai-job-radar.
+Read CONTRIBUTING.md. Do not include private data, credentials or source captures. -->
 
-## What changed and why
+## Problem and resulting behavior
 
-## Failing case / reproduction (for fixes)
+## Reproduction and validation
 
-## Verification
-<!-- What you ran, per CONTRIBUTING: python3 tools/lint_skills.py,
-     python3 tools/check_framework_version.py, bun test / bun run typecheck
-     in touched CLIs, python3 -m unittest discover -s tests -->
+<!-- List actual checks/results and unexecuted checks. Synthetic or human-reviewed?
+Model evaluation and product acceptance are distinct from passing fixture tests. -->
+
+## Contracts, compatibility and documentation
+
+<!-- State migrations, retained application behavior, upstream merge impact,
+source permissions/retention and third-party provenance, where applicable. -->
+
+## Limits and remaining review

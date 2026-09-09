@@ -2,7 +2,14 @@
 
 **Planning date:** 8 September 2026.
 
-**Status:** Active approved roadmap, implementation evidence updated 2026-09-09. Phase 1 commit `d102a88` was pushed to `origin/main` after approval. Phase 2's collection/import, qualified subscription extraction, validation, private lifecycle controls and capability snapshots were committed as `29cca75`; [measured validation and pending human acceptance](docs/research/phase2-validation.md). One permitted Jobicy request captured 20 observations; six real descriptions and baseline comparisons were exercised. Human evaluation review remains open; no production-quality claim is made. Phase 3 implementation on `research/phase3` adds four managed draft types, bounded context acquisition, read-only Radar conversion and reviewed profile proposals; [P3 evidence and limits](docs/research/phase3-validation.md). The approved fork-first direction and seven-phase capability map are unchanged. `PLAN.md` remains local history; no personal application setup was performed.
+**Status:** Active approved roadmap. All seven phases have engineering implementations;
+Phase 7 is committed as `10e2ae3`. The 2026-09-10 v0.1.0 private prerelease includes
+those implementations and updated project documentation; it does not close pending
+human semantic/usefulness review, provider activation or operational qualification.
+See [release notes](docs/releases/v0.1.0.md) and each phase’s validation evidence.
+The approved product direction, fork-first approach and seven-phase capability map
+remain unchanged. `PLAN.md` remains local history; no personal application setup
+was performed. The repository stays private until separately authorized otherwise.
 
 ## 1. Product vision and boundaries
 
@@ -12,7 +19,7 @@ Its central question is:
 
 > What engineering problems are organizations hiring people to solve, and which are worth learning, building for, validating commercially, or explaining through a real experiment?
 
-The primary user is Dharmendra: an engineer, open-source contributor, prospective product builder, and creator of Dharmendra Thinks. Other engineers can use the public fork with their own private research interests and evidence profiles.
+The primary user is Dharmendra: an engineer, open-source contributor, prospective product builder, and creator of Dharmendra Thinks. Invited collaborators can use the private repository with their own private research interests and evidence profiles. Public availability is a future visibility decision, not a release prerequisite.
 
 The complete product connects:
 

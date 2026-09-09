@@ -10,17 +10,18 @@ is `https://github.com/MadsLorentzen/ai-job-search.git`.
 Local branch `research/phase1` starts from approved commit
 `8c81edc330b98db0473dcb016e34db835c2fd378`, preserving its ancestry and files.
 No GitHub fork was created and no visibility changed. After explicit approval,
-Phase 1 commit `d102a88` was pushed to `origin/main` on 2026-09-08. Phase 2 work
-continues on `research/phase2` in this same checkout.
+Phase 1 commit `d102a88` was pushed to `origin/main` on 2026-09-08. Subsequent phases were implemented on `research/phase2` through
+`research/phase7` in this same checkout; P7 is committed as `10e2ae3`.
+The v0.1.0 release integrates that history into `main`. Origin remains private.
 The temporary sibling checkout used during transition was moved here and its
 empty directory removed at the user's request; it is not a second workspace.
 
 `PLAN_RESEARCH.md` remains active. Original `PLAN.md` is unchanged local history,
 ignored from publication (original SHA-256:
 `870e78df2bf0938c9aaf9ad7cdaaf69dadee97f332db50f9b7cf1a9bbc3c6fde`).
-The upstream MIT license and Mads Lorentzen copyright remain unchanged. README
-attribution distinguishes the upstream author's application results from this
-research fork. No AI Trend Radar or JobSpy source was imported.
+The upstream MIT terms and Mads Lorentzen copyright are preserved; the release
+adds attribution for AI Job Radar additions. README attribution links to the original application guide; upstream
+author results are not presented as this research fork’s evaluation. No AI Trend Radar or JobSpy source was imported.
 
 ## Public template and private data
 
@@ -116,12 +117,14 @@ python3 -m unittest discover -s tests -t .
 In each portal CLI use Bun for `run typecheck` and `test`. Ordinary tests use
 fixtures; live collection requires source qualification. LaTeX checks remain
 in upstream CI but are not a research prerequisite; P1 does not change TeX.
-The PR Ready configuration compares P7 against committed P6 `09bc20d`; P6
+The release documentation review compares against P7 `10e2ae3`; the P7
+implementation review compared against P6 `09bc20d`. P6
 was compared with P5 `121bdcd`, and P5
 was compared with P4 `ff5babf`, and P4
 was compared with P3 `5d8fc8f`, and P3
 was compared with P2 `29cca75`, and P2 with P1 `d102a88`. The upstream foundation remains the separate
-synchronization pin. P2 was committed locally, not pushed by the commit request.
+synchronization pin. Earlier phase-only commit requests did not push their work. The authorized
+v0.1.0 release pushes the integrated history to the private origin.
 
 
 ## Phase 6 maintenance surface

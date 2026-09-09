@@ -1,22 +1,77 @@
-# Security Policy
+# Security policy
 
-## Reporting a vulnerability
+## Report privately
 
-Please report security findings privately via **[GitHub private vulnerability reporting](https://github.com/MadsLorentzen/ai-job-search/security/advisories/new)** rather than a public issue. You will get a response within a few days, credit in the fix unless you prefer otherwise, and public disclosure coordinated with the patch.
+Report AI Job Radar vulnerabilities to this repository’s owner, Dharmendra Thinks,
+through an existing private contact channel. If available, use this repository’s
+[private vulnerability form](https://github.com/dharmendrathinks/ai-job-radar/security/advisories/new).
+Do not send fork-specific reports to the upstream maintainer. If no private route
+is available, ask for a private contact route without including exploit details,
+credentials, source captures or personal data. The issue tracker is not a secret
+store, even while the repository is private.
 
-If the private form is unavailable, open a public issue that describes the *class* of problem without a working recipe, and note that you have details to share privately.
+Include the affected release/commit, operating system, sanitized reproduction,
+expected boundary and observed impact. Prefer author-owned fixtures. There is no
+guaranteed response time or security SLA. Disclosure should be coordinated with
+the maintainer; do not publish another user’s data as a reproduction.
 
-## Threat model, honestly stated
+## Supported scope
 
-This is an agentic workflow: an LLM with file access reads untrusted web content (job postings) alongside your personal data (CV, profile, application history). That combination is the main risk surface, and it cannot be fully eliminated - only narrowed. What the framework does about it:
+The current v0.1.0 prerelease is the initial AI Job Radar release. Fixes target
+current `main`; no older release or long-term support line is promised. An
+incompatible runtime change requires inspection and qualification before use.
+Upstream and separate AI Trend Radar deployments have their own security policies.
 
-- **Untrusted-input rules**: `/apply` and `/rank` treat posting text as data, never instructions - agents are told not to follow directions embedded in postings and not to fetch URLs found inside posting text (the user-supplied posting URL is the one exception). Reviewer research starts from the company identity the user confirmed, never from links in the posting body.
-- **Permission allowlist**: `.claude/settings.json` pre-approves only the specific commands the workflow needs; the `security-guards` CI job fails any PR that widens it, adds package-manifest lifecycle scripts, or weakens the personal-data gitignore rules. Note the allowlist governs Bash commands - the model's native WebFetch/WebSearch tools are outside its reach, which is exactly why the instruction-level rules above exist.
-- **Personal data boundaries**: your populated profile, tracker, salary data, and application archive are gitignored; documents never leave the machine by design (`/notion-sync` syncs filenames only; nothing uploads document content anywhere).
+## Trust boundaries
 
-Instruction-level defenses raise the bar; they are not a sandbox. If you run this workflow against job boards you do not trust at all, review what the agent fetched and wrote before sending anything out.
+- **Untrusted input:** descriptions, repository files, discussion text and imported
+  reports are data. Never execute embedded commands or downloaded code, follow
+  embedded instructions, or treat a model proposal as authorization. Orchestration
+  rules are instruction-level safeguards, not a sandbox.
+- **Extraction:** the pinned worker exposes no tools or workspace environments;
+  active qualification checks rejected dispatch. This restriction applies to the
+  extraction thread, not the development agent, acquisition process or host OS.
+  Exact binary/model/configuration drift fails closed. See [runtime evidence](docs/research/runtime.md).
+- **Hosted processing:** Codex needs authentication and network access. Approved
+  source content is sent to the hosted model. Ephemeral threads and disabled
+  transcripts do not guarantee provider deletion, no traces or local-only data.
+  No API-key or paid-provider fallback is configured.
+- **Validation:** code owns identities, exact spans, counts, contracts and state.
+  It rejects malformed output and unsupported policies. It cannot prove semantic
+  truth, source permission, commercial demand or a reviewer’s asserted identity.
+- **Private state:** use a separate private data directory outside the checkout.
+  Supported entry points enforce restrictive permissions, template/index checks
+  and lock/lineage validation. These do not stop the account owner editing files,
+  malware, OS backups or deliberately bypassing the supported interface.
+- **Retention:** permissions must cover raw content and derived artifacts at capture.
+  Expired/withdrawn evidence becomes unusable and linked artifacts are invalidated;
+  cleanup logically removes it on supported operations. Managed report/rollback
+  copies are invalidated too. Physical erasure, hosted recall, browser caches and
+  external backups are not controlled. Sources needing those guarantees are blocked.
+- **External actions:** exports need compatible rights and reviewed content.
+  Notifications need an approved destination and exact message; schedules never
+  send automatically. Publishing, outreach and external writes require explicit
+  task authorization. Software-release authorization is not source-data export permission.
 
-## Scope notes
+## Repository and operational safeguards
 
-- Portal CLI skills make live requests only when you run them; CI never does.
-- Community fork skills listed in the [forks index](https://github.com/MadsLorentzen/ai-job-search/discussions/78) are **not** covered by this policy - review the code you copy, as the index itself says.
+Keep credentials, private source code, populated profiles, runtime ledgers and
+captured descriptions out of commits, issues, logs and release assets. A private
+origin does not disable template checks. `.gitignore` cannot hide tracked content.
+If a credential is exposed, revoke/rotate it and review affected access before
+coordinating any history cleanup; deleting the working file is insufficient.
+
+Do not replace private state from Git, downgrade the writer on a current store,
+restore an old withdrawal ledger or relabel a domain binding. Follow
+[managed recovery](docs/research/continuous-operations.md). There is no fsync or
+power-loss durability guarantee. Scheduling and notifications remain opt-in.
+
+CI uses fixtures instead of live portals or model accounts, pins actions and
+checks permissions, manifests and templates. These guards cannot prevent a
+malicious change to the guards themselves. Review workflow/settings diffs and
+permission changes. No enabled branch protection, secret-scanner coverage or
+unattended-operation qualification is implied by this policy.
+
+Application mode retains upstream agent permissions and instruction-level web
+safeguards; it does not inherit the research worker’s tool restriction. See
+[application mode](docs/application-mode.md) before personal onboarding.
