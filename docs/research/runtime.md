@@ -104,3 +104,26 @@ Hooks do not cover every tool and are not used as the boundary.
 AGENTS routes research before candidate data. `/research` denotes intent, not an
 assumed built-in Codex command. No CV, LaTeX, application tracker, external MCP or
 profile setup is required. Application workflows retain their upstream semantics.
+
+
+## Phase 6 automation and optional model experiment
+
+The P2 extractor and its empty tool registry are unchanged. P6's runner persists
+step intent before calling the same acquisition/extraction/brief functions;
+source selection, validation and persistence remain deterministic code. It has
+no generic shell/model-tool executor. Failed/ambiguous model work pauses for
+review and cannot trigger a paid API or local-model fallback.
+
+Unattended smoke, explicit account-use review, seven-day qualification and exact
+runtime/Python/Codex/harness matching are separate from interactive extraction
+qualification. Unqualified scheduled model steps defer while cleanup/reporting
+continue. The awake-session probe does not verify locked/sleeping laptop access,
+future tokens or account entitlement. No schedule was activated. See
+[actual operational gates and official references](continuous-operations.md) and
+[Phase 6 evidence](phase6-validation.md).
+
+Existing Ollama is used only for the checked-in owned-fixture experiment through
+a fixed loopback, no-proxy/no-redirect endpoint. Its client exposes no tool dispatch
+or model download route and sends no research sources. This is not an OS sandbox
+or a qualified replacement for the production worker. Quality, long-context,
+multilingual and peak-memory evaluation would precede any proposed promotion.

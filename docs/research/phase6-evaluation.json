@@ -1,0 +1,492 @@
+{
+  "schema_version": 1,
+  "recorded_date": "2026-09-09",
+  "scope": "Owned fixtures only; provisional evaluation, no runtime promotion",
+  "hardware": {
+    "machine": "Apple M3 Pro",
+    "unified_memory_bytes": 19327352832,
+    "measurement": "local sysctl"
+  },
+  "local": {
+    "runtime": "ollama-owned-fixture-only",
+    "version": {
+      "version": "0.33.2"
+    },
+    "model": {
+      "name": "qwen3:4b-instruct-2507-q4_K_M",
+      "model": "qwen3:4b-instruct-2507-q4_K_M",
+      "modified_at": "2026-09-07T08:40:16.969653979+05:30",
+      "size": 2497293803,
+      "digest": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+      "details": {
+        "parent_model": "",
+        "format": "gguf",
+        "family": "qwen3",
+        "families": [
+          "qwen3"
+        ],
+        "parameter_size": "4.0B",
+        "quantization_level": "Q4_K_M",
+        "context_length": 262144,
+        "embedding_length": 2560
+      },
+      "capabilities": [
+        "completion",
+        "tools"
+      ]
+    },
+    "recorded_at": "2026-09-09T15:34:39.111722+00:00",
+    "dataset_sha256": "c4257b3680d17851fb6986eff6346f947c62318bfd7010f63a69f05a8637990b",
+    "prompt_sha256": "8683267465ae7d2c9f2f8d34e000862f8942e32b49b32e21b3ae95072102313a",
+    "schema_sha256": "2813bf64c60f8a47ed78da6d6a402493335f2f50f981fd665667eb93165c9610",
+    "harness_sha256": "5346c13ce315e55ff225dd7f09d4d948e8dd5eb66d04462e0147b56ec8a6f6e5",
+    "settings": {
+      "num_ctx": 4096,
+      "num_predict": 1500,
+      "seed": 42,
+      "temperature": 0
+    },
+    "results": [
+      {
+        "valid": true,
+        "score": {
+          "true_positive": 1,
+          "false_positive": 0,
+          "false_negative": 1,
+          "actual_atoms": [
+            "capability:retrieval-knowledge"
+          ],
+          "class_correct": true,
+          "domain_correct": true
+        },
+        "output": {
+          "ai_domain": "in-domain",
+          "responsibility_class": "applied",
+          "claims": [
+            {
+              "kind": "skill",
+              "modality": "unspecified",
+              "quote": "Python",
+              "capabilities": [
+                "retrieval-knowledge"
+              ],
+              "tools": []
+            },
+            {
+              "kind": "responsibility",
+              "modality": "unspecified",
+              "quote": "Build retrieval pipelines for an LLM assistant.",
+              "capabilities": [
+                "retrieval-knowledge"
+              ],
+              "tools": []
+            }
+          ],
+          "unknowns": []
+        },
+        "example": "heldout-retrieval",
+        "latency_seconds": 5.982,
+        "metrics": {
+          "total_duration": 5973962667,
+          "load_duration": 1321129167,
+          "prompt_eval_count": 464,
+          "eval_count": 141,
+          "eval_duration": 3592099000
+        },
+        "resident": {
+          "models": [
+            {
+              "name": "qwen3:4b-instruct-2507-q4_K_M",
+              "model": "qwen3:4b-instruct-2507-q4_K_M",
+              "size": 3175339786,
+              "digest": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+              "details": {
+                "parent_model": "",
+                "format": "gguf",
+                "family": "qwen3",
+                "families": [
+                  "qwen3"
+                ],
+                "parameter_size": "4.0B",
+                "quantization_level": "Q4_K_M"
+              },
+              "expires_at": "2026-09-09T21:06:24.015189+05:30",
+              "size_vram": 3175339786,
+              "context_length": 4096
+            }
+          ]
+        }
+      },
+      {
+        "valid": true,
+        "score": {
+          "true_positive": 1,
+          "false_positive": 1,
+          "false_negative": 1,
+          "actual_atoms": [
+            "capability:inference-deployment",
+            "tool:Kubernetes:unspecified"
+          ],
+          "class_correct": false,
+          "domain_correct": false
+        },
+        "output": {
+          "ai_domain": "unknown",
+          "responsibility_class": "unknown",
+          "claims": [
+            {
+              "kind": "skill",
+              "modality": "unspecified",
+              "quote": "Preferred: Kubernetes. Deploy LLM inference services.",
+              "capabilities": [
+                "inference-deployment"
+              ],
+              "tools": [
+                "Kubernetes"
+              ]
+            }
+          ],
+          "unknowns": [
+            "ai_domain",
+            "responsibility_class"
+          ]
+        },
+        "example": "heldout-serving",
+        "latency_seconds": 3.704,
+        "metrics": {
+          "total_duration": 3693611041,
+          "load_duration": 708666,
+          "prompt_eval_count": 461,
+          "eval_count": 112,
+          "eval_duration": 3589917000
+        },
+        "resident": {
+          "models": [
+            {
+              "name": "qwen3:4b-instruct-2507-q4_K_M",
+              "model": "qwen3:4b-instruct-2507-q4_K_M",
+              "size": 3175339786,
+              "digest": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+              "details": {
+                "parent_model": "",
+                "format": "gguf",
+                "family": "qwen3",
+                "families": [
+                  "qwen3"
+                ],
+                "parameter_size": "4.0B",
+                "quantization_level": "Q4_K_M"
+              },
+              "expires_at": "2026-09-09T21:06:27.728227+05:30",
+              "size_vram": 3175339786,
+              "context_length": 4096
+            }
+          ]
+        }
+      },
+      {
+        "valid": true,
+        "score": {
+          "true_positive": 1,
+          "false_positive": 0,
+          "false_negative": 0,
+          "actual_atoms": [
+            "capability:model-research"
+          ],
+          "class_correct": true,
+          "domain_correct": true
+        },
+        "output": {
+          "ai_domain": "in-domain",
+          "responsibility_class": "research-heavy",
+          "claims": [
+            {
+              "kind": "skill",
+              "modality": "unspecified",
+              "quote": "Work on AI research.",
+              "capabilities": [
+                "model-research"
+              ],
+              "tools": []
+            },
+            {
+              "kind": "skill",
+              "modality": "unspecified",
+              "quote": "Research novel model architectures and publish experiments.",
+              "capabilities": [
+                "model-research"
+              ],
+              "tools": []
+            }
+          ],
+          "unknowns": []
+        },
+        "example": "heldout-research",
+        "latency_seconds": 4.342,
+        "metrics": {
+          "total_duration": 4334036958,
+          "load_duration": 4741250,
+          "prompt_eval_count": 464,
+          "eval_count": 138,
+          "eval_duration": 4207403000
+        },
+        "resident": {
+          "models": [
+            {
+              "name": "qwen3:4b-instruct-2507-q4_K_M",
+              "model": "qwen3:4b-instruct-2507-q4_K_M",
+              "size": 3175339786,
+              "digest": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+              "details": {
+                "parent_model": "",
+                "format": "gguf",
+                "family": "qwen3",
+                "families": [
+                  "qwen3"
+                ],
+                "parameter_size": "4.0B",
+                "quantization_level": "Q4_K_M"
+              },
+              "expires_at": "2026-09-09T21:06:32.076644+05:30",
+              "size_vram": 3175339786,
+              "context_length": 4096
+            }
+          ]
+        }
+      },
+      {
+        "valid": false,
+        "score": null,
+        "output": {
+          "ai_domain": "unknown",
+          "responsibility_class": "unknown",
+          "claims": [],
+          "unknowns": []
+        },
+        "example": "heldout-missing",
+        "latency_seconds": 0.99,
+        "metrics": {
+          "total_duration": 981286000,
+          "load_duration": 1214375,
+          "prompt_eval_count": 451,
+          "eval_count": 28,
+          "eval_duration": 857531000
+        },
+        "resident": {
+          "models": [
+            {
+              "name": "qwen3:4b-instruct-2507-q4_K_M",
+              "model": "qwen3:4b-instruct-2507-q4_K_M",
+              "size": 3175339786,
+              "digest": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+              "details": {
+                "parent_model": "",
+                "format": "gguf",
+                "family": "qwen3",
+                "families": [
+                  "qwen3"
+                ],
+                "parameter_size": "4.0B",
+                "quantization_level": "Q4_K_M"
+              },
+              "expires_at": "2026-09-09T21:06:33.075351+05:30",
+              "size_vram": 3175339786,
+              "context_length": 4096
+            }
+          ]
+        }
+      },
+      {
+        "valid": true,
+        "score": {
+          "true_positive": 0,
+          "false_positive": 0,
+          "false_negative": 1,
+          "actual_atoms": [],
+          "class_correct": null,
+          "domain_correct": null
+        },
+        "output": {
+          "ai_domain": "unknown",
+          "responsibility_class": "unknown",
+          "claims": [
+            {
+              "kind": "skill",
+              "modality": "unspecified",
+              "quote": "Python-Kenntnisse sind erforderlich.",
+              "capabilities": [],
+              "tools": []
+            }
+          ],
+          "unknowns": [
+            "ai_domain",
+            "responsibility_clauss"
+          ]
+        },
+        "example": "heldout-german",
+        "latency_seconds": 3.087,
+        "metrics": {
+          "total_duration": 3073697458,
+          "load_duration": 884208,
+          "prompt_eval_count": 462,
+          "eval_count": 97,
+          "eval_duration": 2961589000
+        },
+        "resident": {
+          "models": [
+            {
+              "name": "qwen3:4b-instruct-2507-q4_K_M",
+              "model": "qwen3:4b-instruct-2507-q4_K_M",
+              "size": 3175339786,
+              "digest": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+              "details": {
+                "parent_model": "",
+                "format": "gguf",
+                "family": "qwen3",
+                "families": [
+                  "qwen3"
+                ],
+                "parameter_size": "4.0B",
+                "quantization_level": "Q4_K_M"
+              },
+              "expires_at": "2026-09-09T21:06:36.173046+05:30",
+              "size_vram": 3175339786,
+              "context_length": 4096
+            }
+          ]
+        }
+      },
+      {
+        "valid": true,
+        "score": {
+          "true_positive": 0,
+          "false_positive": 0,
+          "false_negative": 0,
+          "actual_atoms": [],
+          "class_correct": null,
+          "domain_correct": false
+        },
+        "output": {
+          "ai_domain": "out-of-domain",
+          "responsibility_class": "unknown",
+          "claims": [
+            {
+              "kind": "responsibility",
+              "modality": "unspecified",
+              "quote": "Sell subscriptions to an AI analytics platform.",
+              "capabilities": [],
+              "tools": []
+            }
+          ],
+          "unknowns": [
+            "Sell subscriptions to an AI analytics platform."
+          ]
+        },
+        "example": "heldout-sales",
+        "latency_seconds": 2.86,
+        "metrics": {
+          "total_duration": 2849724000,
+          "load_duration": 1659000,
+          "prompt_eval_count": 459,
+          "eval_count": 95,
+          "eval_duration": 2731288000
+        },
+        "resident": {
+          "models": [
+            {
+              "name": "qwen3:4b-instruct-2507-q4_K_M",
+              "model": "qwen3:4b-instruct-2507-q4_K_M",
+              "size": 3175339786,
+              "digest": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+              "details": {
+                "parent_model": "",
+                "format": "gguf",
+                "family": "qwen3",
+                "families": [
+                  "qwen3"
+                ],
+                "parameter_size": "4.0B",
+                "quantization_level": "Q4_K_M"
+              },
+              "expires_at": "2026-09-09T21:06:39.043001+05:30",
+              "size_vram": 3175339786,
+              "context_length": 4096
+            }
+          ]
+        }
+      }
+    ],
+    "human_review": "pending",
+    "limitations": [
+      "Six previously evaluated author-owned snippets, provisional labels; not a newly unseen held-out set.",
+      "Resident API estimates are not peak unified-memory, pressure, swap or energy measurements.",
+      "No research source disclosure or runtime promotion. Brief quality, long descriptions and multilingual quality unmeasured.",
+      "No downloading, paid fallback or production tool-boundary claim. Existing local server is trusted separately."
+    ]
+  },
+  "unattended": {
+    "schema_version": 1,
+    "recorded_at": "2026-09-09T15:51:33.502395+00:00",
+    "identity": {
+      "runtime": "codex-cli 0.153.4",
+      "binary_sha256": "b973d440acac501fd2594a43e7ca9ce41e0a65b9dfb28d0d7a7837c99e1261e3",
+      "model": "gpt-5.5",
+      "model_metadata_sha256": "7935feee7a55829ad98ac4b2311f14607a04ef84f77584d2f6dd370c1d07be63",
+      "source_commit": "3d2ee51ca2d5db578f328aa75e20aa22c0197c9a",
+      "boundary_config_sha256": "8985e495b46ca446694283362856f594c9a4b5cf1a8bd45d0fdc7b6343e7c884",
+      "client_sha256": "b07ae8f0727b335f38c03d88b1f2b77173268b4a4b0c131b83f1576653883e4f",
+      "boundary_test_sha256": "cddebec6a2ae8c0e03f611516cc526d46f1052d8388fa552a9b08d9746f0757a"
+    },
+    "executable": "/Users/dhasharma/Dharmendra/Projects/ai-job-radar/.venv/bin/python",
+    "codex_path": "/Users/dhasharma/.local/bin/codex",
+    "harness_sha256": "5346c13ce315e55ff225dd7f09d4d948e8dd5eb66d04462e0147b56ec8a6f6e5",
+    "metadata": {
+      "execution": {
+        "authentication": "chatgpt",
+        "binary_sha256": "b973d440acac501fd2594a43e7ca9ce41e0a65b9dfb28d0d7a7837c99e1261e3",
+        "boundary_config_sha256": "8985e495b46ca446694283362856f594c9a4b5cf1a8bd45d0fdc7b6343e7c884",
+        "latency_seconds": 4.306,
+        "model": "gpt-5.5",
+        "model_metadata_sha256": "7935feee7a55829ad98ac4b2311f14607a04ef84f77584d2f6dd370c1d07be63",
+        "observed_item_types": [
+          "agentMessage",
+          "userMessage"
+        ],
+        "paid_fallback": false,
+        "runtime": "codex-cli 0.153.4",
+        "source_commit": "3d2ee51ca2d5db578f328aa75e20aa22c0197c9a",
+        "token_usage": {
+          "last": {
+            "cacheWriteInputTokens": 0,
+            "cachedInputTokens": 0,
+            "inputTokens": 143,
+            "outputTokens": 15,
+            "reasoningOutputTokens": 0,
+            "totalTokens": 158
+          },
+          "modelContextWindow": 258400,
+          "total": {
+            "cacheWriteInputTokens": 0,
+            "cachedInputTokens": 0,
+            "inputTokens": 143,
+            "outputTokens": 15,
+            "reasoningOutputTokens": 0,
+            "totalTokens": 158
+          }
+        }
+      },
+      "status": "passed"
+    },
+    "latency_seconds": 5.042,
+    "limitations": [
+      "Owned synthetic smoke with stdin closed and reduced environment, while this user session is awake.",
+      "Does not validate a sleeping/locked laptop, future token refresh, quotas or entitlement to scheduled account use.",
+      "Operator must review account suitability and explicitly configure scheduled model use."
+    ]
+  },
+  "prior_baselines": "phase2-evaluation.json: same original six-case dataset; narrower P2 span validation and prior harness; no fresh blinded head-to-head",
+  "discarded_development_evaluation": {
+    "artifact": "a89f5fa4bc630176a8867fd8c1adbff7d297b7776212824f26d0998909a458f9",
+    "reason": "Harness timestamp sequencing error rejected all rows; corrected and rerun. Not a model-quality result."
+  }
+}

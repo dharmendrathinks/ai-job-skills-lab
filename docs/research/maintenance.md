@@ -116,7 +116,32 @@ python3 -m unittest discover -s tests -t .
 In each portal CLI use Bun for `run typecheck` and `test`. Ordinary tests use
 fixtures; live collection requires source qualification. LaTeX checks remain
 in upstream CI but are not a research prerequisite; P1 does not change TeX.
-The PR Ready configuration compares P5 against committed P4 `ff5babf`; P4
+The PR Ready configuration compares P6 against committed P5 `121bdcd`; P5
+was compared with P4 `ff5babf`, and P4
 was compared with P3 `5d8fc8f`, and P3
 was compared with P2 `29cca75`, and P2 with P1 `d102a88`. The upstream foundation remains the separate
 synchronization pin. P2 was committed locally, not pushed by the commit request.
+
+
+## Phase 6 maintenance surface
+
+Preserve upstream `rank_state.save_state` and application HTML/report/state tools.
+P6 adds `research_operations.py`, `research_ops.py`, `research_recovery.py`,
+`research_delivery.py`, `research_model_eval.py` and behavioral tests in
+`tests/test_research_operations.py`. `research_evidence.Store` adds a reusable lock
+and recovery-journal/copy synchronization hooks; review that boundary first on
+upstream merges. Run the entire P2–5 regression suite after any lifecycle change.
+
+Read-only Radar reference inspected 2026-09-09: commit
+`fc96d4865ced43f9098a9272e865e96ee603ae3f`,
+`src/ai_trend_radar/slack.py` (bounded payload/destination identity/delivery intent).
+No code, dependency, runtime data, webhook or SQLite state was imported. Research
+uses a separate explicit-approval sender and the existing JSON helper. Upstream
+`.claude/commands/html-report.md` supplies the single-file/escaping conventions;
+its candidate tracker semantics and application command remain unchanged.
+
+Keep an active P6 writer paired with its withdrawal and operations ledgers. Never
+roll these back with a Git revision. Do not downgrade runtime state to the upstream
+writer or restore a ledger from an older backup. Review machine-specific launchd
+paths after an update; new binary/config/client/harness paths invalidate scheduled
+model qualification. Generated schedules and private reports stay outside Git.

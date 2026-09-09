@@ -62,7 +62,7 @@ source data, annotations, snapshot JSON and its `markdown` field. Inspect it wit
 a local editor only where the policy permits. A local editor may retain its own
 history; restrictive sources needing that history recalled remain unsupported.
 There is no public report generation or unmanaged file export. `export`,
-`restore` fail closed. `analyze`/`extract` require an observation ID, a matching
+`restore` on the P2 entry point fail closed. P6 offers only its fixed managed rollback copy. `analyze`/`extract` require an observation ID, a matching
 qualification and hosted-compatible current policy. Failures defer without a paid
 fallback. `--refresh` requests one uncached extraction; ordinary reruns reuse
 validated analysis keyed by observation, prompt, schema, taxonomy, validator and
@@ -121,8 +121,9 @@ Snapshots containing removed evidence disappear and must be regenerated from
 survivors, with changed denominators visible. No external copies are emitted.
 
 Expiry is enforced on supported access, with logical removal on the next
-operation. Scheduled cleanup, monitoring and broader recovery remain P6.
-`restore` is unavailable so an old manifest cannot be restored through the CLI.
+operation. P6 implements scheduled cleanup/monitoring and a managed rollback copy; see
+[continuous operations](continuous-operations.md). Generic unmanaged `restore`
+remains unavailable. P6 restore requires the current independent withdrawal journal.
 Do not replace the state file manually or bypass its withdrawal ledger.
 
 ## Enabled source and evaluation

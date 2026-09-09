@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Private evidence lifecycle and deterministic validation; gated acquisition/analysis.
 
-Use `python3 -m tools.research_evidence --help` from the checkout. All content
-stays in one atomic state file; stdout contains only operation IDs and counts.
+Use `python3 -m tools.research_evidence --help` from the checkout. Evidence uses one atomic manifest plus P6 controlled local copies; stdout
+contains only operation IDs and counts.
 """
 from __future__ import annotations
 
@@ -17,7 +17,6 @@ from pathlib import Path
 import re
 import stat
 
-from tools.rank_state import save_state
 from tools.research_preflight import ROOT, private_state_path, template_errors
 
 VERSION = 1
@@ -190,7 +189,7 @@ class Store:
     """One writer, one atomic content manifest, no content-addressed disk cache.
 
     Supported on macOS/Linux. Private directory is not an OS security boundary.
-    Filesystem backups and physical media erasure are outside this implementation.
+    Unmanaged filesystem backups and physical media erasure are outside this implementation.
     """
 
     def __init__(self, home, clock=utcnow):
@@ -198,7 +197,7 @@ class Store:
         self.clock = clock
 
     @contextmanager
-    def transaction(self):
+    def locked(self):
         require(not self.home.is_symlink(), "state directory may not be a symlink")
         self.home.mkdir(mode=0o700, parents=True, exist_ok=True)
         require(stat.S_IMODE(self.home.stat().st_mode) & 0o077 == 0,
@@ -207,6 +206,11 @@ class Store:
         fd = os.open(lock, os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
         with os.fdopen(fd, "r+") as handle:
             fcntl.flock(handle, fcntl.LOCK_EX)
+            yield
+
+    @contextmanager
+    def transaction(self):
+        with self.locked():
             path = self.home / "research-state.json"
             require(not path.is_symlink(), "state file may not be a symlink")
             if path.exists():
@@ -226,18 +230,20 @@ class Store:
             else:
                 state = {"schema_version": VERSION, "artifacts": {}, "withdrawn": []}
             # Interrupted upstream atomic writes are never loaded or restored.
-            for orphan in self.home.glob(".seen_jobs.*.tmp"):
+            for orphan in [*self.home.glob(".seen_jobs.*.tmp"), *self.home.glob(".research-view.*")]:
                 require(not orphan.is_symlink(), "unsafe orphan state file")
                 orphan.unlink()
+            from tools.research_recovery import apply_journal, persist
+            apply_journal(self, state)
             self.sweep(state)
-            save_state(path, state)  # expiry withdrawal is durable even if the action fails
+            persist(self, path, state)  # expiry withdrawal is durable even if the action fails
             try:
                 yield state
             except Exception:
                 raise
             else:
                 expired = self.sweep(state)  # authorization can expire during work
-                save_state(path, state)
+                persist(self, path, state)
                 require(not expired, "evidence expired during operation; retry on surviving state")
 
     def remove(self, state, ids):
