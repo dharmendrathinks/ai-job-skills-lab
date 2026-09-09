@@ -49,13 +49,13 @@ class PreflightTests(unittest.TestCase):
         self.assertEqual((self.root / "CLAUDE.md").read_bytes(), self.public)
 
     def test_block_unimplemented_research_without_application_fallback(self):
-        for action in ["outcome", "export"]:
+        for action in ["export"]:
             result = self.run_action(action=action)
             self.assertEqual(result["status"], "blocked")
             self.assertEqual(result["canonical_spec"], ".claude/skills/research/SKILL.md")
 
     def test_execution_readiness_does_not_create_state_or_assert_qualification(self):
-        for action in ["collect", "analyze", "refresh", "brief"]:
+        for action in ["collect", "analyze", "refresh", "brief", "outcome"]:
             result = self.run_action(action=action)
             self.assertEqual(result["status"], "ready_for_gated_research")
             self.assertFalse(result["extraction"]["enabled"])

@@ -1,4 +1,4 @@
-"""Phase 3 CLI: reviewed context/profile inputs and four managed draft briefs."""
+"""Research decisions: context, briefs, reviewed outcomes and interchange."""
 import argparse
 import json
 import os
@@ -9,6 +9,8 @@ from tools.research_evidence import EvidenceError, ROOT, Store, private_state_pa
 from tools.research_context import import_context, acquire, import_radar
 from tools.research_profile import propose, review
 from tools.research_briefs import SECTIONS, generate
+from tools.research_outcomes import decide, record_outcome, reconsider, propose_from_outcome, history
+from tools.research_interchange import preview, release, import_interchange
 
 
 def inspect_brief(store, key):
@@ -42,7 +44,7 @@ def inspect_brief(store, key):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('action', choices=['context-import', 'context-acquire', 'radar-import', 'profile-propose', 'profile-review', 'brief', 'inspect'])
+    parser.add_argument('action', choices=['context-import', 'context-acquire', 'radar-import', 'profile-propose', 'profile-review', 'brief', 'inspect', 'decide', 'outcome', 'reconsider', 'history', 'outcome-profile', 'interchange-preview', 'interchange-release', 'interchange-import', 'interchange-inspect'])
     parser.add_argument('--input', help='Private reviewed JSON bundle')
     parser.add_argument('--repo', help='Read-only Git object source; no checkout or execution')
     parser.add_argument('--report', help='Explicit schema-3.0 report JSON; never a database')
@@ -55,14 +57,43 @@ def main():
     parser.add_argument('--context', action='append', default=[])
     parser.add_argument('--profile')
     parser.add_argument('--refresh', action='store_true')
+    parser.add_argument('--reconsideration')
+    parser.add_argument('--exchange', action='append', default=[])
+    parser.add_argument('--review-digest')
+    parser.add_argument('--direction', action='append', default=[])
     args = parser.parse_args()
     try:
         require(not template_errors(ROOT), 'public template preflight failed')
         store = Store(private_state_path(ROOT, dict(os.environ)))
+        if args.action == 'interchange-inspect':
+            from tools.research_outcomes import artifact
+            with store.transaction() as state:
+                row = artifact(state, args.id, ('interchange-item',))
+                print(json.dumps({'status': 'imported-assessment-only', 'item': row}, ensure_ascii=True, indent=2))
+            return 0
+        if args.action == 'history':
+            # Local view uses the same terminal-control filtering as brief inspection.
+            print(re.sub(r'[\x00-\x1f\x7f\u202a-\u202e\u2066-\u2069]', '', json.dumps(history(store, args.id), ensure_ascii=True)))
+            return 0
         if args.action == 'inspect':
             print(inspect_brief(store, args.id))
             return 0
-        if args.action in ('context-import', 'context-acquire', 'radar-import', 'profile-propose'):
+        if args.action in ('decide', 'outcome', 'reconsider', 'interchange-preview', 'interchange-import'):
+            require(args.input is not None, '--input required')
+            data = read_input(args.input)
+            if args.action == 'decide': result = decide(store, data)
+            elif args.action == 'outcome': result = record_outcome(store, data)
+            elif args.action == 'reconsider': result = reconsider(store, data)
+            elif args.action == 'interchange-preview': result = preview(store, data)
+            else:
+                from tools.research_evidence import fields
+                fields(data, ['bundle', 'policy'])
+                result = import_interchange(store, data['bundle'], data['policy'])
+        elif args.action == 'outcome-profile':
+            result = propose_from_outcome(store, args.id, args.direction, args.profile)
+        elif args.action == 'interchange-release':
+            result = release(store, args.id, args.review_digest, args.reviewer)
+        elif args.action in ('context-import', 'context-acquire', 'radar-import', 'profile-propose'):
             require(args.input is not None, '--input required')
             bundle = read_input(args.input)
             if args.action == 'context-import':
@@ -77,11 +108,11 @@ def main():
         elif args.action == 'profile-review':
             result = review(store, args.id, args.decision, args.reviewer)
         else:
-            result = generate(store, args.kind, args.snapshot, args.context, args.profile, refresh=args.refresh)
+            result = generate(store, args.kind, args.snapshot, args.context, args.profile, refresh=args.refresh, reconsideration=args.reconsideration, exchanges=args.exchange)
         print(json.dumps(result, indent=2))
         return 0
     except (ValueError, TypeError, KeyError, OSError, subprocess.SubprocessError):
-        print(json.dumps({'status': 'blocked', 'reason': 'Invalid, unavailable or unqualified decision input; see Phase 3 contracts. No fallback.'}))
+        print(json.dumps({'status': 'blocked', 'reason': 'Invalid, unavailable or unqualified decision input; see decision/outcome contracts. No fallback.'}))
         return 1
 
 

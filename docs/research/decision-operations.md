@@ -171,3 +171,13 @@ If selected inspection does not establish a worthwhile gap, no-project or
 insufficient-evidence is the correct result. Reproducing existing behavior may be
 useful learning practice but must not be sold as a new contribution. The brief
 prompt enforces this as an instruction; human semantic review remains necessary.
+
+## Phase 4 integration
+
+[Outcome operations](outcome-operations.md) now provide decisions, correction
+history, recommendation memory, scoped outcome-to-profile proposals and neutral
+reviewed interchange. P3 native schema-3.0 Radar conversion is unchanged. New
+briefs add revision links and optionally selected `--exchange` assessments;
+old artifact IDs remain addressable. Generic export is still blocked. Only P4's
+exact reviewed projections with compatible source permissions can be released.
+Human-review status is independent of implementation/commit authorization.

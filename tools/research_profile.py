@@ -4,7 +4,7 @@ from tools.research_evidence import TAXONOMY, fields, require, strings, text, va
 LEVELS = ('self-declared', 'inspected', 'demonstrated', 'not-evidenced')
 
 
-def propose(store, bundle):
+def propose(store, bundle, *, outcome=None):
     fields(bundle, ['schema_version', 'policy', 'direction', 'capabilities', 'supersedes'])
     require(bundle['schema_version'] == 1, 'unsupported research profile version')
     validate_policy(bundle['policy'], store.clock())
@@ -12,6 +12,17 @@ def propose(store, bundle):
     require(isinstance(bundle['capabilities'], list) and len(bundle['capabilities']) <= 30, 'profile budget exceeded')
     with store.transaction() as state:
         deps = []
+        if outcome:
+            from tools.research_outcomes import artifact
+            result = artifact(state, outcome, ('outcome',))
+            require(result['basis'] == 'observed' and result['event_type'] in ('test', 'held-out-evaluation'),
+                    'outcome unavailable for profile proposal')
+            require(not any(a['kind'] == 'outcome' and a['payload'].get('supersedes') == outcome
+                            for a in state['artifacts'].values()), 'superseded outcome cannot propose a profile')
+            require(all(r['capability'] in result['capabilities'] and r['evidence'] == result['evidence']
+                        and r['conditions'] == result['conditions'] for r in bundle['capabilities']),
+                    'proposal cannot broaden outcome evidence/conditions')
+            deps.append(outcome)
         if bundle['supersedes'] is not None:
             old = state['artifacts'].get(bundle['supersedes'])
             require(old and old['kind'] == 'research-profile', 'profile revision unavailable')
@@ -37,7 +48,7 @@ def propose(store, bundle):
         policy = store.put(state, 'policy', bundle['policy'], use_until=bundle['policy'].get('use_until'))
         key = store.put(state, 'profile-proposal', {'schema_version': 1, 'direction': bundle['direction'],
                 'capabilities': bundle['capabilities'], 'supersedes': bundle['supersedes'],
-                'status': 'pending-human-review'}, [policy, *deps])
+                'status': 'pending-human-review', **({'outcome': outcome} if outcome else {})}, [policy, *deps])
     return {'proposal': key, 'status': 'pending-human-review'}
 
 

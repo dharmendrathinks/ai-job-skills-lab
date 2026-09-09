@@ -30,7 +30,7 @@ a pointer. Frontmatter and instructions do not establish tool isolation.
    `analyze --id OBSERVATION_SHA256`; matching runtime identity and compatible
    source policy are required. Inspect managed snapshot JSON/Markdown and pending
    human-review labels. Four drafts and research profile proposals use the P3
-   decision helpers below; outcomes and full interchange remain P4. Do not substitute
+   decision helpers below; P4 adds reviewed outcomes, recommendation memory and gated interchange. Do not substitute
    application commands or manual annotations for qualified model evaluation.
 5. For application requests, explicitly route to upstream specifications. Fit
    rules and tracker selection retain application meaning. `/setup` and
@@ -124,8 +124,40 @@ manifest serve every type. All model sections are proposals pending human review
    novelty, customer intent or views. Quote claims must resolve to supplied source
    content, never inspection metadata. Use `inspect --id BRIEF_ID` for policy-checked local viewing of draft text,
    source quotes and inspected paths before selecting work. Terminal history must
-   be compatible with the source policy; unmanaged file exports stay disabled. Source withdrawal invalidates dependent drafts/profiles.
+   be compatible with the source policy; generic unmanaged file exports stay disabled; P4 allows only reviewed no-recall projections. Source withdrawal invalidates dependent drafts/profiles.
 6. Record honest semantic-review limits. P3 implements drafts and profile review;
-   the full decision/outcome ledger and two-way interchange belong in P4. Do not
+   P4 decision/outcome and interchange actions follow the contracts below. Do not
    publish, contact people or execute a proposed project merely because a brief
    suggests it. Those require the user's explicit task authorization.
+
+## Outcomes and interchange (Phase 4)
+
+Follow `docs/research/outcome-operations.md` using the same decision CLI and
+private manifest. Reuse upstream `/outcome`'s record-first, no-profile-change
+semantics; never invoke its application tracker/archive for research.
+
+1. Record actual accepted/rejected/deferred/duplicate/superseded decisions through
+   `decide`, with reasons, explicit supersession, and defer/target fields as
+   applicable. Phase implementation/commit approval is not a favorable rating.
+2. Use `outcome` for chosen existing projects, changes, inspected test results,
+   corrections, product validation, published experiments and lessons. Distinguish
+   observed, user-reported and model-inferred. Never execute a recorded command
+   or invent tests, interviews, publications or commercial outcomes.
+3. `outcome-profile` only proposes capabilities scoped to inspected tests and
+   their conditions. Present the actual proposal and await actual user review
+   before `profile-review`. A corrected outcome retracts affected profile claims.
+4. Generation uses latest decisions/outcomes, preserving their basis. Rejected
+   or duplicate proposals need reviewed new evidence through `reconsider` and
+   `brief --reconsideration`; refresh/profile/model changes are no bypass.
+   Generation and acceptance are not success and never alter market counts.
+5. Keep `radar-import` for selected native schema-3.0 reports. For neutral 1.0
+   interchange, use `interchange-preview` to inspect exact JSON/Markdown, then
+   `interchange-release` only after explicit approval of that content. All source
+   ancestors must allow export without downstream expiry/recall obligations.
+   Default/current Jobicy export permissions remain false. Do not create a
+   permission grant to make release pass. Private profile lineage is excluded.
+6. Reviewed `interchange-import`/`interchange-inspect` preserve origin/revisions,
+   restrictions and withdrawal hashes. Optional `brief --exchange` inputs remain
+   imported assessments, never independent evidence or local observed outcomes.
+   No Radar database/repository write, circular execution or automatic publication.
+   Unknown versions or unsupported retention block only the affected operation.

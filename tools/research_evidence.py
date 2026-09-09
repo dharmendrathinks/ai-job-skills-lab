@@ -90,7 +90,8 @@ def validate_policy(policy, now):
     fields(policy, ["schema_version", "source", "method", "reviewed_by", "reviewed_at",
                     "permission_basis", "permission_reference", "local_processing",
                     "retention", "hosted_disclosure", "export", "audit_hashes",
-                    "limitations"], ["use_until", "hosted_retention", "hosted_permission_reference"])
+                    "limitations"], ["use_until", "hosted_retention", "hosted_permission_reference",
+                    "export_permission_reference", "export_retention"])
     require(policy["schema_version"] == VERSION, "unsupported policy schema")
     for key in ("source", "reviewed_by", "permission_basis", "permission_reference"):
         text(policy[key])
@@ -98,8 +99,15 @@ def validate_policy(policy, now):
     require(policy["method"] in ("reviewed-local-import", "jobicy-api-v2", "reviewed-context"), "collector not qualified")
     require(policy["local_processing"] is True and policy["audit_hashes"] is True,
             "processing and minimal withdrawal hashes require permission")
-    require(type(policy["hosted_disclosure"]) is bool and policy["export"] is False,
+    require(type(policy["hosted_disclosure"]) is bool and type(policy["export"]) is bool,
             "invalid hosted permission or unsupported unmanaged export")
+    if policy['export']:
+        text(policy.get('export_permission_reference'))
+        require(policy.get('export_retention') == 'no-recall-required' and not policy.get('use_until'),
+                'interchange cannot guarantee downstream deletion or expiry')
+    else:
+        require('export_permission_reference' not in policy and 'export_retention' not in policy,
+                'export permission fields require explicit enabled policy')
     if policy["hosted_disclosure"]:
         require(policy.get("hosted_retention") == "provider-managed-no-deletion-deadline",
                 "hosted deletion guarantees are unavailable")
@@ -255,6 +263,16 @@ class Store:
             if descendants <= removed:
                 break
             removed |= descendants
+        from tools.research_interchange import withdrawal_tokens
+        shared = {t for key in removed if key in state['artifacts']
+                  and state['artifacts'][key]['kind'] == 'interchange-item'
+                  for t in withdrawal_tokens(state['artifacts'][key]['payload'])}
+        copies = {key for key,a in state['artifacts'].items() if a['kind'] == 'interchange-item'
+                  and shared.intersection(a['payload']['lineage'])}
+        copies |= shared.intersection(state['artifacts'])
+        if copies - removed:
+            return self.remove(state, removed | copies)
+        state['withdrawn'].extend(shared)
         for key in removed:
             artifact = state["artifacts"].pop(key, None)
             if artifact and artifact['kind'] == 'context' and artifact['payload']['content'] is not None:

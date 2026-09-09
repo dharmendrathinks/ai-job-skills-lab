@@ -19,7 +19,10 @@ See [commands and limits](docs/research/evidence-operations.md) and
 [measured acceptance evidence](docs/research/phase2-validation.md).
 Phase 3 adds four evidence-linked draft workflows, bounded context/Radar imports
 and reviewed research-profile proposals; see [decision commands](docs/research/decision-operations.md).
-Human semantic evaluation remains pending for both phases. No paid API fallback is configured.
+Phase 4 adds reviewed decisions/outcomes, repetition controls, scoped profile
+proposals and permission-gated JSON/Markdown interchange; see
+[outcome commands and limits](docs/research/outcome-operations.md).
+Human semantic evaluation remains pending. No paid API fallback is configured.
 
 For research, ask Codex to use the `research` skill, or run this read-only check
 with Python 3.10+:

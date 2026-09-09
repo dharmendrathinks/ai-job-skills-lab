@@ -103,7 +103,7 @@ def assess(root: Path, mode: str, action: str,
             blockers.append("public_template_profile_write_blocked")
         elif action != "status":
             blockers.append("use_explicit_upstream_application_command")
-    elif action in ("import", "collect", "analyze", "refresh", "brief"):
+    elif action in ("import", "collect", "analyze", "refresh", "brief", "outcome"):
         pass  # Readiness only; execution checks qualification and current source policy.
     elif action == "export":
         blockers.append("unmanaged_exports_not_supported")
@@ -135,6 +135,13 @@ def assess(root: Path, mode: str, action: str,
                     "context": "reviewed_import_or_explicit_bounded_acquisition",
                     "radar_import": "selected_schema_3_0_report_only",
                     "profile": "proposal_and_explicit_review_no_application_writes"},
+        "phase_4": {
+            "outcomes": "explicit_revision_ledger_observed_self_reported_model_inferred",
+            "memory": "reviewed_reconsideration_required_for_blocked_recommendations",
+            "profile": "scoped_test_outcome_proposal_requires_review",
+            "interchange": "reviewed_1_0_projections_only_with_compatible_export_permission",
+            "imported_outcomes": "assessments_only_no_automatic_profile_or_market_evidence"
+        },
         "installed_portal_skills": portal_skills(root),
         "inference": {"authentication": "existing_codex_subscription",
                       "additional_spending_inr": 0, "paid_fallback": False},

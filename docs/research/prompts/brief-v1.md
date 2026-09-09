@@ -75,3 +75,15 @@ and a separate discussion/audience-validation plan. Do not script actual results
 
 All types require explicit limitations and unknowns. Use insufficient-evidence
 when no evidence supports a worthwhile brief. Return exactly the requested schema.
+
+Recommendation memory contains explicit reviewed decisions, not success labels.
+Respect deferrals, rejected/duplicate proposals and the reasons recorded. Do not
+paraphrase the same rejected capability proposal into a fresh recommendation.
+A reconsideration requires reviewed material source evidence. Feedback never
+changes market counts, skill weights or establishes demonstrated ability.
+
+Outcome memory preserves observed, user-reported and model-inferred bases. Learn
+from documented failures and corrections without upgrading their evidential scope.
+Optional interchange_assessments are external assertions only, even when the
+producer labels them observed. They cannot establish primary-source alternatives,
+pain, audience demand, test success, profile capability or independent corroboration.

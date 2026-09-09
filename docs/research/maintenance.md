@@ -62,6 +62,7 @@ allow the original upstream header and the reviewed fork routing header only.
 | `tools/research_runtime.py`, `tools/research_analysis.py`, `tests/test_research_runtime_live.py`, `tests/test_research_runtime_protocol.py`, `tests/test_research_analysis.py` | Qualified subscription worker, execution/cache/validation and adversarial tests. Runtime upgrades fail closed; inspect pinned source and rerun active qualification before source disclosure. Apache-2.0 provenance for the runtime adaptation is preserved in `THIRD_PARTY_NOTICES.md` and `licenses/Apache-2.0-Codex.txt`. |
 | `tools/research_sources.py`, `tools/evaluate_research.py`, `tests/fixtures/research/`, `docs/research/prompts/` | Thin Jobicy source path and shared-store comparisons; preserve policy restrictions, frozen prompt/dataset identities and honest human-review status. No provider code, dependencies or second command tree replaced. |
 | `tools/research_context.py`, `tools/research_profile.py`, `tools/research_briefs.py`, `tools/research_decisions.py`, `tests/test_research_decisions.py`, `tools/evaluate_decisions.py` | Additive P3 contracts, selected acquisition, schema-3.0 report conversion, reviewed profile and four draft workflows. Reuses P2 state/runtime; preserve context/quote withdrawal, profile independence and constrained evidence IDs. No third-party code copied. |
+| `tools/research_outcomes.py`, `tools/research_interchange.py`, `tests/test_research_outcomes.py` | Additive P4 event/revision memory and neutral projections. Reuses upstream outcome semantics and inspected Radar revision patterns, no code/database imports. Preserve old IDs, source/assessment separation, profile review, explicit export permissions and withdrawal hashes during synchronization. |
 | `.github/workflows/ci.yml`, `.github/workflows/upstream-watch.yml`, `.gitignore` | Template/version checks active on this repository; issue reporting is manual and doubly opted in; private/dev artifacts ignored. |
 | `PLAN_RESEARCH.md`, `docs/research/`, `README.md`, `.pr-ready.json` | Roadmap/contracts/runtime evidence, attribution, reproducible checks and source-path inventory; public content only. |
 
@@ -114,6 +115,6 @@ python3 -m unittest discover -s tests -t .
 In each portal CLI use Bun for `run typecheck` and `test`. Ordinary tests use
 fixtures; live collection requires source qualification. LaTeX checks remain
 in upstream CI but are not a research prerequisite; P1 does not change TeX.
-The PR Ready configuration compares P3 against committed P2 `29cca75`; P2
-was evaluated against P1 `d102a88`. The upstream foundation remains the separate
+The PR Ready configuration compares P4 against committed P3 `5d8fc8f`; P3
+was compared with P2 `29cca75`, and P2 with P1 `d102a88`. The upstream foundation remains the separate
 synchronization pin. P2 was committed locally, not pushed by the commit request.

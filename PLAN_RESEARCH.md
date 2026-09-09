@@ -517,7 +517,7 @@ Rejected and duplicate briefs inform future generation, with material new eviden
 
 ### AI Trend Radar interchange
 
-In **Phase 4**, define a neutral **`radar-interchange/1.0`** JSON envelope and Markdown companion containing:
+Phase 4 implements a neutral **`radar-interchange/1.0`** JSON envelope and Markdown companion containing:
 
 - Producer and producer schema/version.
 - Stable external ID, revision, export time, and parent references.
@@ -525,7 +525,7 @@ In **Phase 4**, define a neutral **`radar-interchange/1.0`** JSON envelope and M
 - Capability/problem links, brief type, decision state, or outcome references.
 - Original lineage and reuse/retention restrictions.
 
-Phase 3 delivers the narrow read-only schema-3.0 report conversion described in Section 7. Phase 4 reuses it for full reviewed import/export of research problems, experiments and outcomes; it does not duplicate the acquisition path. Actual consumer changes in AI Trend Radar are separate work in that repository.
+Phase 3 delivers the narrow read-only schema-3.0 report conversion described in Section 7. Phase 4 retains that converter for native reports and adds full reviewed neutral import/export of research problems, experiments and outcomes through the same store; it does not duplicate the acquisition path. Actual consumer changes in AI Trend Radar are separate work in that repository.
 
 No shared database, direct cross-repository state mutation, mandatory runtime dependency, or circular triggering. Reimporting a bundle is idempotent; echoing a recommendation back does not create independent corroboration. Unknown major versions fail clearly.
 
@@ -657,9 +657,9 @@ Phase 5 branches directly from Phase 2 and can progress alongside Phases 3–4. 
 - **Reuse/change:** Upstream outcome/archive concepts; P3 read-only report conversion; AI Trend Radar’s inspected revision and feedback patterns, without importing its database or pipeline.
 - **User outcome:** Record decisions, selected existing projects, work results, validation observations and lessons; exchange reviewed bundles with AI Trend Radar.
 - **Work:** Add decision/outcome ledger, duplicate/repetition handling, correction history, evidence-based profile-change proposals and full interchange export/import using the P3 schema-3.0 conversion. Preserve source/assessment separation and lifecycle restrictions across outcome exchange.
-- **Data/migration:** `OutcomeEvent v1`, `radar-interchange/1.0`, lineage and revision links. Old briefs remain addressable.
-- **Acceptance/evidence:** Idempotent round trips; unknown-major rejection; no circular corroboration; rejected profile proposals make no change; inspected test results support only scoped capability claims; private fields excluded from exports. P2 retention/export gates apply to bundles and outcomes; round trips and old imports cannot resurrect withdrawn evidence or discard restrictions.
-- **Limitations/next:** AI Trend Radar consumer modifications require separate repository work. External validation and publication require authorization. Enables meaningful repeated-use evaluation and Phase 6 review queues.
+- **Data/migration:** Implemented additive state-v1 `decision`, `outcome`, `reconsideration`, profile-outcome links, managed interchange previews/releases/receipts and imported assessments. `OutcomeEvent v1`, `radar-interchange/1.0`, stable recommendation family/revision links; old P3 brief IDs imply revision 1 and remain addressable without rewriting. Corrections preserve event history and retract derived profile claims.
+- **Acceptance/evidence:** Implemented and behaviorally tested in `tests/test_research_outcomes.py`: explicit decision revisions/idempotence, deferred/rejected repetition gates and reviewed new evidence, outcome basis/scoped recorded tests, correction-driven profile retraction, rejected profile proposals with no change, exact export previews, unknown-version/private-field rejection, idempotent round trips, no circular corroboration, and withdrawn-content non-resurrection. See [P4 validation](docs/research/phase4-validation.md). Human usefulness and semantic scope review remain distinct from automated checks; no user feedback or real outcome is invented.
+- **Limitations/next:** AI Trend Radar consumer modifications require separate repository work. Current Jobicy/other false export policies remain blocked; reviewed projections require explicit export permission without downstream expiry/recall obligations, and exclude private profile lineage. Importer provenance/observer claims are not authenticated; imported outcomes remain assessments. Capability-overlap suppression is conservative, not semantic novelty proof; record-budget overflow requires review. External validation/publication require authorization. Enables meaningful repeated-use evaluation and Phase 6 review queues without blocking P5.
 
 ### Phase 5 — Measured global expansion and comparable observations
 
@@ -704,7 +704,7 @@ Phase 5 branches directly from Phase 2 and can progress alongside Phases 3–4. 
 | Tool-free extraction boundary, validation and persistence | P1 enforcement assessment; P2 implementation/tests | Pinned empty-registry worker qualified; validator/persistence and forced-call, drift/quota tests implemented; human evaluation acceptance pending |
 | Separate research/application policies | P1–2 | Entry-point routing and independent state |
 | Permitted collection/import and provenance | P2; expansion P5 | Reviewed imports and narrow Jobicy API capture implemented; other providers conditional; policy review/expiry applies before use |
-| Retention, expiry, deletion, export gates and withdrawal | P2 onward | Implemented for indefinite local retention/logical deletion only; transitive lineage and withdrawal enforced, unmanaged exports/restore disabled; unsupported hard deadlines rejected before capture |
+| Retention, expiry, deletion, export gates and withdrawal | P2 onward | Implemented for indefinite local retention/logical deletion only; transitive lineage and withdrawal enforced, generic unmanaged exports/restore disabled; P4 adds reviewed no-recall projections; unsupported hard deadlines rejected before capture |
 | Identity, deduplication, revisions and vacancy/history separation | P2; comparisons P5 | Source observations and completeness receipts |
 | AI responsibility classification | P2 | Validated descriptions and taxonomy |
 | Evidence-grounded LLM extraction and capability aggregation | P2 | Qualified real extraction, exact spans, versioned cache and modality counts implemented; provisional baseline results recorded, human review pending |
@@ -714,9 +714,9 @@ Phase 5 branches directly from Phase 2 and can progress alongside Phases 3–4. 
 | Product/monetization hypotheses | P3 | Implemented hypothetical workflow/validation schema with support/contradiction and unknown commercial judgment when context is missing |
 | YouTube experiment briefs | P3; full context/outcome exchange P4 | Implemented experiment draft schema; dated discussion window gate and explicit unknown audience suitability |
 | Reviewed evidence profile | P3; outcome updates P4 | Implemented proposal/review actions, separate declaration/inspection/demonstration levels and lifecycle links; no automatic promotion |
-| Feedback, corrections and repetition control | P4 | Stable briefs, revisions and outcome ledger |
+| Feedback, corrections and repetition control | P4 | Implemented decision/outcome history, explicit correction/reconsideration, deferral and capability-overlap repetition gates; source-content basis and pending semantic review |
 | Read-only AI Trend Radar report import | P3 deliverable; optional acquisition route | Implemented selected schema-3.0 conversion; imported assessments remain separate, original quote lineage/withdrawal preserved; no runtime/database dependency |
-| Full AI Trend Radar Markdown/JSON interchange and outcomes | P4 | Reuse P3 conversion; independent repositories, lineage, export/withdrawal controls |
+| Full AI Trend Radar Markdown/JSON interchange and outcomes | P4 | Implemented native P3 converter plus neutral 1.0 previews/releases/imported assessments, idempotent origin identity and withdrawal controls; explicit compatible export permission required; Radar consumer changes separate |
 | Global source/language expansion | P5, branching from P2 alongside P3–4 | Measured gaps, permission, lifecycle and quality gates; conditional adapters do not block unrelated capabilities |
 | Stable-source/time-window analysis | P5 | P2 receipts and accumulated observations |
 | Incremental operation, review inbox and offline HTML | P6 | Complete P2–4 journey and durable state |
@@ -728,7 +728,7 @@ Phase 5 branches directly from Phase 2 and can progress alongside Phases 3–4. 
 
 ## 12. Concrete next phase and unresolved evidence
 
-**Current implementation phase: Phase 3 implementation and acceptance review.** The approved source-to-analysis implementation is delivered in the required folder. Resolve the pending human evaluation labels/adjudication recorded in `phase2-validation.md`; do not describe provisional model scores as human-validated accuracy. P3 four-workflow intelligence is implemented with its human review still pending; P5 measured source expansion remains an independent branch. Future visibility/fork-metadata changes remain explicit external-write steps.
+**Current implementation phase: Phase 4 implementation delivered; semantic acceptance review remains open.** The approved source-to-analysis implementation is delivered in the required folder. Resolve the pending human evaluation labels/adjudication recorded in `phase2-validation.md`; do not describe provisional model scores as human-validated accuracy. P3 four-workflow intelligence and P4 feedback/interchange are implemented, with P2/P3 human review still pending. P4 operations and automated evidence are in `docs/research/outcome-operations.md` and `phase4-validation.md`; no actual user outcome was recorded by the implementation tests. P5 measured source expansion remains an independent branch. Future visibility/fork-metadata changes remain explicit external-write steps.
 
 Genuine blockers or unresolved evidence:
 
@@ -738,7 +738,7 @@ Genuine blockers or unresolved evidence:
 - Some sources need permission or clarification for the exact method, analysis, hosted disclosure/retention, evaluation or export use. Enabled paths must also meet storage/deletion obligations from P2, including derivatives and runtime histories. Incompatible deadlines, uncontrolled copies or unresolved terms block only affected paths; P6 is not a retention grace period.
 - Narrow extraction/brief execution metrics and failures are recorded; broad human-reviewed recommendation usefulness, multilingual accuracy and local-inference performance remain unestablished.
 - Time comparisons require accumulated comparable observations; no historical market-growth result exists.
-- P3 briefs may lack inspected repository alternatives, product/problem evidence or dated discussions; missing evidence requires per-dimension limitations or abstention. The narrow P3 AI Trend Radar report importer is implemented; P4 full interchange remains unimplemented; report availability is optional and imported summaries cannot substitute for inspected source content.
+- P3 briefs may lack inspected repository alternatives, product/problem evidence or dated discussions; missing evidence requires per-dimension limitations or abstention. The narrow P3 AI Trend Radar report importer is implemented; P4 neutral interchange is implemented for reviewed no-recall-compatible projections; current source export rights and an actual reviewed producer bundle are still needed for real exchange, and Radar consumer support remains separate; report availability is optional and imported summaries cannot substitute for inspected source content.
 - Unattended subscription compatibility, disclosure/retention and usage limits require evidence. No additional spending, paid API worker, credit purchase or automatic paid fallback is authorized. A dashboard must still earn its complexity through demonstrated need.
 
 The direction changes from personal job matching to **global, source-grounded AI engineering research built by extending the upstream fork**.
@@ -747,4 +747,4 @@ The complete dependency sequence is:
 
 **P1 fork/privacy/runtime foundation → P2 evidence and capability analysis → P3 four decision workflows → P4 outcomes and interchange → P6 continuous operation → P7 broader IT domains. P5 global/longitudinal expansion branches from P2 alongside P3–4; its cohort contracts support P6 longitudinal reporting. Conditional providers do not block unrelated capabilities.**
 
-The planning exercise itself completed no implementation phase. Subsequent authorized work completed and pushed P1 and delivered the P2 implementation and automated validation above. Human evaluation acceptance is still open. P3 implementation is recorded above; P4–7 remain unimplemented.
+The planning exercise itself completed no implementation phase. Subsequent authorized work completed and pushed P1 and delivered the P2 implementation and automated validation above. Human evaluation acceptance is still open. P3/P4 implementation is recorded above; P5–7 remain unimplemented. The next dependency-independent implementation phase is P5; P6 follows the integrated P2–4 journey and relevant P5 cohort contracts.

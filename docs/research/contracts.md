@@ -1,4 +1,4 @@
-# Research contracts v1 — Phases 2–3 implementation status
+# Research contracts v1 — Phases 2–4 implementation status
 
 The table remains the full target. Reviewed local imports, span validation,
 snapshots and logical lifecycle operations are implemented in
@@ -9,6 +9,8 @@ checked-in configuration and test fixtures remain synthetic. Human quality revie
 is pending; do not equate structural validation with semantic correctness.
 Phase 3 context requests/receipts, reviewed profile proposals, four draft types and
 read-only Radar conversion are implemented; see [decision contracts](decision-operations.md).
+Phase 4 decision/outcome revisions, scoped profile proposals, recommendation
+memory and neutral interchange are implemented; see [outcome contracts](outcome-operations.md).
 The normative capability/lifecycle requirements remain in `PLAN_RESEARCH.md`.
 
 | Contract | Required responsibilities |
@@ -44,8 +46,10 @@ Keep only allowed audit metadata; restore must not resurrect withdrawn evidence.
 Reviewed local imports and the narrowly reviewed Jobicy API path support
 indefinite local retention, logical deletion and minimal withdrawal hashes.
 Hosted submission additionally requires an explicit compatible permission basis
-and provider-managed retention without a deletion deadline. Unmanaged export,
-restore and hard physical deletion deadlines are rejected. Execution responses,
+and provider-managed retention without a deletion deadline. Generic unmanaged export, restore and hard physical deletion deadlines are
+rejected. P4 adds explicit reviewed projections only for export-enabled source
+policies with no downstream recall/expiry obligation; current false policies stay
+false. No source policy was upgraded in runtime data. Execution responses,
 caches and real-description evaluation artifacts inherit source dependencies.
 Policy validation cannot independently verify an operator's permission claim.
 No source with an unsupported hard deletion deadline is enabled. P6 adds
@@ -57,11 +61,24 @@ imported-quote fingerprints prevent wrapper-based resurrection; generated briefs
 and profile proposals inherit all dependencies. Its optional read-only
 schema-3.0 AI Trend Radar importer consumes selected report files, separates
 source evidence from assessments, and preserves missing dates/content as limits.
-No database access, shared state or repository mutation. P4 reuses that conversion
-for `radar-interchange/1.0` JSON and Markdown outcome exchange with restrictions
-and original lineage preserved. Missing evidence requires limitation/abstention.
+No database access, shared state or repository mutation. P4 retains that
+converter for native reports and extends the shared store with
+`radar-interchange/1.0` reviewed projections and imported assessments. JSON is
+authoritative, its Markdown companion must match, origin/revision identity is
+idempotent, and original restrictions/withdrawal lineage are preserved. Imported
+outcomes cannot automatically become observed results, profile evidence or
+independent corroboration. Missing evidence requires limitation/abstention.
 
 Application identities, fit bands, gap logic and tracker state remain separate.
 No research migration reconstructs missing descriptions from application notes.
 Future migrations need validation, policy-compatible backup/reversible operation,
 and withdrawal-aware rollback; unsupported major versions fail clearly.
+
+P4 is an additive state-v1 migration: new artifact kinds and brief metadata,
+no rewriting of retained P2/P3 objects. Legacy brief IDs imply revision 1.
+Outcome corrections retain event history and retract dependent capability
+proposals/profiles. All feedback/executions inherit current source permissions;
+withdrawing evidence invalidates the resulting drafts. Interchange import is
+never a state/backup restore. Known tombstones block returning content in a
+participating store; remote recall and hostile-producer authenticity are not
+verified. Unsupported expiry/recall obligations keep the affected path disabled.

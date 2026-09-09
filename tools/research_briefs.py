@@ -7,6 +7,7 @@ import subprocess
 from tools.research_analysis import qualified
 from tools.research_evidence import ROOT, TAXONOMY, EvidenceError, digest, fields, require, strings, text
 from tools.research_runtime import CodexWorker
+from tools.research_outcomes import evidence_basis, check_memory, memory, outcome_memory, artifact
 
 PROMPT = ROOT / 'docs/research/prompts/brief-v1.md'
 SECTIONS = {
@@ -156,10 +157,24 @@ def validate(output, kind, data):
     return output
 
 
-def generate(store, kind, snapshot, contexts=(), profile=None, *, refresh=False, worker_factory=CodexWorker):
-    require(kind in SECTIONS and len(contexts) <= 10, 'invalid brief request')
+def generate(store, kind, snapshot, contexts=(), profile=None, *, refresh=False, worker_factory=CodexWorker, reconsideration=None, exchanges=()):
+    require(kind in SECTIONS and len(contexts) <= 10 and len(exchanges) <= 10, 'invalid brief request')
     with store.transaction() as state:
         data = inputs(state, snapshot, contexts, profile, store.clock())
+        data['interchange_assessments'] = {k: artifact(state, k, ('interchange-item',)) for k in exchanges}
+        if exchanges: hosted_eligible(state, exchanges)
+        basis = evidence_basis(state, snapshot, contexts)
+        check_memory(state, kind, basis, contexts, store.clock(), reconsideration=reconsideration)
+        feedback = memory(state, kind)
+        work_memory = outcome_memory(state, kind)
+        require(len(feedback) + len(work_memory) <= 100, 'memory review budget exceeded; no silent history truncation')
+        memory_deps = [r['id'] for r in [*feedback, *work_memory]] + ([reconsideration] if reconsideration else [])
+        if memory_deps or exchanges: hosted_eligible(state, [*memory_deps, *exchanges])
+        data['recommendation_memory'] = feedback
+        data['outcome_memory'] = work_memory
+        if reconsideration:
+            rec = artifact(state, reconsideration, ('reconsideration',))
+            data['reconsideration'] = {k: rec[k] for k in ('brief', 'reason', 'evidence')}
         qualification, identity = qualified(state)
         versions = {'schema': 'brief/1', 'prompt': digest(PROMPT.read_text()), 'runtime': identity,
                     'validator': digest(Path(__file__).read_text()), 'output_schema': digest(schema(kind, data))}
@@ -173,10 +188,12 @@ def generate(store, kind, snapshot, contexts=(), profile=None, *, refresh=False,
         with worker_factory(store.home) as worker:
             with store.transaction() as state:
                 inputs(state, snapshot, contexts, profile, store.clock()); qualified(state)
+                require(memory(state, kind) == feedback and outcome_memory(state, kind) == work_memory, 'feedback changed before invocation')
+                if memory_deps or exchanges: hosted_eligible(state, [*memory_deps, *exchanges])
             response, metadata = worker.run(prompt, schema(kind, data))
     except (ValueError, OSError, subprocess.SubprocessError):
         with store.transaction() as state:
-            deps = [snapshot, *contexts, qualification] + ([profile] if profile else [])
+            deps = [snapshot, *contexts, qualification, *memory_deps, *exchanges] + ([profile] if profile else [])
             if all(key in state['artifacts'] for key in deps):
                 store.put(state, 'brief-failure', {'schema_version': 1, 'kind': kind, 'versions': versions,
                           'recorded_at': store.clock().isoformat(), 'status': 'deferred',
@@ -184,22 +201,29 @@ def generate(store, kind, snapshot, contexts=(), profile=None, *, refresh=False,
         raise
     with store.transaction() as state:
         current = inputs(state, snapshot, contexts, profile, store.clock()); qualified(state)
+        require(memory(state, kind) == feedback and outcome_memory(state, kind) == work_memory, 'feedback changed during generation; retry review')
+        if memory_deps or exchanges: hosted_eligible(state, [*memory_deps, *exchanges])
         error = None
         try:
             output = validate(response, kind, current)
+            check_memory(state, kind, basis, contexts, store.clock(), output, reconsideration)
         except EvidenceError as exc:
             error = str(exc)
-        deps = [snapshot, *contexts, qualification] + ([profile] if profile else [])
+        deps = [snapshot, *contexts, qualification, *memory_deps, *exchanges] + ([profile] if profile else [])
         execution = store.put(state, 'brief-execution', {'schema_version': 1, 'metadata': metadata, 'versions': versions,
                                   'recorded_at': store.clock().isoformat(), 'response': response,
                                   'status': 'rejected' if error else 'validated', 'reason': error}, deps)
         if not error:
             record = {'schema_version': 1, 'kind': kind, 'status': 'draft-human-review', 'cache_key': cache_key,
                   'versions': versions, 'snapshot': snapshot, 'contexts': list(contexts), 'profile': profile,
-                  'execution': execution, 'proposal': output,
+                  'execution': execution, 'proposal': output, 'evidence_basis': basis, 'exchanges': list(exchanges),
+                  'revises': artifact(state, reconsideration, ('reconsideration',))['brief'] if reconsideration else None,
                   'profile_evidence': current['profile'],
                   'evidence_limits': [*current['limitations'], *[x for r in current['contexts'].values() for x in r['limitations']]],
                   'notice': 'Sections and judgments are model proposals, not observed outcomes or demonstrated demand.'}
+            old = artifact(state, record['revises'], ('brief',)) if record['revises'] else None
+            record['recommendation_id'] = old.get('recommendation_id', record['revises']) if old else digest(['recommendation/1', kind, output['title'], basis])
+            record['revision'] = old.get('revision', 1) + 1 if old else 1
             record['markdown'] = render(record)
             key = store.put(state, 'brief', record, [execution])
     if error:
