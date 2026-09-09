@@ -308,5 +308,16 @@ class DecisionTests(unittest.TestCase):
         result = self.brief('project', [first, second])
         self.assertIn('Distinct alternative sources: 1', inspect_brief(self.store, result['brief']))
 
+    def test_phase5_coverage_is_a_grounded_brief_input(self):
+        from tools.research_coverage import coverage
+        self.snapshot = coverage(self.store, expected={'language':['de']})['coverage']
+        self.output = self.output_for('learning')
+        result = self.brief()
+        with self.store.transaction() as state:
+            self.assertEqual(state['artifacts'][result['brief']]['payload']['snapshot'], self.snapshot)
+            data = inputs(state, self.snapshot, [], None, self.now)
+            self.assertIn('period',data['coverage'])
+            self.assertEqual(data['coverage']['missing_segments']['language'],['de'])
+
 
 if __name__ == '__main__': unittest.main()

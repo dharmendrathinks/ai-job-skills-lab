@@ -161,3 +161,36 @@ semantics; never invoke its application tracker/archive for research.
    imported assessments, never independent evidence or local observed outcomes.
    No Radar database/repository write, circular execution or automatic publication.
    Unknown versions or unsupported retention block only the affected operation.
+
+## Global coverage and language research (Phase 5)
+
+Follow `docs/research/global-operations.md` with `python3 -m tools.research_global`.
+Use the existing state/runtime and explicit upstream source tools; no second
+research platform, automatic collector activation or application-profile filters.
+
+1. Inspect `registry` and measured `coverage` before proposing a source. All
+   candidates have a disposition. Only current, permitted Jobicy collection is
+   qualified; other adapters require a demonstrated gap, rights, bounded live
+   evidence and lifecycle/fixture validation. Do not run blocked portal probes.
+2. Use reviewed `board`, `board-link` and `segments` evidence to normalize source
+   identity/segments while preserving original fields. Never infer employer,
+   requisition, geography or source language from the user's profile/title.
+   Use coverage IDs directly as `brief --snapshot` inputs when useful.
+3. Freeze protocol/query-pack/filter/cadence versions and inspect actual capture
+   receipts. Compare explicit adjacent equal windows; missing/stale/failed/partial
+   captures, sampling changes and withdrawal mean insufficient evidence, not
+   growth or fewer vacancies. Added sources stay separate. No first-seen fallback
+   for unknown publication dates. The default target is two 28-day windows.
+4. `vacancies` only infers board disappearance after two fresh, complete,
+   unfiltered absences at least 24h apart. Other feeds cannot reopen that board
+   view. Never interpret a cap, outage, cache hit or missing detail as closure.
+5. Query packs are language candidates, not measured coverage or quality claims.
+   `translate` uses the same qualified empty-tool worker with source-policy gates;
+   preserve original text/offsets, inspect the indexed draft and obtain actual user
+   review before `translation-review` acceptance. Untranslated/unassessed sources
+   remain in research. Translation cannot replace original requirement spans.
+6. Freeze inspected human or explicit synthetic labels separately from model
+   outputs; evaluate by language/model/prompt version using the existing atom
+   scoring helper. Disclose label basis, held-out ordering, sample size and errors.
+   Targets, fixture results and one aligned live translation are not broad quality
+   evidence. P6 owns scheduling, operational monitoring and broader recovery.

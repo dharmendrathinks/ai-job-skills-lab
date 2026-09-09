@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parent.parent
 MANIFEST = "research-template-manifest.json"
 CANONICAL = ".claude/skills/research/SKILL.md"
 FUTURE = {"collect": 2, "import": 2, "analyze": 2, "brief": 3,
-          "outcome": 4, "refresh": 2, "export": 2}
+          "outcome": 4, "refresh": 2, "export": 2, "coverage": 5, "compare": 5, "translate": 5}
 
 
 def private_state_path(root: Path, env: dict[str, str]) -> Path:
@@ -103,7 +103,7 @@ def assess(root: Path, mode: str, action: str,
             blockers.append("public_template_profile_write_blocked")
         elif action != "status":
             blockers.append("use_explicit_upstream_application_command")
-    elif action in ("import", "collect", "analyze", "refresh", "brief", "outcome"):
+    elif action in ("import", "collect", "analyze", "refresh", "brief", "outcome", "coverage", "compare", "translate"):
         pass  # Readiness only; execution checks qualification and current source policy.
     elif action == "export":
         blockers.append("unmanaged_exports_not_supported")
@@ -141,6 +141,13 @@ def assess(root: Path, mode: str, action: str,
             "profile": "scoped_test_outcome_proposal_requires_review",
             "interchange": "reviewed_1_0_projections_only_with_compatible_export_permission",
             "imported_outcomes": "assessments_only_no_automatic_profile_or_market_evidence"
+        },
+        "phase_5": {
+            "coverage": "source_receipts_segments_unknowns_and_reviewed_board_identity",
+            "cohorts": "equal_windows_frozen_protocol_and_cadence_sufficiency_required",
+            "languages": "indexed_translation_proposals_and_explicit_review_no_eligibility_filter",
+            "source_registry": "all_candidates_recorded_only_existing_jobicy_go_limited",
+            "promotion": "conditional_source_and_language_quality_evidence_required"
         },
         "installed_portal_skills": portal_skills(root),
         "inference": {"authentication": "existing_codex_subscription",

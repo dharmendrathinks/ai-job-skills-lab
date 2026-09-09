@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "revision": "ai-language-queries/1",
+  "status": "candidate-language-expansion-requires-human-quality-review",
+  "domain": "ai-engineering",
+  "packs": [
+    {
+      "language": "en",
+      "queries": [
+        "LLM evaluation",
+        "AI inference deployment",
+        "retrieval pipelines"
+      ],
+      "review": "proposed-not-quality-qualified"
+    },
+    {
+      "language": "de",
+      "queries": [
+        "LLM Evaluierung",
+        "KI Inferenz Bereitstellung"
+      ],
+      "review": "proposed-not-quality-qualified"
+    },
+    {
+      "language": "hi",
+      "queries": [
+        "एआई मूल्यांकन",
+        "मशीन लर्निंग इंजीनियर"
+      ],
+      "review": "proposed-not-quality-qualified"
+    },
+    {
+      "language": "es",
+      "queries": [
+        "evaluación de modelos de lenguaje",
+        "ingeniería de inteligencia artificial"
+      ],
+      "review": "proposed-not-quality-qualified"
+    }
+  ],
+  "limitations": [
+    "Seed queries are not measured recall or translation-quality evidence",
+    "No country, employment, remote or profile-language eligibility exclusions",
+    "Feed exact supported query to reviewed collector; preserve effective filters/version; do not silently translate search queries"
+  ]
+}

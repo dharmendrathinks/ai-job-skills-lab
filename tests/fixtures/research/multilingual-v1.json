@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "revision": "owned-multilingual/1",
+  "provenance": "Author-created snippets and provisional labels; not real jobs or human language review. Frozen separately from model output.",
+  "human_review": "pending",
+  "examples": [
+    {
+      "id": "owned-de",
+      "language": "de",
+      "description": "Entwickeln Sie Retrieval-Pipelines für LLM-Anwendungen. Python ist erwünscht.",
+      "responsibility_class": "applied",
+      "claims": [
+        {
+          "quote": "Entwickeln Sie Retrieval-Pipelines für LLM-Anwendungen.",
+          "start": 0,
+          "end": 55,
+          "kind": "responsibility",
+          "modality": "unspecified",
+          "capabilities": [
+            "retrieval-knowledge"
+          ],
+          "tools": []
+        },
+        {
+          "quote": "Python ist erwünscht.",
+          "start": 56,
+          "end": 77,
+          "kind": "skill",
+          "modality": "preferred",
+          "capabilities": [],
+          "tools": [
+            "Python"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "owned-es",
+      "language": "es",
+      "description": "Evalúa aplicaciones LLM con casos de prueba reservados. Python es obligatorio.",
+      "responsibility_class": "applied",
+      "claims": [
+        {
+          "quote": "Evalúa aplicaciones LLM con casos de prueba reservados.",
+          "start": 0,
+          "end": 55,
+          "kind": "responsibility",
+          "modality": "unspecified",
+          "capabilities": [
+            "evaluation"
+          ],
+          "tools": []
+        },
+        {
+          "quote": "Python es obligatorio.",
+          "start": 56,
+          "end": 78,
+          "kind": "skill",
+          "modality": "required",
+          "capabilities": [],
+          "tools": [
+            "Python"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "owned-hi",
+      "language": "hi",
+      "description": "LLM अनुप्रयोगों का मूल्यांकन करें। Python का अनुभव वांछनीय है।",
+      "responsibility_class": "applied",
+      "claims": [
+        {
+          "quote": "LLM अनुप्रयोगों का मूल्यांकन करें।",
+          "start": 0,
+          "end": 34,
+          "kind": "responsibility",
+          "modality": "unspecified",
+          "capabilities": [
+            "evaluation"
+          ],
+          "tools": []
+        },
+        {
+          "quote": "Python का अनुभव वांछनीय है।",
+          "start": 35,
+          "end": 62,
+          "kind": "skill",
+          "modality": "preferred",
+          "capabilities": [],
+          "tools": [
+            "Python"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "owned-en-negation",
+      "language": "en",
+      "description": "Build retrieval pipelines. Experience with LangChain is not required.",
+      "responsibility_class": "applied",
+      "claims": [
+        {
+          "quote": "Build retrieval pipelines.",
+          "start": 0,
+          "end": 26,
+          "kind": "responsibility",
+          "modality": "unspecified",
+          "capabilities": [
+            "retrieval-knowledge"
+          ],
+          "tools": []
+        },
+        {
+          "quote": "Experience with LangChain is not required.",
+          "start": 27,
+          "end": 69,
+          "kind": "constraint",
+          "modality": "unspecified",
+          "capabilities": [],
+          "tools": [
+            "LangChain"
+          ]
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "No translation/extraction quality result or new-language promotion is established by these examples",
+    "Negated non-requirements remain constraints with unspecified modality; never counted as required skills"
+  ]
+}

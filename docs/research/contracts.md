@@ -1,4 +1,4 @@
-# Research contracts v1 — Phases 2–4 implementation status
+# Research contracts v1 — Phases 2–5 implementation status
 
 The table remains the full target. Reviewed local imports, span validation,
 snapshots and logical lifecycle operations are implemented in
@@ -11,6 +11,10 @@ Phase 3 context requests/receipts, reviewed profile proposals, four draft types 
 read-only Radar conversion are implemented; see [decision contracts](decision-operations.md).
 Phase 4 decision/outcome revisions, scoped profile proposals, recommendation
 memory and neutral interchange are implemented; see [outcome contracts](outcome-operations.md).
+Phase 5 coverage/board/segment reviews, frozen collection protocols/cohorts,
+indexed translations and language evaluation are implemented; see
+[global contracts](global-operations.md). Conditional sources/languages are not
+promoted by the availability of these mechanisms.
 The normative capability/lifecycle requirements remain in `PLAN_RESEARCH.md`.
 
 | Contract | Required responsibilities |
@@ -82,3 +86,15 @@ withdrawing evidence invalidates the resulting drafts. Interchange import is
 never a state/backup restore. Known tombstones block returning content in a
 participating store; remote recall and hostile-producer authenticity are not
 verified. Unsupported expiry/recall obligations keep the affected path disabled.
+
+P5 adds state-v1 collection-protocol, capture-assessment, cohort/comparison,
+coverage-report, employer-board/board-link, segment-review, translation proposal/
+review/failure, and language-gold/evaluation artifacts. Original observations and
+prior snapshots are not rewritten. Coverage reports can feed the existing P3
+brief interface with period, segment, source-health and analysis-version limits.
+Frozen protocols include cadence/offset/tolerance and query/collector versions;
+comparison checks complete receipt counts, all expected slots and publication
+unknowns. Source/analysis changes or withdrawal cannot manufacture growth.
+Reviewed translations preserve exact original spans and never become source
+requirements. Source registry/query packs are versioned configuration, not rights
+or quality grants. Source-level board absence views do not redefine P2 snapshots.

@@ -22,7 +22,10 @@ and reviewed research-profile proposals; see [decision commands](docs/research/d
 Phase 4 adds reviewed decisions/outcomes, repetition controls, scoped profile
 proposals and permission-gated JSON/Markdown interchange; see
 [outcome commands and limits](docs/research/outcome-operations.md).
-Human semantic evaluation remains pending. No paid API fallback is configured.
+Phase 5 adds measured coverage, reviewed employer/language evidence, translation
+proposals and stable-window comparisons; see [global research commands](docs/research/global-operations.md).
+Source/language expansion remains evidence-gated; human semantic evaluation is
+pending. No paid API fallback is configured.
 
 For research, ask Codex to use the `research` skill, or run this read-only check
 with Python 3.10+:

@@ -55,7 +55,7 @@ class PreflightTests(unittest.TestCase):
             self.assertEqual(result["canonical_spec"], ".claude/skills/research/SKILL.md")
 
     def test_execution_readiness_does_not_create_state_or_assert_qualification(self):
-        for action in ["collect", "analyze", "refresh", "brief", "outcome"]:
+        for action in ["collect", "analyze", "refresh", "brief", "outcome", "coverage", "compare", "translate"]:
             result = self.run_action(action=action)
             self.assertEqual(result["status"], "ready_for_gated_research")
             self.assertFalse(result["extraction"]["enabled"])

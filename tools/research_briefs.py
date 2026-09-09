@@ -72,7 +72,7 @@ def hosted_eligible(state, ids):
 
 def inputs(state, snapshot, contexts, profile, now):
     snap = state['artifacts'].get(snapshot)
-    require(snap and snap['kind'] == 'snapshot', 'market snapshot unavailable')
+    require(snap and snap['kind'] in ('snapshot', 'coverage-report'), 'market snapshot unavailable')
     ids = [snapshot, *contexts] + ([profile] if profile else [])
     hosted_eligible(state, ids)
     analyses = {}
@@ -98,7 +98,9 @@ def inputs(state, snapshot, contexts, profile, now):
     return {'snapshot': snapshot, 'as_of': now.date().isoformat(), 'discussion_window_days': 90,
             'counts': snap['payload']['counts'], 'capabilities': snap['payload']['capabilities'],
             'analyses': analyses, 'contexts': context_map, 'profile': profile_data,
-            'limitations': snap['payload']['limitations']}
+            'limitations': snap['payload']['limitations'],
+            'coverage': {k:snap['payload'][k] for k in ('period','segments','missing_segments','source_health','analysis_versions')}
+                        if snap['kind'] == 'coverage-report' else None}
 
 
 def validate(output, kind, data):

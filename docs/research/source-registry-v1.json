@@ -1,0 +1,343 @@
+{
+  "schema_version": 1,
+  "revision": "source-registry/1",
+  "review_date": "2026-09-09",
+  "sources": [
+    {
+      "id": "freehire",
+      "disposition": "conditional",
+      "implementation": ".agents/skills/freehire-search/",
+      "mechanism": "Documented public agent REST API",
+      "authentication_and_cost": "No API key; public API; ₹0",
+      "coverage_and_completeness": "Limit/offset, cap 10000; tech-first multilingual/multi-market aggregator; descriptions and source identity need validation",
+      "reference": "https://freehire.me/terms",
+      "inspection_evidence": "2026-09-09 reinspection of terms; API behavior from Phase 1 audit",
+      "gap_and_gate": "Authoritative employer, onsite and language gaps; research retention/disclosure still unresolved",
+      "validation_steps": [
+        "Review permission for exact acquisition, retention, hosted use and exports",
+        "Bound requests and record fresh/partial/failed receipts; fixture parsing and lifecycle tests",
+        "Measure deduplicated openings, verified employers and new segments against baseline"
+      ],
+      "limitations": [
+        "Accessible documentation/API or software license is not blanket data permission",
+        "No proxy/credential rotation, bypass or JobSpy dependency"
+      ],
+      "phase": 5
+    },
+    {
+      "id": "greenhouse",
+      "disposition": "conditional",
+      "implementation": null,
+      "mechanism": "Public employer job-board GET API",
+      "authentication_and_cost": "Unauthenticated board GET; ₹0",
+      "coverage_and_completeness": "Board inventory with content=true; no documented list pagination; update time not publication",
+      "reference": "https://docs.greenhouse.io/job-board.html",
+      "inspection_evidence": "2026-09-09 API documentation revisited; no board data captured",
+      "gap_and_gate": "Verify employer board ownership and independent research/retention rights",
+      "validation_steps": [
+        "Review permission for exact acquisition, retention, hosted use and exports",
+        "Bound requests and record fresh/partial/failed receipts; fixture parsing and lifecycle tests",
+        "Measure deduplicated openings, verified employers and new segments against baseline"
+      ],
+      "limitations": [
+        "Accessible documentation/API or software license is not blanket data permission",
+        "No proxy/credential rotation, bypass or JobSpy dependency"
+      ],
+      "phase": 5
+    },
+    {
+      "id": "lever",
+      "disposition": "conditional",
+      "implementation": null,
+      "mechanism": "Global/EU public postings GET API",
+      "authentication_and_cost": "Unauthenticated public GET; ₹0",
+      "coverage_and_completeness": "skip/limit; employer boards, country code or null, descriptions; no full-text search",
+      "reference": "https://github.com/lever/postings-api",
+      "inspection_evidence": "2026-09-09 README revisited; third-party scraping acknowledged, research-specific retention unresolved",
+      "gap_and_gate": "First direct-board candidate for employer authority, onsite and region gaps; needs compatible use evidence",
+      "validation_steps": [
+        "Review permission for exact acquisition, retention, hosted use and exports",
+        "Bound requests and record fresh/partial/failed receipts; fixture parsing and lifecycle tests",
+        "Measure deduplicated openings, verified employers and new segments against baseline"
+      ],
+      "limitations": [
+        "Accessible documentation/API or software license is not blanket data permission",
+        "No proxy/credential rotation, bypass or JobSpy dependency"
+      ],
+      "phase": 5
+    },
+    {
+      "id": "ashby",
+      "disposition": "conditional",
+      "implementation": null,
+      "mechanism": "Public listed job-board posting API",
+      "authentication_and_cost": "Public GET distinct from provisioned partner feeds",
+      "coverage_and_completeness": "Board-dependent language/geography, full descriptions, publishedAt last publication, isListed; pagination not documented",
+      "reference": "https://developers.ashbyhq.com/docs/public-job-posting-api",
+      "inspection_evidence": "2026-09-09 API documentation revisited; no live data qualification",
+      "gap_and_gate": "Prove unique segment contribution, listed-only capture and permissible retained processing",
+      "validation_steps": [
+        "Review permission for exact acquisition, retention, hosted use and exports",
+        "Bound requests and record fresh/partial/failed receipts; fixture parsing and lifecycle tests",
+        "Measure deduplicated openings, verified employers and new segments against baseline"
+      ],
+      "limitations": [
+        "Accessible documentation/API or software license is not blanket data permission",
+        "No proxy/credential rotation, bypass or JobSpy dependency"
+      ],
+      "phase": 5
+    },
+    {
+      "id": "smartrecruiters",
+      "disposition": "conditional",
+      "implementation": null,
+      "mechanism": "Company Posting API list/detail",
+      "authentication_and_cost": "Public/internal scopes and legitimate free credentials unresolved",
+      "coverage_and_completeness": "limit/offset, language filters, structured details; no current bounded access result",
+      "reference": "https://developers.smartrecruiters.com/docs/posting-api",
+      "inspection_evidence": "Phase 1 audit carried forward; no new authentication/terms claim",
+      "gap_and_gate": "Public-only scope, ₹0 access and retention first; never internal posting access",
+      "validation_steps": [
+        "Review permission for exact acquisition, retention, hosted use and exports",
+        "Bound requests and record fresh/partial/failed receipts; fixture parsing and lifecycle tests",
+        "Measure deduplicated openings, verified employers and new segments against baseline"
+      ],
+      "limitations": [
+        "Accessible documentation/API or software license is not blanket data permission",
+        "No proxy/credential rotation, bypass or JobSpy dependency"
+      ],
+      "phase": 5
+    },
+    {
+      "id": "himalayas",
+      "disposition": "conditional",
+      "implementation": null,
+      "mechanism": "Public browse/search JSON API",
+      "authentication_and_cost": "No account/key, documented free API",
+      "coverage_and_completeness": "Remote-only; cursor browse max20, page search, daily cached refresh; full descriptions; moving-feed completeness risk",
+      "reference": "https://himalayas.app/docs/remote-jobs-api",
+      "inspection_evidence": "2026-09-09 API docs revisited; research/AI intended audience, attribution",
+      "gap_and_gate": "Could fill language/location metadata gap but not onsite gap; validate permitted storage/disclosure and incremental contribution first",
+      "validation_steps": [
+        "Review permission for exact acquisition, retention, hosted use and exports",
+        "Bound requests and record fresh/partial/failed receipts; fixture parsing and lifecycle tests",
+        "Measure deduplicated openings, verified employers and new segments against baseline"
+      ],
+      "limitations": [
+        "Accessible documentation/API or software license is not blanket data permission",
+        "No proxy/credential rotation, bypass or JobSpy dependency"
+      ],
+      "phase": 5
+    },
+    {
+      "id": "jobicy",
+      "disposition": "go-limited",
+      "implementation": "tools/research_sources.py",
+      "mechanism": "Reviewed API v2 bounded feed",
+      "authentication_and_cost": "No account/key; ₹0",
+      "coverage_and_completeness": "Single capped remote feed, no pagination/total proof; hourly cooldown; descriptions, unknown language/country/availability retained",
+      "reference": "https://github.com/Jobicy/remote-jobs-api/blob/c38dc5308768d7a9c0228c4831b453530f4788d9/README.md#fair-use",
+      "inspection_evidence": "P2 permitted bounded 20-item call and lifecycle/fixtures documented in phase2-validation.md",
+      "gap_and_gate": "Existing narrow path; export false; permission review expires 2026-10-09; no broader promotion",
+      "validation_steps": [
+        "Review permission for exact acquisition, retention, hosted use and exports",
+        "Bound requests and record fresh/partial/failed receipts; fixture parsing and lifecycle tests",
+        "Measure deduplicated openings, verified employers and new segments against baseline"
+      ],
+      "limitations": [
+        "Accessible documentation/API or software license is not blanket data permission",
+        "No proxy/credential rotation, bypass or JobSpy dependency"
+      ],
+      "phase": 5
+    },
+    {
+      "id": "linkedin",
+      "disposition": "no-go",
+      "implementation": ".agents/skills/linkedin-search/",
+      "mechanism": "Existing guest HTML collector",
+      "authentication_and_cost": "Public access is not research permission",
+      "coverage_and_completeness": "Broad locale-biased search; fragile HTML, pagination/detail completeness unknown",
+      "reference": "https://www.linkedin.com/legal/crawling-terms",
+      "inspection_evidence": "Phase 1 access/usage audit carried forward; no new probe",
+      "gap_and_gate": "Express permitted automated research method and retention needed",
+      "validation_steps": [
+        "Review permission for exact acquisition, retention, hosted use and exports",
+        "Bound requests and record fresh/partial/failed receipts; fixture parsing and lifecycle tests",
+        "Measure deduplicated openings, verified employers and new segments against baseline"
+      ],
+      "limitations": [
+        "Accessible documentation/API or software license is not blanket data permission",
+        "No proxy/credential rotation, bypass or JobSpy dependency"
+      ],
+      "phase": 5
+    },
+    {
+      "id": "indeed",
+      "disposition": "no-go",
+      "implementation": null,
+      "mechanism": "No approved route; reference used internal GraphQL",
+      "authentication_and_cost": "Authorized ₹0 access not established",
+      "coverage_and_completeness": "Country search/cursors and schema risk; internal access material must not be reused",
+      "reference": "https://www.indeed.com/legal?hl=en_US",
+      "inspection_evidence": "Phase 1 audit carried forward; no live probe",
+      "gap_and_gate": "Authorized collection and AI-analysis/evaluation usage required",
+      "validation_steps": [
+        "Review permission for exact acquisition, retention, hosted use and exports",
+        "Bound requests and record fresh/partial/failed receipts; fixture parsing and lifecycle tests",
+        "Measure deduplicated openings, verified employers and new segments against baseline"
+      ],
+      "limitations": [
+        "Accessible documentation/API or software license is not blanket data permission",
+        "No proxy/credential rotation, bypass or JobSpy dependency"
+      ],
+      "phase": 5
+    },
+    {
+      "id": "glassdoor",
+      "disposition": "no-go",
+      "implementation": null,
+      "mechanism": "No approved route; reference used session/GraphQL",
+      "authentication_and_cost": "No approved free research access",
+      "coverage_and_completeness": "Locale/session, relative dates, missing descriptions; high maintenance",
+      "reference": "https://www.glassdoor.com/about/terms/",
+      "inspection_evidence": "Phase 1 audit carried forward; no live probe",
+      "gap_and_gate": "Express permission and permitted storage/disclosure required",
+      "validation_steps": [
+        "Review permission for exact acquisition, retention, hosted use and exports",
+        "Bound requests and record fresh/partial/failed receipts; fixture parsing and lifecycle tests",
+        "Measure deduplicated openings, verified employers and new segments against baseline"
+      ],
+      "limitations": [
+        "Accessible documentation/API or software license is not blanket data permission",
+        "No proxy/credential rotation, bypass or JobSpy dependency"
+      ],
+      "phase": 5
+    },
+    {
+      "id": "google-jobs",
+      "disposition": "no-go",
+      "implementation": null,
+      "mechanism": "No official public Jobs search API established",
+      "authentication_and_cost": "Paid SERP data outside ₹0 budget",
+      "coverage_and_completeness": "Locale-biased Search HTML and undocumented continuation; duplicate aggregator evidence",
+      "reference": "https://developers.google.com/search/docs/essentials/spam-policies#machine-generated-traffic",
+      "inspection_evidence": "Phase 1 audit carried forward; no live probe",
+      "gap_and_gate": "Permitted automated access; no challenge bypass or positional parser assumptions",
+      "validation_steps": [
+        "Review permission for exact acquisition, retention, hosted use and exports",
+        "Bound requests and record fresh/partial/failed receipts; fixture parsing and lifecycle tests",
+        "Measure deduplicated openings, verified employers and new segments against baseline"
+      ],
+      "limitations": [
+        "Accessible documentation/API or software license is not blanket data permission",
+        "No proxy/credential rotation, bypass or JobSpy dependency"
+      ],
+      "phase": 5
+    },
+    {
+      "id": "ziprecruiter",
+      "disposition": "no-go",
+      "implementation": null,
+      "mechanism": "No approved route; reference used internal mobile service",
+      "authentication_and_cost": "Authorized free credentials/research use not established",
+      "coverage_and_completeness": "Reference geography mapping not global coverage; token/detail fragility",
+      "reference": "https://www.ziprecruiter.com/terms",
+      "inspection_evidence": "Phase 1 terms fetch unresolved; deliberately no new access claim",
+      "gap_and_gate": "Resolve authoritative terms/geography before technical probing",
+      "validation_steps": [
+        "Review permission for exact acquisition, retention, hosted use and exports",
+        "Bound requests and record fresh/partial/failed receipts; fixture parsing and lifecycle tests",
+        "Measure deduplicated openings, verified employers and new segments against baseline"
+      ],
+      "limitations": [
+        "Accessible documentation/API or software license is not blanket data permission",
+        "No proxy/credential rotation, bypass or JobSpy dependency"
+      ],
+      "phase": 5
+    },
+    {
+      "id": "jobbank",
+      "disposition": "conditional",
+      "implementation": ".agents/skills/jobbank-search/",
+      "mechanism": "RSS plus HTML/JSON-LD detail",
+      "authentication_and_cost": "Inspected unauthenticated implementation; sustainable free use not qualified",
+      "coverage_and_completeness": "Danish academic/professional; cap100, no pagination; protection may block",
+      "reference": "https://jobbank.dk",
+      "inspection_evidence": "Pinned upstream implementation/Phase 1 audit carried forward; no new live health result",
+      "gap_and_gate": "Danish/language gap only; review exact method, detail retention and incremental contribution",
+      "validation_steps": [
+        "Review permission for exact acquisition, retention, hosted use and exports",
+        "Bound requests and record fresh/partial/failed receipts; fixture parsing and lifecycle tests",
+        "Measure deduplicated openings, verified employers and new segments against baseline"
+      ],
+      "limitations": [
+        "Accessible documentation/API or software license is not blanket data permission",
+        "No proxy/credential rotation, bypass or JobSpy dependency"
+      ],
+      "phase": 5
+    },
+    {
+      "id": "jobdanmark",
+      "disposition": "conditional",
+      "implementation": ".agents/skills/jobdanmark-search/",
+      "mechanism": "Public site API plus HTML detail",
+      "authentication_and_cost": "Inspected unauthenticated implementation; sustainable free use not qualified",
+      "coverage_and_completeness": "Danish markets; numbered pages, no recency flag",
+      "reference": "https://jobdanmark.dk",
+      "inspection_evidence": "Pinned upstream implementation/Phase 1 audit carried forward; no new live health result",
+      "gap_and_gate": "Danish/language gap only; review exact method, detail retention and incremental contribution",
+      "validation_steps": [
+        "Review permission for exact acquisition, retention, hosted use and exports",
+        "Bound requests and record fresh/partial/failed receipts; fixture parsing and lifecycle tests",
+        "Measure deduplicated openings, verified employers and new segments against baseline"
+      ],
+      "limitations": [
+        "Accessible documentation/API or software license is not blanket data permission",
+        "No proxy/credential rotation, bypass or JobSpy dependency"
+      ],
+      "phase": 5
+    },
+    {
+      "id": "jobindex",
+      "disposition": "conditional",
+      "implementation": ".agents/skills/jobindex-search/",
+      "mechanism": "HTML search/detail despite API wording",
+      "authentication_and_cost": "Inspected unauthenticated implementation; sustainable free use not qualified",
+      "coverage_and_completeness": "Danish market and language; selector/page assumptions fragile",
+      "reference": "https://jobindex.dk",
+      "inspection_evidence": "Pinned upstream implementation/Phase 1 audit carried forward; no new live health result",
+      "gap_and_gate": "Danish/language gap only; review exact method, detail retention and incremental contribution",
+      "validation_steps": [
+        "Review permission for exact acquisition, retention, hosted use and exports",
+        "Bound requests and record fresh/partial/failed receipts; fixture parsing and lifecycle tests",
+        "Measure deduplicated openings, verified employers and new segments against baseline"
+      ],
+      "limitations": [
+        "Accessible documentation/API or software license is not blanket data permission",
+        "No proxy/credential rotation, bypass or JobSpy dependency"
+      ],
+      "phase": 5
+    },
+    {
+      "id": "jobnet",
+      "disposition": "conditional",
+      "implementation": ".agents/skills/jobnet-search/",
+      "mechanism": "Public BFF API with detail fallback",
+      "authentication_and_cost": "Inspected unauthenticated implementation; sustainable free use not qualified",
+      "coverage_and_completeness": "Danish occupations; page/per-page; fallback summaries not full descriptions",
+      "reference": "https://jobnet.dk",
+      "inspection_evidence": "Pinned upstream implementation/Phase 1 audit carried forward; no new live health result",
+      "gap_and_gate": "Danish/language gap only; review exact method, detail retention and incremental contribution",
+      "validation_steps": [
+        "Review permission for exact acquisition, retention, hosted use and exports",
+        "Bound requests and record fresh/partial/failed receipts; fixture parsing and lifecycle tests",
+        "Measure deduplicated openings, verified employers and new segments against baseline"
+      ],
+      "limitations": [
+        "Accessible documentation/API or software license is not blanket data permission",
+        "No proxy/credential rotation, bypass or JobSpy dependency"
+      ],
+      "phase": 5
+    }
+  ]
+}
