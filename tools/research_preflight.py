@@ -103,6 +103,10 @@ def assess(root: Path, mode: str, action: str,
             blockers.append("public_template_profile_write_blocked")
         elif action != "status":
             blockers.append("use_explicit_upstream_application_command")
+    elif action in ("import", "collect", "analyze", "refresh"):
+        pass  # Readiness only; execution checks qualification and current source policy.
+    elif action == "export":
+        blockers.append("unmanaged_exports_not_supported")
     elif action in FUTURE:
         blockers.append(f"capability_not_implemented_until_phase_{FUTURE[action]}")
     elif action not in ("status", "configure"):
@@ -111,15 +115,22 @@ def assess(root: Path, mode: str, action: str,
         "schema_version": 1,
         "mode": mode,
         "action": action,
-        "status": "blocked" if errors or blockers else "ready_for_phase_1_only",
+        "status": "blocked" if errors or blockers else (
+            "ready_for_gated_research" if mode == "research" else "ready_for_application_routing"),
         "canonical_spec": CANONICAL if mode == "research" else ".claude/",
         "state_path": state,
         "writes_runtime_data": False,
         "template_errors": errors,
         "blockers": blockers,
-        "extraction": {"qualification": "unverified", "enabled": False,
-                       "reason": "complete_tool_free_codex_mechanism_not_verified"},
+        "extraction": {"qualification": "checked_by_execution_helper", "enabled": False,
+                       "reason": "read_only_preflight_does_not_qualify_or_invoke_runtime"},
         "sources_enabled": [],
+        "phase_2": {"reviewed_local_import": "available_with_supported_policy",
+                    "human_annotation_and_snapshot": "available",
+                    "retention": "logical_deletion_only_no_hard_deadlines",
+                    "live_collection": "jobicy_explicit_invocation_with_current_policy",
+                    "model_analysis": "requires_matching_runtime_qualification_and_source_permission",
+                    "completion": "see_phase2_validation_record"},
         "installed_portal_skills": portal_skills(root),
         "inference": {"authentication": "existing_codex_subscription",
                       "additional_spending_inr": 0, "paid_fallback": False},

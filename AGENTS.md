@@ -1,5 +1,5 @@
 ---
-framework_version: 1.0.1
+framework_version: 1.0.2
 ---
 
 # Agent Guidelines: AI Job Search
@@ -15,7 +15,7 @@ Do not run application setup for research. Public-template profile writes are
 blocked by the research preflight even when the GitHub repository is private.
 Use only this checkout for development; keep personal research state outside it.
 See [the runtime decision](docs/research/runtime.md) for enforced checks versus
-instruction-level safeguards and the unresolved tool-free extraction boundary.
+instruction-level safeguards and the qualified Phase 2 extraction boundary and its limits.
 
 This workspace is structured to manage job search activities, scraper tools, CVs, cover letters, and interview preparation.
 

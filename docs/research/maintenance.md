@@ -4,12 +4,14 @@
 
 Development uses only `/Users/dhasharma/Dharmendra/Projects/ai-job-radar`.
 `origin` is `https://github.com/dharmendrathinks/ai-job-radar.git`; GitHub
-inspection found it private, empty, and not a GitHub-network fork. `upstream`
+inspection initially found it private, empty, and not a GitHub-network fork. `upstream`
 is `https://github.com/MadsLorentzen/ai-job-search.git`.
 
 Local branch `research/phase1` starts from approved commit
 `8c81edc330b98db0473dcb016e34db835c2fd378`, preserving its ancestry and files.
-No GitHub fork was created, no visibility changed, and nothing was pushed.
+No GitHub fork was created and no visibility changed. After explicit approval,
+Phase 1 commit `d102a88` was pushed to `origin/main` on 2026-09-08. Phase 2 work
+continues on `research/phase2` in this same checkout.
 The temporary sibling checkout used during transition was moved here and its
 empty directory removed at the user's request; it is not a second workspace.
 
@@ -56,6 +58,9 @@ allow the original upstream header and the reviewed fork routing header only.
 | `.claude/commands/setup.md`, `.claude/commands/expand.md` | Explicit public-template preflight before every personal-write path; retain application workflow below the gate. |
 | `.claude/skills/job-scraper/SKILL.md` | Research route before state loading; portal discovery requires a CLI manifest/entrypoint. Ordinary scrape selection remains upstream. |
 | `tools/research_preflight.py`, `research-template-manifest.json`, `tests/test_research_preflight.py` | Fork-owned read-only state-path, template/index and capability checks. No collection, extraction or persistence implementation. |
+| `tools/research_evidence.py`, `tests/test_research_evidence.py` | Additive reviewed imports, validation, deterministic snapshots and lifecycle controls. Directly imports unchanged `tools/rank_state.py:save_state`; retain upstream behavior and run both test suites when synchronizing. No portal source fork or second workflow tree. |
+| `tools/research_runtime.py`, `tools/research_analysis.py`, `tests/test_research_runtime_live.py`, `tests/test_research_runtime_protocol.py`, `tests/test_research_analysis.py` | Qualified subscription worker, execution/cache/validation and adversarial tests. Runtime upgrades fail closed; inspect pinned source and rerun active qualification before source disclosure. Apache-2.0 provenance for the runtime adaptation is preserved in `THIRD_PARTY_NOTICES.md` and `licenses/Apache-2.0-Codex.txt`. |
+| `tools/research_sources.py`, `tools/evaluate_research.py`, `tests/fixtures/research/`, `docs/research/prompts/` | Thin Jobicy source path and shared-store comparisons; preserve policy restrictions, frozen prompt/dataset identities and honest human-review status. No provider code, dependencies or second command tree replaced. |
 | `.github/workflows/ci.yml`, `.github/workflows/upstream-watch.yml`, `.gitignore` | Template/version checks active on this repository; issue reporting is manual and doubly opted in; private/dev artifacts ignored. |
 | `PLAN_RESEARCH.md`, `docs/research/`, `README.md`, `.pr-ready.json` | Roadmap/contracts/runtime evidence, attribution, reproducible checks and source-path inventory; public content only. |
 
@@ -108,5 +113,5 @@ python3 -m unittest discover -s tests -t .
 In each portal CLI use Bun for `run typecheck` and `test`. Ordinary tests use
 fixtures; live collection requires source qualification. LaTeX checks remain
 in upstream CI but are not a research prerequisite; P1 does not change TeX.
-The PR Ready configuration uses the pinned foundation as its comparison base;
-update that reviewed base when adopting a new upstream checkpoint.
+The PR Ready configuration now compares P2 against approved Phase 1 commit
+`d102a88`; the upstream foundation remains the separate synchronization pin.

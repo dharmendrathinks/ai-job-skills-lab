@@ -35,7 +35,7 @@ class PreflightTests(unittest.TestCase):
     def test_research_needs_no_profile_setup_or_state(self):
         before = sorted(str(p.relative_to(self.root)) for p in self.root.rglob("*"))
         result = self.run_action(action="configure")
-        self.assertEqual(result["status"], "ready_for_phase_1_only")
+        self.assertEqual(result["status"], "ready_for_gated_research")
         self.assertFalse(Path(result["state_path"]).exists())
         self.assertEqual(before, sorted(str(p.relative_to(self.root)) for p in self.root.rglob("*")))
         self.assertFalse(result["extraction"]["enabled"])
@@ -49,10 +49,24 @@ class PreflightTests(unittest.TestCase):
         self.assertEqual((self.root / "CLAUDE.md").read_bytes(), self.public)
 
     def test_block_unimplemented_research_without_application_fallback(self):
-        for action in ["collect", "analyze", "brief", "outcome", "import", "export"]:
+        for action in ["brief", "outcome", "export"]:
             result = self.run_action(action=action)
             self.assertEqual(result["status"], "blocked")
             self.assertEqual(result["canonical_spec"], ".claude/skills/research/SKILL.md")
+
+    def test_execution_readiness_does_not_create_state_or_assert_qualification(self):
+        for action in ["collect", "analyze", "refresh"]:
+            result = self.run_action(action=action)
+            self.assertEqual(result["status"], "ready_for_gated_research")
+            self.assertFalse(result["extraction"]["enabled"])
+            self.assertFalse(Path(result["state_path"]).exists())
+
+    def test_import_readiness_does_not_enable_collection_or_create_state(self):
+        result = self.run_action(action="import")
+        self.assertEqual(result["blockers"], [])
+        self.assertEqual(result["phase_2"]["reviewed_local_import"], "available_with_supported_policy")
+        self.assertEqual(result["sources_enabled"], [])
+        self.assertFalse(Path(result["state_path"]).exists())
 
     def test_application_status_keeps_its_own_route(self):
         self.assertEqual(self.run_action("application")["canonical_spec"], ".claude/")

@@ -1,0 +1,339 @@
+{
+  "schema_version": 1,
+  "recorded_date": "2026-09-09",
+  "scope": "provisional six-example synthetic comparison; no real source content",
+  "summary": {
+    "versions": {
+      "dataset_sha256": "c4257b3680d17851fb6986eff6346f947c62318bfd7010f63a69f05a8637990b",
+      "prompt_sha256": "8683267465ae7d2c9f2f8d34e000862f8942e32b49b32e21b3ae95072102313a",
+      "schema_sha256": "2813bf64c60f8a47ed78da6d6a402493335f2f50f981fd665667eb93165c9610",
+      "upstream_spec_sha256": "6c7716a9b3066df55ccf056ef95e15e908f468ffa2bf05ad907fe06e2d4f2107",
+      "runtime": {
+        "runtime": "codex-cli 0.153.4",
+        "binary_sha256": "b973d440acac501fd2594a43e7ca9ce41e0a65b9dfb28d0d7a7837c99e1261e3",
+        "model": "gpt-5.5",
+        "model_metadata_sha256": "7935feee7a55829ad98ac4b2311f14607a04ef84f77584d2f6dd370c1d07be63",
+        "source_commit": "3d2ee51ca2d5db578f328aa75e20aa22c0197c9a",
+        "boundary_config_sha256": "8985e495b46ca446694283362856f594c9a4b5cf1a8bd45d0fdc7b6343e7c884",
+        "client_sha256": "b07ae8f0727b335f38c03d88b1f2b77173268b4a4b0c131b83f1576653883e4f",
+        "boundary_test_sha256": "cddebec6a2ae8c0e03f611516cc526d46f1052d8388fa552a9b08d9746f0757a"
+      },
+      "harness_sha256": "80000a5f21a9bfef6112c11b23fe0274ea9e43640d6acf32ae85a490d6371c37"
+    },
+    "human_review": "pending",
+    "summaries": {
+      "research": {
+        "examples": 6,
+        "true_positive": 6,
+        "false_positive": 1,
+        "false_negative": 0,
+        "precision": 0.8571428571428571,
+        "recall": 1.0,
+        "valid_span_examples": 6,
+        "latency_seconds": 41.177
+      },
+      "simple-prompt": {
+        "examples": 6,
+        "true_positive": 6,
+        "false_positive": 2,
+        "false_negative": 0,
+        "precision": 0.75,
+        "recall": 1.0,
+        "valid_span_examples": 6,
+        "latency_seconds": 42.013
+      },
+      "upstream-targeted-replay": {
+        "examples": 6,
+        "true_positive": 5,
+        "false_positive": 4,
+        "false_negative": 1,
+        "precision": 0.5555555555555556,
+        "recall": 0.8333333333333334,
+        "valid_span_examples": 6,
+        "latency_seconds": 54.262
+      }
+    },
+    "limitations": [
+      "Six short synthetic cases, not 120 descriptions/40 employers or operational prevalence.",
+      "Upstream targeted analytical replay with supplied inputs, not full application workflow.",
+      "Commercial, project and content recommendation ratings begin with P3 outputs."
+    ]
+  },
+  "case_scores": [
+    {
+      "arm": "research",
+      "example": "heldout-retrieval",
+      "source_spans_valid": true,
+      "score": {
+        "true_positive": 2,
+        "false_positive": 1,
+        "false_negative": 0,
+        "actual_atoms": [
+          "capability:ai-product-engineering",
+          "capability:retrieval-knowledge",
+          "tool:Python:required"
+        ],
+        "class_correct": true,
+        "domain_correct": true
+      }
+    },
+    {
+      "arm": "research",
+      "example": "heldout-serving",
+      "source_spans_valid": true,
+      "score": {
+        "true_positive": 2,
+        "false_positive": 0,
+        "false_negative": 0,
+        "actual_atoms": [
+          "capability:inference-deployment",
+          "tool:Kubernetes:preferred"
+        ],
+        "class_correct": true,
+        "domain_correct": true
+      }
+    },
+    {
+      "arm": "research",
+      "example": "heldout-research",
+      "source_spans_valid": true,
+      "score": {
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0,
+        "actual_atoms": [
+          "capability:model-research"
+        ],
+        "class_correct": true,
+        "domain_correct": true
+      }
+    },
+    {
+      "arm": "research",
+      "example": "heldout-missing",
+      "source_spans_valid": true,
+      "score": {
+        "true_positive": 0,
+        "false_positive": 0,
+        "false_negative": 0,
+        "actual_atoms": [],
+        "class_correct": true,
+        "domain_correct": true
+      }
+    },
+    {
+      "arm": "research",
+      "example": "heldout-german",
+      "source_spans_valid": true,
+      "score": {
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0,
+        "actual_atoms": [
+          "tool:Python:required"
+        ],
+        "class_correct": null,
+        "domain_correct": null
+      }
+    },
+    {
+      "arm": "research",
+      "example": "heldout-sales",
+      "source_spans_valid": true,
+      "score": {
+        "true_positive": 0,
+        "false_positive": 0,
+        "false_negative": 0,
+        "actual_atoms": [],
+        "class_correct": null,
+        "domain_correct": true
+      }
+    },
+    {
+      "arm": "simple-prompt",
+      "example": "heldout-retrieval",
+      "source_spans_valid": true,
+      "score": {
+        "true_positive": 2,
+        "false_positive": 1,
+        "false_negative": 0,
+        "actual_atoms": [
+          "capability:ai-product-engineering",
+          "capability:retrieval-knowledge",
+          "tool:Python:required"
+        ],
+        "class_correct": true,
+        "domain_correct": true
+      }
+    },
+    {
+      "arm": "simple-prompt",
+      "example": "heldout-serving",
+      "source_spans_valid": true,
+      "score": {
+        "true_positive": 2,
+        "false_positive": 0,
+        "false_negative": 0,
+        "actual_atoms": [
+          "capability:inference-deployment",
+          "tool:Kubernetes:preferred"
+        ],
+        "class_correct": true,
+        "domain_correct": true
+      }
+    },
+    {
+      "arm": "simple-prompt",
+      "example": "heldout-research",
+      "source_spans_valid": true,
+      "score": {
+        "true_positive": 1,
+        "false_positive": 1,
+        "false_negative": 0,
+        "actual_atoms": [
+          "capability:evaluation",
+          "capability:model-research"
+        ],
+        "class_correct": true,
+        "domain_correct": true
+      }
+    },
+    {
+      "arm": "simple-prompt",
+      "example": "heldout-missing",
+      "source_spans_valid": true,
+      "score": {
+        "true_positive": 0,
+        "false_positive": 0,
+        "false_negative": 0,
+        "actual_atoms": [],
+        "class_correct": true,
+        "domain_correct": true
+      }
+    },
+    {
+      "arm": "simple-prompt",
+      "example": "heldout-german",
+      "source_spans_valid": true,
+      "score": {
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0,
+        "actual_atoms": [
+          "tool:Python:required"
+        ],
+        "class_correct": null,
+        "domain_correct": null
+      }
+    },
+    {
+      "arm": "simple-prompt",
+      "example": "heldout-sales",
+      "source_spans_valid": true,
+      "score": {
+        "true_positive": 0,
+        "false_positive": 0,
+        "false_negative": 0,
+        "actual_atoms": [],
+        "class_correct": null,
+        "domain_correct": true
+      }
+    },
+    {
+      "arm": "upstream-targeted-replay",
+      "example": "heldout-retrieval",
+      "source_spans_valid": true,
+      "score": {
+        "true_positive": 1,
+        "false_positive": 1,
+        "false_negative": 1,
+        "actual_atoms": [
+          "capability:ai-product-engineering",
+          "capability:retrieval-knowledge"
+        ],
+        "class_correct": true,
+        "domain_correct": true
+      }
+    },
+    {
+      "arm": "upstream-targeted-replay",
+      "example": "heldout-serving",
+      "source_spans_valid": true,
+      "score": {
+        "true_positive": 2,
+        "false_positive": 2,
+        "false_negative": 0,
+        "actual_atoms": [
+          "capability:ai-product-engineering",
+          "capability:inference-deployment",
+          "capability:reliability-observability",
+          "tool:Kubernetes:preferred"
+        ],
+        "class_correct": true,
+        "domain_correct": true
+      }
+    },
+    {
+      "arm": "upstream-targeted-replay",
+      "example": "heldout-research",
+      "source_spans_valid": true,
+      "score": {
+        "true_positive": 1,
+        "false_positive": 1,
+        "false_negative": 0,
+        "actual_atoms": [
+          "capability:evaluation",
+          "capability:model-research"
+        ],
+        "class_correct": true,
+        "domain_correct": true
+      }
+    },
+    {
+      "arm": "upstream-targeted-replay",
+      "example": "heldout-missing",
+      "source_spans_valid": true,
+      "score": {
+        "true_positive": 0,
+        "false_positive": 0,
+        "false_negative": 0,
+        "actual_atoms": [],
+        "class_correct": true,
+        "domain_correct": true
+      }
+    },
+    {
+      "arm": "upstream-targeted-replay",
+      "example": "heldout-german",
+      "source_spans_valid": true,
+      "score": {
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0,
+        "actual_atoms": [
+          "tool:Python:required"
+        ],
+        "class_correct": null,
+        "domain_correct": null
+      }
+    },
+    {
+      "arm": "upstream-targeted-replay",
+      "example": "heldout-sales",
+      "source_spans_valid": true,
+      "score": {
+        "true_positive": 0,
+        "false_positive": 0,
+        "false_negative": 0,
+        "actual_atoms": [],
+        "class_correct": null,
+        "domain_correct": true
+      }
+    }
+  ],
+  "reported_total_tokens": {
+    "research": 5007,
+    "simple-prompt": 2659,
+    "upstream-targeted-replay": 25084
+  }
+}

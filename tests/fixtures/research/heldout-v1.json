@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "set_id": "synthetic-heldout/1",
+  "provenance": "Author-created evaluation snippets, not real jobs or market evidence. Frozen after extraction prompt v1 and before model runs.",
+  "human_review": "pending",
+  "examples": [
+    {"id": "heldout-retrieval", "employer_family": "synthetic-a", "description": "Required: Python. Build retrieval pipelines for an LLM assistant.", "expected_atoms": ["tool:Python:required", "capability:retrieval-knowledge"], "expected_class": "applied", "expected_domain": "in-domain"},
+    {"id": "heldout-serving", "employer_family": "synthetic-b", "description": "Preferred: Kubernetes. Deploy LLM inference services.", "expected_atoms": ["tool:Kubernetes:preferred", "capability:inference-deployment"], "expected_class": "applied", "expected_domain": "in-domain"},
+    {"id": "heldout-research", "employer_family": "synthetic-c", "description": "Work on AI research. Research novel model architectures and publish experiments.", "expected_atoms": ["capability:model-research"], "expected_class": "research-heavy", "expected_domain": "in-domain"},
+    {"id": "heldout-missing", "employer_family": "synthetic-d", "title": "Python security expert", "description": null, "expected_atoms": [], "expected_class": "unknown", "expected_domain": "unknown"},
+    {"id": "heldout-german", "employer_family": "synthetic-e", "description": "Python-Kenntnisse sind erforderlich.", "expected_atoms": ["tool:Python:required"], "expected_class": null, "expected_domain": null},
+    {"id": "heldout-sales", "employer_family": "synthetic-f", "description": "Sell subscriptions to an AI analytics platform.", "expected_atoms": [], "expected_class": null, "expected_domain": "adjacent"}
+  ]
+}

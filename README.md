@@ -12,10 +12,13 @@ The original MIT copyright and license remain intact; upstream author accounts
 and results below describe Mads Lorentzen's application workflow, not this fork.
 
 **Active roadmap:** [PLAN_RESEARCH.md](PLAN_RESEARCH.md). Phase 1 establishes
-research routing, safe configuration, public-template guards and runtime
-qualification requirements. Collection/extraction and recommendations are not
-implemented yet. The tool-free Codex extraction boundary is explicitly blocked
-pending qualification; no paid API fallback is selected.
+research routing and safe public-template defaults. Phase 2 implements bounded
+Jobicy collection, reviewed imports, qualified subscription-based extraction,
+exact evidence validation, private lifecycle controls and capability snapshots.
+See [commands and limits](docs/research/evidence-operations.md) and
+[measured acceptance evidence](docs/research/phase2-validation.md).
+Human evaluation review remains pending; four recommendation workflows begin
+in Phase 3. No paid API fallback is configured.
 
 For research, ask Codex to use the `research` skill, or run this read-only check
 with Python 3.10+:

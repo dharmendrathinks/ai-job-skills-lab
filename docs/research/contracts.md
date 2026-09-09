@@ -1,7 +1,12 @@
-# Research contracts v1 — Phase 1 definitions
+# Research contracts v1 — Phase 2 implementation status
 
-These definitions and the synthetic config example establish interfaces only.
-P2 implements capture/storage/validation; there is no initialized research data.
+The table remains the full target. Reviewed local imports, span validation,
+snapshots and logical lifecycle operations are implemented in
+`tools/research_evidence.py`; see [executable contracts and limits](evidence-operations.md).
+Execution records, qualified automated extraction and bounded Jobicy acquisition
+are implemented. Real permitted observations live outside the checkout; the
+checked-in configuration and test fixtures remain synthetic. Human quality review
+is pending; do not equate structural validation with semantic correctness.
 The normative capability/lifecycle requirements remain in `PLAN_RESEARCH.md`.
 
 | Contract | Required responsibilities |
@@ -26,12 +31,21 @@ status and controlled copies. The helper owns IDs and validation, not the model.
 Source-stated facts, normalization, cross-source inference and recommendations
 remain separately labeled and traceable.
 
-P2 uses private versioned JSON plus a one-writer lock and manifest commit point,
-adapting upstream state helpers. Partial runs cannot masquerade as complete.
+The implemented subset uses private versioned JSON, a one-writer lock and one
+atomic manifest, reusing upstream `rank_state.save_state` unchanged. Snapshot
+JSON and Markdown remain inside managed state, without separate exported copies.
+Partial runs cannot masquerade as complete.
 Check eligibility before capture, submission, use, output commit and export.
 Withdraw first from use, delete prohibited source/derived material, invalidate
 caches, recompute surviving aggregates and mark briefs/reports for regeneration.
 Keep only allowed audit metadata; restore must not resurrect withdrawn evidence.
+Reviewed local imports and the narrowly reviewed Jobicy API path support
+indefinite local retention, logical deletion and minimal withdrawal hashes.
+Hosted submission additionally requires an explicit compatible permission basis
+and provider-managed retention without a deletion deadline. Unmanaged export,
+restore and hard physical deletion deadlines are rejected. Execution responses,
+caches and real-description evaluation artifacts inherit source dependencies.
+Policy validation cannot independently verify an operator's permission claim.
 No source with an unsupported hard deletion deadline is enabled. P6 adds
 scheduled cleanup/monitoring and broader recovery; it is not a grace period.
 
