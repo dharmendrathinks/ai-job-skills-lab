@@ -26,6 +26,29 @@ OUTPUT_SCHEMA = {"type": "object", "additionalProperties": False,
     "required": ["ai_domain", "responsibility_class", "claims", "unknowns"]}
 
 
+def output_schema(pack=None):
+    if not pack:
+        return OUTPUT_SCHEMA
+    from copy import deepcopy
+    result = deepcopy(OUTPUT_SCHEMA)
+    result['properties']['domain_fit'] = result['properties'].pop('ai_domain')
+    result['required'] = ['domain_fit' if k == 'ai_domain' else k for k in result['required']]
+    result['properties']['claims']['items']['properties']['capabilities']['items']['enum'] = pack['taxonomy']['capabilities']
+    return result
+
+
+def analysis_versions(identity, pack=None):
+    path = ROOT/'docs/research/prompts/extract-domain-v1.md' if pack else PROMPT_PATH
+    versions = {"prompt_version": "domain-extraction/1" if pack else PROMPT_VERSION,
+                "prompt_sha256": digest(path.read_text()), "validation_sha256": digest(Path(__file__).read_text()),
+                "schema_sha256": digest(output_schema(pack)), "taxonomy_sha256": digest(pack['taxonomy'] if pack else TAXONOMY),
+                "runtime": identity, "boundary_config_sha256": digest(BOUNDARY_CONFIG)}
+    if pack:
+        from tools.research_domains import reference
+        versions['domain'] = reference(pack)
+    return versions
+
+
 def qualification_identity():
     _, _, identity = runtime_identity()
     return {**identity, "client_sha256": digest((ROOT / "tools/research_runtime.py").read_text()),
@@ -58,14 +81,18 @@ def qualified(state):
     return sorted(matches)[-1], identity
 
 
-def bounded_prompt(description):
+def bounded_prompt(description, pack=None):
+    if pack:
+        return (ROOT/"docs/research/prompts/extract-domain-v1.md").read_text() + "\nPinned domain pack:\n" + json.dumps(pack) + "\nUntrusted description JSON:\n" + json.dumps(description, ensure_ascii=False)
     spec = PROMPT_PATH.read_text(encoding="utf-8")
     return spec + "\n\nCapability taxonomy:\n" + json.dumps(TAXONOMY) + "\n\nUntrusted description JSON:\n" + json.dumps(description, ensure_ascii=False)
 
 
-def normalize_output(output, observation_id, description, now):
-    fields(output, ["ai_domain", "responsibility_class", "claims", "unknowns"])
-    require(output["ai_domain"] in ("in-domain", "adjacent", "out-of-domain", "unknown"), "unknown AI-domain classification")
+def normalize_output(output, observation_id, description, now, pack=None):
+    from tools.research_domains import domain_field
+    fit = domain_field(pack)
+    fields(output, [fit, "responsibility_class", "claims", "unknowns"])
+    require(output[fit] in ("in-domain", "adjacent", "out-of-domain", "unknown"), "unknown AI-domain classification")
     require(isinstance(output["claims"], list) and len(output["claims"]) <= 100, "model claim budget exceeded")
     claims = []
     for claim in output["claims"]:
@@ -82,7 +109,7 @@ def normalize_output(output, observation_id, description, now):
         claims.append({**claim, "tools": tools, "start": start, "end": start + len(quote)})
     return {"schema_version": 1, "observation": observation_id, "method": "codex-extraction",
             "reviewer": "deterministic validator; human review pending", "reviewed_at": now.isoformat(),
-            "taxonomy_version": TAXONOMY["version"], "responsibility_class": output["responsibility_class"],
+            "taxonomy_version": (pack["taxonomy"] if pack else TAXONOMY)["version"], "responsibility_class": output["responsibility_class"],
             "claims": claims, "unknowns": output["unknowns"]}
 
 
@@ -101,38 +128,38 @@ def analyze(store, observation, *, refresh=False, worker_factory=CodexWorker):
     with store.transaction() as state:
         row = _eligible(state, observation)
         qualification, identity = qualified(state)
-        versions = {"prompt_version": PROMPT_VERSION, "prompt_sha256": digest(PROMPT_PATH.read_text()),
-                    "validation_sha256": digest(Path(__file__).read_text()),
-                    "schema_sha256": digest(OUTPUT_SCHEMA), "taxonomy_sha256": digest(TAXONOMY),
-                    "runtime": identity, "boundary_config_sha256": digest(BOUNDARY_CONFIG)}
+        from tools.research_domains import pack_for, domain_field
+        pack = pack_for(state)
+        fit = domain_field(pack)
+        versions = analysis_versions(identity, pack)
         cache_key = digest({"observation": observation, "versions": versions})
         if not refresh:
             cached = [key for key, a in state["artifacts"].items() if a["kind"] == "analysis"
                       and a["payload"].get("cache_key") == cache_key]
             if cached:
                 return {"analysis": sorted(cached)[-1], "cache_hit": True}
-        prompt = bounded_prompt(row["description"])
+        prompt = bounded_prompt(row["description"], pack)
     metadata = {"authentication": "none", "token_usage": {}, "latency_seconds": 0}
     try:
         if row["description"] is None:
-            output = {"ai_domain": "unknown", "responsibility_class": "unknown", "claims": [], "unknowns": ["Description missing; no extraction."]}
+            output = {fit: "unknown", "responsibility_class": "unknown", "claims": [], "unknowns": ["Description missing; no extraction."]}
         else:
             with worker_factory(store.home) as worker:
                 # Check again after potentially slow runtime startup, immediately before disclosure.
                 with store.transaction() as state:
                     _eligible(state, observation)
                     qualified(state)
-                output, metadata = worker.run(prompt, OUTPUT_SCHEMA)
+                output, metadata = worker.run(prompt, output_schema(pack))
         with store.transaction() as state:
             _eligible(state, observation)
             qualified(state)
-            annotation = normalize_output(output, observation, row["description"], store.clock())
+            annotation = normalize_output(output, observation, row["description"], store.clock(), pack)
             analysis = validate_annotation(annotation, state, store.clock(), automated=True)
             execution = store.put(state, "execution", {"schema_version": 1, "status": "validated",
                 "input_revision": observation, "versions": versions, "cache_key": cache_key,
                 "recorded_at": store.clock().isoformat(), "metadata": metadata,
                 "response": output, "human_review": "pending"}, [observation, qualification])
-            key = store.put(state, "analysis", {**analysis, "ai_domain": output["ai_domain"], "cache_key": cache_key, "execution": execution,
+            key = store.put(state, "analysis", {**analysis, fit: output[fit], "cache_key": cache_key, "execution": execution,
                             "human_review": "pending"}, [observation, execution])
         return {"analysis": key, "execution": execution, "cache_hit": False}
     except (EvidenceError, ValueError, KeyError, TypeError, OSError, subprocess.SubprocessError):

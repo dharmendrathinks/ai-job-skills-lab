@@ -28,6 +28,9 @@ Phase 6 adds bounded refresh/resume, a durable review inbox, managed offline HTM
 withdrawal-aware local recovery and optional reviewed scheduling/delivery; see
 [continuous operation](docs/research/continuous-operations.md). Scheduling and
 external notifications are not activated.
+Phase 7 adds opt-in, pinned backend/platform workspaces using the same four
+workflows, lifecycle and evaluation; [domain commands](docs/research/domain-operations.md).
+AI remains the default; historical AI records are not reclassified.
 Source/language expansion remains evidence-gated; human semantic evaluation is
 pending. No paid API fallback is configured.
 

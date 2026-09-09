@@ -62,6 +62,8 @@ def apply_journal(store, state):
 
 def persist(store, path, state):
     """Journal precedes primary replacement; stale backups fail closed on restore."""
+    from tools.research_domains import check_binding
+    check_binding(store.home, state)
     regular(path)
     row = journal(store, state)
     merged = sorted(set(row['withdrawn']) | set(state['withdrawn']))
@@ -107,7 +109,7 @@ def materialize(store, html):
 
 
 def validate_state(state):
-    fields(state, ['schema_version', 'artifacts', 'withdrawn'])
+    fields(state, ['schema_version', 'artifacts', 'withdrawn'], ['domain_pack'])
     require(state['schema_version'] == VERSION and isinstance(state['artifacts'], dict) and
             isinstance(state['withdrawn'], list), 'invalid backup state')
     for key, a in state['artifacts'].items():

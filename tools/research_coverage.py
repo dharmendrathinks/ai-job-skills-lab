@@ -1,4 +1,5 @@
 """Measured coverage and equal-window cohorts over P2 evidence, without fit gates."""
+from tools.research_domains import taxonomy_for
 from collections import Counter
 from pathlib import Path
 from datetime import timedelta
@@ -131,7 +132,7 @@ def selected_state(state, receipts, start=None, end=None, basis='capture'):
                                           'employer_requisition': links[0]['employer_requisition']}}
     for k,a in state['artifacts'].items():
         if a['kind'] == 'analysis' and a['payload']['observation'] in selected: selected[k] = a
-    return {'schema_version': 1, 'artifacts': selected, 'withdrawn': []}
+    return {'schema_version': 1, 'artifacts': selected, 'withdrawn': [], **({'domain_pack': state['domain_pack']} if state.get('domain_pack') else {})}
 
 
 def analysis_version(state, payload):
@@ -310,7 +311,7 @@ def compare(store, key):
                   'opening_delta': reports[1]['counts']['deduplicated_openings'] - reports[0]['counts']['deduplicated_openings'] if comparable else None,
                   'capability_comparison': 'comparable-within-sample' if capabilities_ok else 'insufficient-or-changed-analysis',
                   'capability_deltas': {c: reports[1]['capabilities'].get(c,{}).get('openings',0) - reports[0]['capabilities'].get(c,{}).get('openings',0)
-                                         for c in TAXONOMY['capabilities']} if capabilities_ok else None,
+                                         for c in taxonomy_for(state)['capabilities']} if capabilities_ok else None,
                   'limitations': ['Counts are openings observed in each window, not new hires or worldwide demand growth.',
                                   'Equal sampling protocols do not remove provider/employer selection bias.',
                                   'Missing a listing in a sample is not evidence of closure.', *cohort['limitations']]}

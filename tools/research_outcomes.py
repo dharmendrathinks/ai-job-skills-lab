@@ -78,7 +78,7 @@ def record_outcome(store, row):
     for name in ('observer', 'summary'): text(row[name], 4000)
     require(timestamp(row['occurred_at']) <= store.clock(), 'future outcome')
     for name in ('evidence', 'capabilities', 'conditions', 'limitations'): strings(row[name], 30)
-    require(row['limitations'] and set(row['capabilities']) <= set(TAXONOMY['capabilities']), 'outcome needs scoped capabilities/limitations')
+    require(row['limitations'], 'outcome limitations required')
     validate_policy(row['policy'], store.clock())
     require(isinstance(row['tests'], list) and len(row['tests']) <= 20, 'test-run budget exceeded')
     project = row['project']
@@ -91,6 +91,8 @@ def record_outcome(store, row):
         require(re.fullmatch('[0-9a-f]{40,64}', project['revision']) and project['action'] in ('extend', 'contribute', 'new', 'inspect'), 'pinned project/action required')
     if row['event_type'] == 'project-selected': require(project, 'selected project required')
     with store.transaction() as state:
+        from tools.research_domains import taxonomy_for
+        require(set(row['capabilities']) <= set(taxonomy_for(state)['capabilities']), 'outcome capabilities outside workspace taxonomy')
         artifact(state, row['brief'], ('brief',))
         deps = [row['brief']]
         if row['supersedes']:

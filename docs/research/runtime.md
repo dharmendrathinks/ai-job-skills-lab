@@ -127,3 +127,20 @@ a fixed loopback, no-proxy/no-redirect endpoint. Its client exposes no tool disp
 or model download route and sends no research sources. This is not an OS sandbox
 or a qualified replacement for the production worker. Quality, long-context,
 multilingual and peak-memory evaluation would precede any proposed promotion.
+
+
+## Phase 7 domain dispatch
+
+The registered tools, binary, ChatGPT authentication, source-disclosure checks and
+no-paid-fallback boundary are unchanged. Shared extraction selects the immutable
+workspace taxonomy and the domain prompt/schema before invoking the same worker.
+Backend `domain_fit` and exact evidence spans are validated deterministically;
+pack aliases are guidance, never source statements. Pack data cannot install code
+or activate an adapter/runtime. The AI prompt and default schema remain unchanged.
+
+The owned backend evaluation workspace ran the existing installed-binary forced-
+call qualification and real subscription extraction/briefs. Results, scope limits
+and semantic disagreements are in `phase7-validation.md`. The evaluation harness
+uses only its frozen owned examples and rejects mixed/private context, feedback
+or profile stores. No real corpus, application data or private repository was
+submitted for Phase 7 evaluation. See `domain-operations.md` for explicit selection.

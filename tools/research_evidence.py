@@ -217,7 +217,7 @@ class Store:
                 require(stat.S_IMODE(path.stat().st_mode) & 0o077 == 0,
                         "state file must be private (mode 0600)")
                 state = json.loads(path.read_text(encoding="utf-8"))
-                fields(state, ["schema_version", "artifacts", "withdrawn"])
+                fields(state, ["schema_version", "artifacts", "withdrawn"], ["domain_pack"])
                 require(state["schema_version"] == VERSION, "unsupported state schema; no implicit migration")
                 require(isinstance(state["artifacts"], dict) and isinstance(state["withdrawn"], list),
                         "invalid state manifest")
@@ -234,6 +234,8 @@ class Store:
                 require(not orphan.is_symlink(), "unsafe orphan state file")
                 orphan.unlink()
             from tools.research_recovery import apply_journal, persist
+            from tools.research_domains import check_binding
+            check_binding(self.home, state)
             apply_journal(self, state)
             self.sweep(state)
             persist(self, path, state)  # expiry withdrawal is durable even if the action fails
@@ -299,6 +301,11 @@ class Store:
         return self.remove(state, expired)
 
     def put(self, state, kind, payload, dependencies=(), use_until=None):
+        from tools.research_domains import pack_for, reference
+        pack = pack_for(state)
+        if pack and kind in ('analysis', 'snapshot', 'coverage-report', 'brief', 'profile-proposal',
+                             'research-profile', 'outcome', 'translation-proposal', 'language-gold'):
+            payload = {**payload, 'domain': reference(pack)}
         deps = sorted(set(dependencies))
         require(all(d in state["artifacts"] for d in deps), "missing or withdrawn dependency")
         limits = [state["artifacts"][d]["use_until"] for d in deps]
@@ -386,10 +393,12 @@ class Store:
 
 
 def validate_annotation(annotation, state, now, *, automated=False):
+    from tools.research_domains import taxonomy_for
+    taxonomy = taxonomy_for(state)
     fields(annotation, ["schema_version", "observation", "method", "reviewer", "reviewed_at",
                         "taxonomy_version", "responsibility_class", "claims", "unknowns"])
     require(annotation["schema_version"] == VERSION, "unsupported analysis schema")
-    require(annotation["taxonomy_version"] == TAXONOMY["version"], "unknown taxonomy")
+    require(annotation["taxonomy_version"] == taxonomy["version"], "unknown taxonomy")
     allowed = ("codex-extraction",) if automated else ("human-reviewed", "synthetic-fixture")
     require(annotation["method"] in allowed,
             "automated extraction not qualified; no external model output accepted")
@@ -421,7 +430,7 @@ def validate_annotation(annotation, state, now, *, automated=False):
                 and 0 <= start < end <= len(description), "invalid evidence offsets")
         require(description[start:end] == claim["quote"], "evidence quote does not match captured revision")
         strings(claim["capabilities"])
-        require(set(claim["capabilities"]) <= set(TAXONOMY["capabilities"]), "unknown capability")
+        require(set(claim["capabilities"]) <= set(taxonomy["capabilities"]), "unknown capability")
         strings(claim["tools"])
     strings(annotation["unknowns"])
     require(description is not None or annotation["unknowns"], "missing-description limit required")
@@ -430,6 +439,10 @@ def validate_annotation(annotation, state, now, *, automated=False):
 
 
 def aggregate(state):
+    from tools.research_domains import pack_for, taxonomy_for, domain_field, reference
+    pack = pack_for(state)
+    taxonomy = taxonomy_for(state)
+    fit_field = domain_field(pack)
     artifacts = state["artifacts"]
     observations = {i: a["payload"] for i, a in artifacts.items() if a["kind"] == "observation"}
     receipts = {i: a["payload"] for i, a in artifacts.items() if a["kind"] == "receipt"}
@@ -475,7 +488,7 @@ def aggregate(state):
             if key not in analyses:
                 continue
             analysis = artifacts[analyses[key]]["payload"]
-            if analysis["method"] == "codex-extraction" and analysis.get("ai_domain") != "in-domain":
+            if analysis["method"] == "codex-extraction" and analysis.get(fit_field) != "in-domain":
                 continue
             for claim in analysis["claims"]:
                 for label in claim["capabilities"]:
@@ -489,7 +502,7 @@ def aggregate(state):
                              "availability": next(iter(states)) if len(states) == 1 else "unknown"})
     deps = sorted(set(observations) | set(receipts) | set(analyses.values()))
     report = {
-        "schema_version": VERSION, "taxonomy_version": TAXONOMY["version"],
+        "schema_version": VERSION, "taxonomy_version": taxonomy["version"],
         "scope": "synthetic test corpus" if receipts and all(r["kind"] == "synthetic" for r in receipts.values())
                  else "historical captured sample; capabilities count latest source observations",
         "counts": {"captured_revisions": len(observations), "source_listings": len(latest),
@@ -511,8 +524,8 @@ def aggregate(state):
         "capabilities_by_modality": {m: {k: len(v) for k, v in sorted(labels.items())}
                                      for m, labels in modalities.items()},
         "analysis_methods": sorted({artifacts[a]["payload"]["method"] for a in analyses.values()}),
-        "ai_domain_latest_observations": {
-            domain: sum(k in analyses and artifacts[analyses[k]]["payload"].get("ai_domain") == domain
+        ("domain_fit_latest_observations" if pack else "ai_domain_latest_observations"): {
+            domain: sum(k in analyses and artifacts[analyses[k]]["payload"].get(fit_field) == domain
                         for k in latest.values())
             for domain in ("in-domain", "adjacent", "out-of-domain", "unknown")},
         "limitations": ["Sample, not global market coverage or growth evidence.",
@@ -522,13 +535,15 @@ def aggregate(state):
                         "Validated spans do not imply human-reviewed semantic accuracy.",
                         "Conflicting source availability is unknown; no title-only deduplication."],
     }
+    if pack:
+        report["domain"] = reference(pack)
     report["markdown"] = render_markdown(report)
     return report, deps
 
 
 def render_markdown(report):
     # Only controlled labels/counts; untrusted imported strings remain in private JSON.
-    lines = ["# Captured AI capability sample", "", report["scope"], "", "| Measure | Count |", "|---|---:|"]
+    lines = ["# Captured " + (report["domain"]["id"] if report.get("domain") else "AI") + " capability sample", "", report["scope"], "", "| Measure | Count |", "|---|---:|"]
     lines += [f"| {key} | {value} |" for key, value in report["counts"].items()]
     lines += ["", "| Capability | Openings | Verified employers |", "|---|---:|---:|"]
     lines += [f"| {key} | {v['openings']} | {v['employers']} |" for key, v in report["capabilities"].items()]
@@ -542,7 +557,7 @@ def main():
     parser.add_argument("action", choices=["import", "annotate", "snapshot", "status", "withdraw", "extract", "analyze", "qualify", "collect", "export", "restore"])
     parser.add_argument("--input", type=Path)
     parser.add_argument("--id")
-    parser.add_argument("--query", default="machine learning")
+    parser.add_argument("--query")
     parser.add_argument("--count", type=int, default=20)
     parser.add_argument("--refresh", action="store_true")
     args = parser.parse_args()
@@ -563,7 +578,11 @@ def main():
             result = qualify(store)
         elif args.action == "collect":
             from tools.research_sources import collect_jobicy
-            result = collect_jobicy(store, args.query, args.count)
+            from tools.research_domains import pack_for
+            with store.transaction() as state:
+                pack = pack_for(state)
+                query = args.query or (pack['queries'][0] if pack else 'machine learning')
+            result = collect_jobicy(store, query, args.count)
         elif args.action in ("extract", "analyze"):
             result = store.analyze(args.id, refresh=args.refresh)
         else:

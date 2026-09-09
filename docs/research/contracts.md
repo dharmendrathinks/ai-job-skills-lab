@@ -1,4 +1,4 @@
-# Research contracts v1 — Phases 2–6 implementation status
+# Research contracts v1 — Phases 2–7 implementation status
 
 The table remains the full target. Reviewed local imports, span validation,
 snapshots and logical lifecycle operations are implemented in
@@ -125,3 +125,46 @@ do not downgrade active state or restore an older withdrawal/operations ledger.
 Local logical-deletion guarantees cover managed copies at the next supported
 operation, not hard timing, physical media, browser memory or unmanaged backups.
 See [operations, failure handling and activation gates](continuous-operations.md).
+
+
+## Phase 7 domain extension
+
+The default AI envelope/schema and its historical artifact IDs remain intact.
+A newly initialized non-AI workspace adds a `domain_pack` field to state schema 1
+and a private `domain-binding.json` with exact domain ID, version, pack digest and
+taxonomy version. P6 backups retain the header and must match that binding before
+restore. Source withdrawal leaves the domain identity intact. Existing AI stores
+are not migrated; foreign backups, missing bindings and in-place reclassification
+fail closed. The default AI directory is reserved; choose a separate empty private
+data workspace for opt-in.
+
+Domain-pack/1 contains responsibilities, exclusions, capability IDs, aliases,
+acyclic prerequisites, candidate queries, a frozen evaluation dataset reference
+and limitations. The first reviewed pack is backend-platform/1. Only reviewed
+built-in catalog entries can initialize a workspace; a pack cannot execute code,
+load dependencies or qualify collection/model access. Another revision requires
+an explicitly selected new workspace and permitted acquisition/import.
+
+Backend analysis uses `domain_fit` and its versioned taxonomy through the shared
+P2 extractor/validator. Domain, taxonomy, prompt, schema and code versions enter
+cache identity. Compatible analysis/snapshot/coverage/brief/profile/outcome records
+carry an explicit domain reference; source identities and receipts stay original.
+All four brief schemas use that workspace's capabilities and preserve source
+scope, external-evidence requirements, unknowns and P4 reviewed feedback. Backend
+synthetic evaluation drafts explicitly carry synthetic scope into prompts and
+rendered limits; generated scores do not establish real market demand.
+
+Cross-domain-comparison/1 is an ephemeral local read with both lifecycle locks,
+separately disclosed sample scopes/windows/receipts/segments/versions, conservative
+matching opening IDs and null pooled counts/demand ratios. It is not stored across
+independent lifecycles or exported by default. A shared taxonomy/cohort, missing
+employer identities or non-overlap is never inferred. P5 longitudinal sufficiency
+rules remain unchanged.
+
+AI neutral interchange 1.0 is retained. Backend uses an explicit 1.1 envelope with
+matching domain reference and Markdown; receiver pack digest/taxonomy mismatch is
+rejected before import. Existing source export/no-recall/profile/lineage controls
+apply. Radar 1.1 consumer support remains separate and conditional. Owned domain
+case/evaluation artifacts link to source observations/executions and retain actual
+scores, runtime versions and pending human review; the public evaluation record
+contains only development results over author-owned fixtures.

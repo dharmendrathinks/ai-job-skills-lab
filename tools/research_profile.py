@@ -1,5 +1,6 @@
 """Reviewable research direction/evidence profile, independent of application data."""
-from tools.research_evidence import TAXONOMY, fields, require, strings, text, validate_policy
+from tools.research_domains import taxonomy_for
+from tools.research_evidence import fields, require, strings, text, validate_policy
 
 LEVELS = ('self-declared', 'inspected', 'demonstrated', 'not-evidenced')
 
@@ -30,7 +31,7 @@ def propose(store, bundle, *, outcome=None):
         seen = set()
         for row in bundle['capabilities']:
             fields(row, ['capability', 'level', 'evidence', 'conditions', 'limitations'])
-            require(row['capability'] in TAXONOMY['capabilities'] and row['capability'] not in seen, 'unknown/duplicate capability')
+            require(row['capability'] in taxonomy_for(state)['capabilities'] and row['capability'] not in seen, 'unknown/duplicate capability')
             seen.add(row['capability'])
             require(row['level'] in LEVELS, 'unknown evidence level')
             strings(row['evidence']); strings(row['conditions']); strings(row['limitations'])

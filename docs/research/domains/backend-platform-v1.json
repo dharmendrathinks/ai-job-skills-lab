@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "id": "backend-platform",
+  "version": "1",
+  "title": "Backend and platform engineering",
+  "taxonomy": {
+    "version": "backend-platform/capabilities/1",
+    "capabilities": [
+      "service-api-design",
+      "data-storage",
+      "distributed-systems",
+      "delivery-automation",
+      "service-reliability",
+      "platform-security",
+      "performance-capacity",
+      "developer-platforms"
+    ]
+  },
+  "responsibilities": [
+    "Design and operate backend services, APIs and persistence.",
+    "Build deployment, reliability, security and developer infrastructure for general software workloads.",
+    "Classify responsibilities, not job titles; preserve explicit requirements even for adjacent roles."
+  ],
+  "exclusions": [
+    "AI/ML-specific inference, retrieval, agents or model research belong to the default AI workspace unless the description also explicitly establishes general backend/platform responsibilities.",
+    "Generic AI tool use does not make a backend role an AI role.",
+    "Pure sales, product promotion and title-only records do not establish backend engineering responsibilities."
+  ],
+  "aliases": {
+    "service-api-design": [
+      "API design",
+      "backend services"
+    ],
+    "data-storage": [
+      "database design",
+      "transaction integrity"
+    ],
+    "distributed-systems": [
+      "idempotency",
+      "message processing"
+    ],
+    "delivery-automation": [
+      "CI/CD",
+      "deployment rollback"
+    ],
+    "service-reliability": [
+      "SLOs",
+      "incident response"
+    ],
+    "platform-security": [
+      "service authorization",
+      "secret management"
+    ],
+    "performance-capacity": [
+      "load testing",
+      "capacity planning"
+    ],
+    "developer-platforms": [
+      "self-service environments",
+      "internal developer tools"
+    ]
+  },
+  "prerequisites": {
+    "service-api-design": [],
+    "data-storage": [
+      "service-api-design"
+    ],
+    "distributed-systems": [
+      "service-api-design",
+      "data-storage"
+    ],
+    "delivery-automation": [
+      "service-api-design"
+    ],
+    "service-reliability": [
+      "service-api-design"
+    ],
+    "platform-security": [
+      "service-api-design"
+    ],
+    "performance-capacity": [
+      "service-api-design"
+    ],
+    "developer-platforms": [
+      "delivery-automation"
+    ]
+  },
+  "queries": [
+    "backend engineering",
+    "platform engineering",
+    "site reliability"
+  ],
+  "evaluation": {
+    "dataset": "tests/fixtures/research/backend-platform-v1.json",
+    "sha256": "4e9482a52abcf878325b80ca7125a8b8b567536a2349eb3846486ccfaa53cadf",
+    "label_status": "provisional-human-review-pending"
+  },
+  "limitations": [
+    "Author-defined scope and aliases, not measured prevalence or automatic keyword labeling.",
+    "First backend/platform pack only; source availability, commercial usefulness and language quality remain unverified.",
+    "Cross-domain responsibilities may overlap; no pooled worldwide market total."
+  ]
+}

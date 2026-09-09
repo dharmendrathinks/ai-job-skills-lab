@@ -1,0 +1,424 @@
+{
+  "schema_version": 1,
+  "recorded_date": "2026-09-09",
+  "basis": "Development evaluation over checked-in author-owned examples; no real jobs, customer data, profile, code or outcome claims.",
+  "versions": {
+    "domain": {
+      "id": "backend-platform",
+      "version": "1",
+      "pack_sha256": "20b729e2817d52154968510d0da4fd109a85cc1b1a796eb893f1b597b156afea",
+      "taxonomy_version": "backend-platform/capabilities/1"
+    },
+    "dataset": "4e9482a52abcf878325b80ca7125a8b8b567536a2349eb3846486ccfaa53cadf",
+    "runtime": {
+      "runtime": "codex-cli 0.153.4",
+      "binary_sha256": "b973d440acac501fd2594a43e7ca9ce41e0a65b9dfb28d0d7a7837c99e1261e3",
+      "model": "gpt-5.5",
+      "model_metadata_sha256": "7935feee7a55829ad98ac4b2311f14607a04ef84f77584d2f6dd370c1d07be63",
+      "source_commit": "3d2ee51ca2d5db578f328aa75e20aa22c0197c9a",
+      "boundary_config_sha256": "8985e495b46ca446694283362856f594c9a4b5cf1a8bd45d0fdc7b6343e7c884",
+      "client_sha256": "b07ae8f0727b335f38c03d88b1f2b77173268b4a4b0c131b83f1576653883e4f",
+      "boundary_test_sha256": "cddebec6a2ae8c0e03f611516cc526d46f1052d8388fa552a9b08d9746f0757a"
+    },
+    "harness": "9eb519b602b740e0d3ff434c165b21beb7cf003da8e688a56bb99fb54e6511df",
+    "analysis": {
+      "prompt_version": "domain-extraction/1",
+      "prompt_sha256": "adae072e97ef673e11c88eb2c0c1079d060a88b148b6e16f644fd343fd22b8e7",
+      "validation_sha256": "bf363fbe266fbfd75b5433bc671c7c9dcdef72bea793fcb6ec88b851e00520e5",
+      "schema_sha256": "71f56341d30e4261ab8173afb8d2dab371ba8a7cc354ff119f98d97705a2c74b",
+      "taxonomy_sha256": "ae0dd911af9049254c970a667b83f2007bf1e698b55c69092f152b976a2577d6",
+      "runtime": {
+        "runtime": "codex-cli 0.153.4",
+        "binary_sha256": "b973d440acac501fd2594a43e7ca9ce41e0a65b9dfb28d0d7a7837c99e1261e3",
+        "model": "gpt-5.5",
+        "model_metadata_sha256": "7935feee7a55829ad98ac4b2311f14607a04ef84f77584d2f6dd370c1d07be63",
+        "source_commit": "3d2ee51ca2d5db578f328aa75e20aa22c0197c9a",
+        "boundary_config_sha256": "8985e495b46ca446694283362856f594c9a4b5cf1a8bd45d0fdc7b6343e7c884",
+        "client_sha256": "b07ae8f0727b335f38c03d88b1f2b77173268b4a4b0c131b83f1576653883e4f",
+        "boundary_test_sha256": "cddebec6a2ae8c0e03f611516cc526d46f1052d8388fa552a9b08d9746f0757a"
+      },
+      "boundary_config_sha256": "8985e495b46ca446694283362856f594c9a4b5cf1a8bd45d0fdc7b6343e7c884",
+      "domain": {
+        "id": "backend-platform",
+        "version": "1",
+        "pack_sha256": "20b729e2817d52154968510d0da4fd109a85cc1b1a796eb893f1b597b156afea",
+        "taxonomy_version": "backend-platform/capabilities/1"
+      }
+    },
+    "brief_validator": "447d0e42fdab46de4c370eb444a5e40653d8ff3916fcbb835ea69c899042a430",
+    "brief_prompt": "5d9b4c06d15cf924325370f75b38c87f9c02e7cd142f2f90e8c7c247943aef56"
+  },
+  "cases": [
+    {
+      "id": "backend-api",
+      "validated": true,
+      "score": {
+        "true_positive": 2,
+        "false_positive": 0,
+        "false_negative": 0,
+        "actual_atoms": [
+          "capability:service-api-design",
+          "tool:Go:required"
+        ],
+        "class_correct": true,
+        "domain_correct": true
+      },
+      "actual_domain_fit": "in-domain",
+      "tokens": 1335,
+      "latency_seconds": 8.347,
+      "human_review": "pending"
+    },
+    {
+      "id": "backend-storage",
+      "validated": true,
+      "score": {
+        "true_positive": 2,
+        "false_positive": 0,
+        "false_negative": 0,
+        "actual_atoms": [
+          "capability:data-storage",
+          "tool:SQL:required"
+        ],
+        "class_correct": true,
+        "domain_correct": true
+      },
+      "actual_domain_fit": "in-domain",
+      "tokens": 1177,
+      "latency_seconds": 5.37,
+      "human_review": "pending"
+    },
+    {
+      "id": "backend-distributed",
+      "validated": true,
+      "score": {
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0,
+        "actual_atoms": [
+          "capability:distributed-systems"
+        ],
+        "class_correct": true,
+        "domain_correct": true
+      },
+      "actual_domain_fit": "in-domain",
+      "tokens": 1215,
+      "latency_seconds": 9.621,
+      "human_review": "pending"
+    },
+    {
+      "id": "backend-delivery",
+      "validated": true,
+      "score": {
+        "true_positive": 2,
+        "false_positive": 0,
+        "false_negative": 0,
+        "actual_atoms": [
+          "capability:delivery-automation",
+          "tool:Kubernetes:preferred"
+        ],
+        "class_correct": true,
+        "domain_correct": true
+      },
+      "actual_domain_fit": "in-domain",
+      "tokens": 1322,
+      "latency_seconds": 16.322,
+      "human_review": "pending"
+    },
+    {
+      "id": "backend-reliability",
+      "validated": true,
+      "score": {
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0,
+        "actual_atoms": [
+          "capability:service-reliability"
+        ],
+        "class_correct": true,
+        "domain_correct": true
+      },
+      "actual_domain_fit": "in-domain",
+      "tokens": 1151,
+      "latency_seconds": 10.588,
+      "human_review": "pending"
+    },
+    {
+      "id": "backend-security",
+      "validated": true,
+      "score": {
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0,
+        "actual_atoms": [
+          "capability:platform-security"
+        ],
+        "class_correct": true,
+        "domain_correct": true
+      },
+      "actual_domain_fit": "in-domain",
+      "tokens": 1213,
+      "latency_seconds": 7.319,
+      "human_review": "pending"
+    },
+    {
+      "id": "backend-performance",
+      "validated": true,
+      "score": {
+        "true_positive": 1,
+        "false_positive": 1,
+        "false_negative": 0,
+        "actual_atoms": [
+          "capability:performance-capacity",
+          "capability:service-api-design"
+        ],
+        "class_correct": true,
+        "domain_correct": true
+      },
+      "actual_domain_fit": "in-domain",
+      "tokens": 1255,
+      "latency_seconds": 7.462,
+      "human_review": "pending"
+    },
+    {
+      "id": "backend-developer",
+      "validated": true,
+      "score": {
+        "true_positive": 2,
+        "false_positive": 0,
+        "false_negative": 0,
+        "actual_atoms": [
+          "capability:delivery-automation",
+          "capability:developer-platforms"
+        ],
+        "class_correct": true,
+        "domain_correct": true
+      },
+      "actual_domain_fit": "in-domain",
+      "tokens": 1152,
+      "latency_seconds": 8.427,
+      "human_review": "pending"
+    },
+    {
+      "id": "backend-research",
+      "validated": true,
+      "score": {
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0,
+        "actual_atoms": [
+          "capability:distributed-systems"
+        ],
+        "class_correct": true,
+        "domain_correct": false
+      },
+      "actual_domain_fit": "adjacent",
+      "tokens": 1270,
+      "latency_seconds": 11.753,
+      "human_review": "pending"
+    },
+    {
+      "id": "backend-ai",
+      "validated": true,
+      "score": {
+        "true_positive": 0,
+        "false_positive": 0,
+        "false_negative": 0,
+        "actual_atoms": [],
+        "class_correct": true,
+        "domain_correct": false
+      },
+      "actual_domain_fit": "out-of-domain",
+      "tokens": 1145,
+      "latency_seconds": 5.557,
+      "human_review": "pending"
+    },
+    {
+      "id": "backend-title-only",
+      "validated": true,
+      "score": {
+        "true_positive": 0,
+        "false_positive": 0,
+        "false_negative": 0,
+        "actual_atoms": [],
+        "class_correct": true,
+        "domain_correct": true
+      },
+      "actual_domain_fit": "unknown",
+      "tokens": 0,
+      "latency_seconds": 0,
+      "human_review": "pending"
+    },
+    {
+      "id": "backend-injection",
+      "validated": true,
+      "score": {
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0,
+        "actual_atoms": [
+          "capability:service-api-design"
+        ],
+        "class_correct": true,
+        "domain_correct": true
+      },
+      "actual_domain_fit": "in-domain",
+      "tokens": 1279,
+      "latency_seconds": 7.231,
+      "human_review": "pending"
+    }
+  ],
+  "final_briefs": [
+    {
+      "kind": "learning",
+      "brief": "38cad5cefd85ad21027db2cc46bd0cd62c2304c2d74cd34fa3c956a7278146be",
+      "validated": true,
+      "disposition": "propose",
+      "source_scope": "synthetic test corpus",
+      "synthetic_word_in_model_proposal": true,
+      "judgments": {
+        "learning_value": "high",
+        "opensource_usefulness": "unknown",
+        "commercial_validation": "unknown",
+        "video_suitability": "unknown",
+        "evidence_strength": "medium",
+        "feasibility": "medium"
+      },
+      "tokens": 8228,
+      "latency_seconds": 25.139,
+      "versions": {
+        "schema": "brief/1",
+        "prompt": "5d9b4c06d15cf924325370f75b38c87f9c02e7cd142f2f90e8c7c247943aef56",
+        "runtime": {
+          "runtime": "codex-cli 0.153.4",
+          "binary_sha256": "b973d440acac501fd2594a43e7ca9ce41e0a65b9dfb28d0d7a7837c99e1261e3",
+          "model": "gpt-5.5",
+          "model_metadata_sha256": "7935feee7a55829ad98ac4b2311f14607a04ef84f77584d2f6dd370c1d07be63",
+          "source_commit": "3d2ee51ca2d5db578f328aa75e20aa22c0197c9a",
+          "boundary_config_sha256": "8985e495b46ca446694283362856f594c9a4b5cf1a8bd45d0fdc7b6343e7c884",
+          "client_sha256": "b07ae8f0727b335f38c03d88b1f2b77173268b4a4b0c131b83f1576653883e4f",
+          "boundary_test_sha256": "cddebec6a2ae8c0e03f611516cc526d46f1052d8388fa552a9b08d9746f0757a"
+        },
+        "validator": "48fb35a8ccb5d7aeea103236af86d9d13003c99bd0c142e271e6d01651f68f51",
+        "output_schema": "e8062ce2aebd653531ed0cfb255268bcf5860594ad3f9eba224065214a4eb770"
+      },
+      "human_review": "pending"
+    },
+    {
+      "kind": "project",
+      "brief": "bedacd38291243f47b0cbb1132c8608c025f060ce1ca0d1a22ee287f275cdcbc",
+      "validated": true,
+      "disposition": "insufficient-evidence",
+      "source_scope": "synthetic test corpus",
+      "synthetic_word_in_model_proposal": true,
+      "judgments": {
+        "learning_value": "medium",
+        "opensource_usefulness": "unknown",
+        "commercial_validation": "unknown",
+        "video_suitability": "unknown",
+        "evidence_strength": "low",
+        "feasibility": "medium"
+      },
+      "tokens": 8683,
+      "latency_seconds": 32.465,
+      "versions": {
+        "schema": "brief/1",
+        "prompt": "5d9b4c06d15cf924325370f75b38c87f9c02e7cd142f2f90e8c7c247943aef56",
+        "runtime": {
+          "runtime": "codex-cli 0.153.4",
+          "binary_sha256": "b973d440acac501fd2594a43e7ca9ce41e0a65b9dfb28d0d7a7837c99e1261e3",
+          "model": "gpt-5.5",
+          "model_metadata_sha256": "7935feee7a55829ad98ac4b2311f14607a04ef84f77584d2f6dd370c1d07be63",
+          "source_commit": "3d2ee51ca2d5db578f328aa75e20aa22c0197c9a",
+          "boundary_config_sha256": "8985e495b46ca446694283362856f594c9a4b5cf1a8bd45d0fdc7b6343e7c884",
+          "client_sha256": "b07ae8f0727b335f38c03d88b1f2b77173268b4a4b0c131b83f1576653883e4f",
+          "boundary_test_sha256": "cddebec6a2ae8c0e03f611516cc526d46f1052d8388fa552a9b08d9746f0757a"
+        },
+        "validator": "48fb35a8ccb5d7aeea103236af86d9d13003c99bd0c142e271e6d01651f68f51",
+        "output_schema": "d27677db6896259834a026066b501f417ebeeedd46ada341f3b3736c1ec214ac"
+      },
+      "human_review": "pending"
+    },
+    {
+      "kind": "product",
+      "brief": "bdac3fc5800ef6a49b88d627aeeb1cbb8185c62bf168eba2ae709ff5612cdd72",
+      "validated": true,
+      "disposition": "insufficient-evidence",
+      "source_scope": "synthetic test corpus",
+      "synthetic_word_in_model_proposal": true,
+      "judgments": {
+        "learning_value": "medium",
+        "opensource_usefulness": "unknown",
+        "commercial_validation": "unknown",
+        "video_suitability": "unknown",
+        "evidence_strength": "low",
+        "feasibility": "unknown"
+      },
+      "tokens": 8566,
+      "latency_seconds": 30.551,
+      "versions": {
+        "schema": "brief/1",
+        "prompt": "5d9b4c06d15cf924325370f75b38c87f9c02e7cd142f2f90e8c7c247943aef56",
+        "runtime": {
+          "runtime": "codex-cli 0.153.4",
+          "binary_sha256": "b973d440acac501fd2594a43e7ca9ce41e0a65b9dfb28d0d7a7837c99e1261e3",
+          "model": "gpt-5.5",
+          "model_metadata_sha256": "7935feee7a55829ad98ac4b2311f14607a04ef84f77584d2f6dd370c1d07be63",
+          "source_commit": "3d2ee51ca2d5db578f328aa75e20aa22c0197c9a",
+          "boundary_config_sha256": "8985e495b46ca446694283362856f594c9a4b5cf1a8bd45d0fdc7b6343e7c884",
+          "client_sha256": "b07ae8f0727b335f38c03d88b1f2b77173268b4a4b0c131b83f1576653883e4f",
+          "boundary_test_sha256": "cddebec6a2ae8c0e03f611516cc526d46f1052d8388fa552a9b08d9746f0757a"
+        },
+        "validator": "48fb35a8ccb5d7aeea103236af86d9d13003c99bd0c142e271e6d01651f68f51",
+        "output_schema": "c5fdd9960697dc7aff58fb9672c0a33ee30dd13bda68ec266e96fe382c2bff1b"
+      },
+      "human_review": "pending"
+    },
+    {
+      "kind": "youtube",
+      "brief": "9445131def505ff82d1076aeeadfaec40c9c94254c80cb08970fdfb167dd324b",
+      "validated": true,
+      "disposition": "insufficient-evidence",
+      "source_scope": "synthetic test corpus",
+      "synthetic_word_in_model_proposal": true,
+      "judgments": {
+        "learning_value": "high",
+        "opensource_usefulness": "unknown",
+        "commercial_validation": "unknown",
+        "video_suitability": "unknown",
+        "evidence_strength": "low",
+        "feasibility": "medium"
+      },
+      "tokens": 8720,
+      "latency_seconds": 33.097,
+      "versions": {
+        "schema": "brief/1",
+        "prompt": "5d9b4c06d15cf924325370f75b38c87f9c02e7cd142f2f90e8c7c247943aef56",
+        "runtime": {
+          "runtime": "codex-cli 0.153.4",
+          "binary_sha256": "b973d440acac501fd2594a43e7ca9ce41e0a65b9dfb28d0d7a7837c99e1261e3",
+          "model": "gpt-5.5",
+          "model_metadata_sha256": "7935feee7a55829ad98ac4b2311f14607a04ef84f77584d2f6dd370c1d07be63",
+          "source_commit": "3d2ee51ca2d5db578f328aa75e20aa22c0197c9a",
+          "boundary_config_sha256": "8985e495b46ca446694283362856f594c9a4b5cf1a8bd45d0fdc7b6343e7c884",
+          "client_sha256": "b07ae8f0727b335f38c03d88b1f2b77173268b4a4b0c131b83f1576653883e4f",
+          "boundary_test_sha256": "cddebec6a2ae8c0e03f611516cc526d46f1052d8388fa552a9b08d9746f0757a"
+        },
+        "validator": "48fb35a8ccb5d7aeea103236af86d9d13003c99bd0c142e271e6d01651f68f51",
+        "output_schema": "d6e7d23b3e9e33167016ff8d3a4eece3935d6ebc447b07eca7259486232ac858"
+      },
+      "human_review": "pending"
+    }
+  ],
+  "extraction_tokens": 13514,
+  "extraction_latency_seconds": 97.997,
+  "provenance_adjustment": "Initial four drafts passed structural validation but used generic job-evidence wording for synthetic inputs. Explicit source_scope was added to backend prompts and rendered evidence limits; all four regenerated. Initial extraction results retained, not rerun.",
+  "initial_evaluation": "d26f6965532c953da5e4eb4e70499776c68034904a722e86ff3be602ff62fcc1",
+  "scoped_brief_evaluation": "bb711aafa8fb31288fa420670bc9818bdce618db9f95d377bcf57b52c84efce9",
+  "limitations": [
+    "Twelve short owned examples and provisional author labels; no human-reviewed accuracy or practical recommendation benefit.",
+    "Two domain-fit disagreements and one extra capability remain for human adjudication.",
+    "Backend upstream/simple-prompt comparison on representative real inputs remains pending; P6 AI regression baseline is not a backend superiority claim.",
+    "Evaluation harness later added stricter dedicated-workspace guards; first-run scope was inspected as owned fixtures only.",
+    "No provider activation, real job capture, interviews, project implementation, publication or external messages."
+  ]
+}

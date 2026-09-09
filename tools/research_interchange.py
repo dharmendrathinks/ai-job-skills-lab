@@ -143,6 +143,8 @@ def markdown(bundle):
     def safe(s):
         return re.sub(r'[\x00-\x1f\x7f\u202a-\u202e\u2066-\u2069]', ' ', str(s)).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('[', '&#91;').replace(']', '&#93;').replace('`', '&#96;')
     lines = ['# Reviewed research interchange', '', 'Imported assessments are not independent corroboration.', '']
+    if bundle.get('domain'):
+        lines += ['Domain: ' + safe(json.dumps(bundle['domain'])), '']
     for row in bundle['items']:
         lines += ['## ' + safe(row['content']['title']), '', '> ' + safe(row['content']['summary']), '',
                   'Origin: ' + safe(json.dumps(row['origin'])), 'Basis (producer assertion): ' + safe(row['basis'])]
@@ -150,13 +152,16 @@ def markdown(bundle):
     return '\n'.join(lines) + '\n'
 
 
-def validate(bundle, now):
-    fields(bundle, ['schema', 'producer', 'exported_at', 'items', 'markdown'])
-    require(bundle['schema'] == SCHEMA, 'unsupported interchange version; no implicit major/minor conversion')
+def validate(bundle, now, pack=None):
+    fields(bundle, ['schema', 'producer', 'exported_at', 'items', 'markdown'], ['domain'])
+    from tools.research_domains import reference
+    require(bundle['schema'] == ('radar-interchange/1.1' if pack else SCHEMA), 'interchange domain/version mismatch')
+    require(bundle.get('domain') == (reference(pack) if pack else None), 'interchange pack revision mismatch')
     require(len(json.dumps(bundle).encode()) <= 2_000_000, 'interchange exceeds byte budget')
     text(bundle['producer']); require(timestamp(bundle['exported_at']) <= now, 'future export time')
     require(isinstance(bundle['items'], list) and 0 < len(bundle['items']) <= 20, 'invalid interchange budget')
     from tools.research_evidence import TAXONOMY
+    taxonomy = pack['taxonomy'] if pack else TAXONOMY
     for row in bundle['items']:
         fields(row, ['origin', 'producer_schema', 'parents', 'lineage', 'kind', 'basis', 'observed_at', 'sources', 'restrictions', 'content'])
         fields(row['origin'], ['producer', 'id', 'revision'])
@@ -175,7 +180,7 @@ def validate(bundle, now):
             else: require(timestamp(observed) <= now, 'future observation')
         c = row['content']; fields(c, ['title', 'summary', 'capabilities', 'decision', 'outcome_type', 'limitations'])
         text(c['title'], 200); text(c['summary'], 4000); strings(c['capabilities'], 30); strings(c['limitations'], 100)
-        require(c['limitations'] and set(c['capabilities']) <= set(TAXONOMY['capabilities']), 'missing limits/unknown capability')
+        require(c['limitations'] and set(c['capabilities']) <= set(taxonomy['capabilities']), 'missing limits/unknown capability')
         from tools.research_outcomes import DECISIONS, EVENTS
         require(c['decision'] is None or c['decision'] in DECISIONS, 'unknown decision')
         require(c['outcome_type'] is None or c['outcome_type'] in EVENTS, 'unknown outcome type')
@@ -197,7 +202,11 @@ def preview(store, requests):
     with store.transaction() as state:
         rows = [projection(state, r, store.clock()) for r in requests]
         bundle = {'schema': SCHEMA, 'producer': PRODUCER, 'exported_at': store.clock().isoformat(), 'items': rows}
-        bundle['markdown'] = markdown(bundle); validate(bundle, store.clock())
+        from tools.research_domains import pack_for, reference
+        pack = pack_for(state)
+        if pack:
+            bundle.update(schema='radar-interchange/1.1', domain=reference(pack))
+        bundle['markdown'] = markdown(bundle); validate(bundle, store.clock(), pack)
         key = store.put(state, 'interchange-preview', bundle, [r['artifact'] for r in requests])
         return {'preview': key, 'review_digest': digest(bundle), 'bundle': bundle}
 
@@ -206,7 +215,9 @@ def release(store, key, review_digest, reviewer):
     text(reviewer)
     with store.transaction() as state:
         bundle = artifact(state, key, ('interchange-preview',))
-        exportable(state, [key], store.clock()); validate(bundle, store.clock())
+        exportable(state, [key], store.clock())
+        from tools.research_domains import pack_for
+        validate(bundle, store.clock(), pack_for(state))
         require(digest(bundle) == review_digest, 'review must match exact current preview')
         store.put(state, 'interchange-release', {'preview': key, 'review_digest': review_digest, 'reviewer': reviewer,
                   'released_at': store.clock().isoformat(), 'limitation': 'Explicit review assertion; no recipient identity or remote recall guarantee.'}, [key])
@@ -214,10 +225,12 @@ def release(store, key, review_digest, reviewer):
 
 
 def import_interchange(store, bundle, policy):
-    validate(bundle, store.clock()); validate_policy(policy, store.clock())
+    validate_policy(policy, store.clock())
     require(policy['method'] == 'reviewed-context', 'reviewed import permission required')
     require(policy['export'] and not policy.get('use_until'), 'interchange import must preserve no-recall restrictions; narrower local paths use P3 context import')
     with store.transaction() as state:
+        from tools.research_domains import pack_for
+        validate(bundle, store.clock(), pack_for(state))
         pol = store.put(state, 'policy', policy)
         ids = []
         for row in bundle['items']:

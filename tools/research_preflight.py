@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parent.parent
 MANIFEST = "research-template-manifest.json"
 CANONICAL = ".claude/skills/research/SKILL.md"
 FUTURE = {"collect": 2, "import": 2, "analyze": 2, "brief": 3,
-          "outcome": 4, "refresh": 2, "export": 2, "coverage": 5, "compare": 5, "translate": 5}
+          "outcome": 4, "refresh": 2, "export": 2, "coverage": 5, "compare": 5, "translate": 5, "domain": 7}
 
 
 def private_state_path(root: Path, env: dict[str, str]) -> Path:
@@ -103,7 +103,7 @@ def assess(root: Path, mode: str, action: str,
             blockers.append("public_template_profile_write_blocked")
         elif action != "status":
             blockers.append("use_explicit_upstream_application_command")
-    elif action in ("import", "collect", "analyze", "refresh", "brief", "outcome", "coverage", "compare", "translate"):
+    elif action in ("import", "collect", "analyze", "refresh", "brief", "outcome", "coverage", "compare", "translate", "domain"):
         pass  # Readiness only; execution checks qualification and current source policy.
     elif action == "export":
         blockers.append("unmanaged_exports_not_supported")
@@ -148,6 +148,13 @@ def assess(root: Path, mode: str, action: str,
             "languages": "indexed_translation_proposals_and_explicit_review_no_eligibility_filter",
             "source_registry": "all_candidates_recorded_only_existing_jobicy_go_limited",
             "promotion": "conditional_source_and_language_quality_evidence_required"
+        },
+        "phase_7": {
+            "default_domain": "ai-engineering",
+            "opt_in": "backend_platform_requires_empty_explicit_private_workspace",
+            "binding": "immutable_pack_digest_and_taxonomy_no_historical_reclassification",
+            "comparison": "local_descriptive_samples_no_pooled_demand_ratio",
+            "evaluation": "owned_fixtures_and_pending_human_domain_quality_review"
         },
         "installed_portal_skills": portal_skills(root),
         "inference": {"authentication": "existing_codex_subscription",

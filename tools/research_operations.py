@@ -251,11 +251,10 @@ def _execute(store, plan_id, *, resume=None, scheduled=False, handlers=None):
     if plan['analyze'] and not model_blocked:
         if run['analysis_queue'] is None:
             with store.transaction() as state:
-                from tools.research_analysis import PROMPT_PATH, OUTPUT_SCHEMA
-                from tools.research_evidence import TAXONOMY
-                expected = {'prompt_sha256': digest(PROMPT_PATH.read_text()),
-                            'schema_sha256': digest(OUTPUT_SCHEMA), 'taxonomy_sha256': digest(TAXONOMY),
-                            'validation_sha256': digest((Path(__file__).parent/'research_analysis.py').read_text())}
+                from tools.research_analysis import analysis_versions
+                from tools.research_domains import pack_for
+                expected = analysis_versions({}, pack_for(state))
+                expected.pop('runtime')  # runtime qualification is checked before new invocations
                 done = set()
                 for a in state['artifacts'].values():
                     if a['kind'] != 'analysis':

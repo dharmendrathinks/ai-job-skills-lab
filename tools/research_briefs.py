@@ -37,14 +37,15 @@ STRINGS = array(STRING)
 
 def schema(kind, data=None):
     require(kind in SECTIONS, 'unknown brief type')
+    taxonomy = data['domain_pack']['taxonomy'] if data and data.get('domain_pack') else TAXONOMY
     analysis_id = {'type': 'string', 'description': 'Existing analysis artifact ID; never prose or a summary.'}
     context_id = {'type': 'string', 'description': 'Existing context artifact ID; never a repository name or prose.'}
     if data is not None:
         analysis_id['enum'] = list(data['analyses']) or ['unavailable']
         context_id['enum'] = list(data['contexts']) or ['unavailable']
     return obj({'title': STRING, 'disposition': {'type': 'string', 'enum': ['propose', 'contribute', 'no-project', 'insufficient-evidence']},
-        'capabilities': array({'type': 'string', 'enum': TAXONOMY['capabilities']}),
-        'prerequisites': array({'type': 'string', 'enum': TAXONOMY['capabilities']}),
+        'capabilities': array({'type': 'string', 'enum': taxonomy['capabilities']}),
+        'prerequisites': array({'type': 'string', 'enum': taxonomy['capabilities']}),
         'market_claims': array(obj({'analysis': analysis_id, 'quote': STRING})),
         'context_claims': array(obj({'context': context_id, 'quote': STRING, 'relation': {'type': 'string', 'enum': ['supports', 'contradicts']}})),
         'alternatives': array(obj({'context': context_id, 'reason': STRING})),
@@ -71,6 +72,8 @@ def hosted_eligible(state, ids):
 
 
 def inputs(state, snapshot, contexts, profile, now):
+    from tools.research_domains import pack_for, domain_field
+    pack = pack_for(state)
     snap = state['artifacts'].get(snapshot)
     require(snap and snap['kind'] in ('snapshot', 'coverage-report'), 'market snapshot unavailable')
     ids = [snapshot, *contexts] + ([profile] if profile else [])
@@ -78,7 +81,7 @@ def inputs(state, snapshot, contexts, profile, now):
     analyses = {}
     for key in snap['dependencies']:
         a = state['artifacts'][key]
-        if a['kind'] == 'analysis' and (a['payload']['method'] != 'codex-extraction' or a['payload'].get('ai_domain') == 'in-domain'):
+        if a['kind'] == 'analysis' and (a['payload']['method'] != 'codex-extraction' or a['payload'].get(domain_field(pack)) == 'in-domain'):
             analyses[key] = a['payload']
     context_map = {}
     identities = set()
@@ -95,7 +98,7 @@ def inputs(state, snapshot, contexts, profile, now):
         a = state['artifacts'].get(profile)
         require(a and a['kind'] == 'research-profile', 'reviewed research profile required')
         profile_data = a['payload']
-    return {'snapshot': snapshot, 'as_of': now.date().isoformat(), 'discussion_window_days': 90,
+    return {**({'domain_pack': pack, 'source_scope': snap['payload']['scope']} if pack else {}), 'snapshot': snapshot, 'as_of': now.date().isoformat(), 'discussion_window_days': 90,
             'counts': snap['payload']['counts'], 'capabilities': snap['payload']['capabilities'],
             'analyses': analyses, 'contexts': context_map, 'profile': profile_data,
             'limitations': snap['payload']['limitations'],
@@ -104,12 +107,13 @@ def inputs(state, snapshot, contexts, profile, now):
 
 
 def validate(output, kind, data):
-    fields(output, list(schema(kind)['properties']))
+    taxonomy = data['domain_pack']['taxonomy'] if data.get('domain_pack') else TAXONOMY
+    fields(output, list(schema(kind, data)['properties']))
     text(output['title'], 200)
     require(output['disposition'] in ('propose', 'contribute', 'no-project', 'insufficient-evidence'), 'unknown disposition')
     require(kind == 'project' or output['disposition'] in ('propose', 'insufficient-evidence'), 'project-only disposition')
     strings(output['capabilities']); strings(output['prerequisites']); strings(output['limitations'])
-    require(set(output['capabilities']) <= set(data['capabilities']) and set(output['prerequisites']) <= set(TAXONOMY['capabilities']),
+    require(set(output['capabilities']) <= set(data['capabilities']) and set(output['prerequisites']) <= set(taxonomy['capabilities']),
             'unsupported capability or prerequisite')
     require(isinstance(output['market_claims'], list) and len(output['market_claims']) <= 20, 'market claim budget exceeded')
     for claim in output['market_claims']:
@@ -223,6 +227,9 @@ def generate(store, kind, snapshot, contexts=(), profile=None, *, refresh=False,
                   'profile_evidence': current['profile'],
                   'evidence_limits': [*current['limitations'], *[x for r in current['contexts'].values() for x in r['limitations']]],
                   'notice': 'Sections and judgments are model proposals, not observed outcomes or demonstrated demand.'}
+            if current.get('domain_pack'):
+                record['source_scope'] = current['source_scope']
+                record['evidence_limits'].append('Source scope: ' + current['source_scope'] + '. Synthetic examples are not hiring or market evidence.')
             old = artifact(state, record['revises'], ('brief',)) if record['revises'] else None
             record['recommendation_id'] = old.get('recommendation_id', record['revises']) if old else digest(['recommendation/1', kind, output['title'], basis])
             record['revision'] = old.get('revision', 1) + 1 if old else 1

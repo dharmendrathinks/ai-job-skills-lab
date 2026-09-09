@@ -228,3 +228,37 @@ The canonical P2–5 rules and source permissions remain in force.
 7. Local inference evaluation uses only the checked-in owned fixtures and an
    already-installed model. It cannot silently become the production runtime.
    Preserve measured failures, sample-size limits and pending human evaluation.
+
+
+## Explicit broader-domain workspaces (Phase 7)
+
+Use `docs/research/domain-operations.md` and `python3 -m tools.research_domain`.
+AI engineering remains the default. `packs` is inspection; `init` requires an
+explicit empty private directory distinct from the reserved default AI directory.
+Do not create a second development checkout or copy a corpus to initialize it.
+
+1. Select a reviewed versioned pack before collecting domain evidence. A workspace
+   has an immutable domain/taxonomy binding. Missing/corrupt bindings fail closed;
+   never relabel old AI snapshots, restore a foreign backup or change the binding
+   to bypass a mismatch. Another revision needs another explicitly selected data
+   workspace with independently permitted collection/import.
+2. Reuse P2–6 commands in that selected workspace. Backend extraction uses
+   `domain_fit` and the pinned backend taxonomy with exact source spans and unknowns.
+   Aliases/prerequisites guide classification/planning, not evidence or personal
+   ability. Existing tool-free execution, source permissions and ₹0 cost gates apply.
+3. All four brief workflows, reviewed profiles, outcomes, coverage and operational
+   controls stay shared. Missing repository/problem/discussion evidence still means
+   limits, hypothetical judgments or abstention. Synthetic evaluation content must
+   remain explicitly synthetic and never establish real hiring or market demand.
+4. Cross-domain comparisons are local descriptive views of explicit windows and
+   separately disclosed cohorts. Never pool overlapping openings, infer a common
+   taxonomy, claim relative demand or treat a new source as growth. No persisted
+   cross-store derivative or unmanaged export is implied by local inspection.
+5. AI interchange remains 1.0; backend uses an explicit 1.1 domain extension with
+   an exact pack digest and matching receiver. Permissions, provenance, approval
+   and withdrawal still apply. Radar consumer changes remain separate; do not
+   downgrade/relabel a bundle to force compatibility.
+6. Backend evaluation uses a dedicated owned-fixture workspace without private
+   context/profile/feedback. Validate the frozen dataset revision and the actual
+   model results; do not mark provisional labels or generated ratings human-reviewed.
+   More domains need reviewed packs and their own evidence, not automatic activation.

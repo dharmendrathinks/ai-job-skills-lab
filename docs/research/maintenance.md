@@ -116,7 +116,8 @@ python3 -m unittest discover -s tests -t .
 In each portal CLI use Bun for `run typecheck` and `test`. Ordinary tests use
 fixtures; live collection requires source qualification. LaTeX checks remain
 in upstream CI but are not a research prerequisite; P1 does not change TeX.
-The PR Ready configuration compares P6 against committed P5 `121bdcd`; P5
+The PR Ready configuration compares P7 against committed P6 `09bc20d`; P6
+was compared with P5 `121bdcd`, and P5
 was compared with P4 `ff5babf`, and P4
 was compared with P3 `5d8fc8f`, and P3
 was compared with P2 `29cca75`, and P2 with P1 `d102a88`. The upstream foundation remains the separate
@@ -145,3 +146,25 @@ roll these back with a Git revision. Do not downgrade runtime state to the upstr
 writer or restore a ledger from an older backup. Review machine-specific launchd
 paths after an update; new binary/config/client/harness paths invalidate scheduled
 model qualification. Generated schedules and private reports stay outside Git.
+
+
+## Phase 7 maintenance surface
+
+Review `research_domains.py`, `research_domain.py`, `evaluate_domains.py`, the
+versioned domain-pack/fixture JSON and `tests/test_research_domains.py`. Taxonomy
+lookup is explicit from each workspace state; never mutate global TAXONOMY or
+copy the command/specification tree for another domain. Shared changes are in
+analysis/brief/profile/outcome/coverage/interchange/operations helpers and Store
+binding checks. Preserve the unmodified runtime boundary and source providers.
+
+Frozen AI regression expectations were produced by executing relevant functions
+from `git show 09bc20d:tools/{research_evidence,research_analysis,research_briefs}.py`
+on an owned fixture. `tests/fixtures/research/ai-phase6-baseline.json` records that
+origin. Update it only for an intentional, reviewed change to AI behavior.
+
+A domain revision is not a rewrite of historical classifications. Version packs,
+prompts and evaluation fixtures independently, retain their hashes, use a new
+workspace for another revision and inspect both cohort definitions before a
+cross-domain comparison. Missing domain bindings fail closed during access or
+restore. Do not downgrade backend interchange 1.1 into AI 1.0 or assume that the
+separate Radar repository implements the new consumer contract.

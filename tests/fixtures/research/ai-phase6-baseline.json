@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "commit": "09bc20d",
+  "source_paths": [
+    "tools/research_evidence.py",
+    "tools/research_analysis.py",
+    "tools/research_briefs.py"
+  ],
+  "basis": "Executed these functions from git show of committed Phase 6 on tests.test_research_evidence owned fixture; source files were not overwritten.",
+  "aggregate_sha256": "2113e8ab50f761ff17f32634c48b7510a57d7167dc0b686da1284355409af1b5",
+  "schema_sha256": "2813bf64c60f8a47ed78da6d6a402493335f2f50f981fd665667eb93165c9610",
+  "prompt_sha256": "62fa41d1bbbb928ac53d9cab041f3bc4160d2669117c4292dd697b879fb63d1a",
+  "brief_schema_sha256": "1f9a7b7567c202c602bb96b4ea294613d663cfef4578460202bef2c560b98a83"
+}
