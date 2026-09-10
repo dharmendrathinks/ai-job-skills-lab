@@ -171,3 +171,14 @@ workspace for another revision and inspect both cohort definitions before a
 cross-domain comparison. Missing domain bindings fail closed during access or
 restore. Do not downgrade backend interchange 1.1 into AI 1.0 or assume that the
 separate Radar repository implements the new consumer contract.
+
+## Two-report presentation update
+
+`research_reports.py` owns escaped presentation and the fixed CSP-hashed UI script;
+`research_report_files.py` owns the approved ignored destination, ownership binding
+and atomic file writes. Review `research_recovery.persist` whenever changing either:
+withdrawal, expiry, failed writes and legacy-view migration must remove every
+managed copy. Keep `reports/` ignored and untracked even on the private origin.
+Corpus and credentials remain external; only generated views use this exception.
+Behavioral checks live in `tests/test_research_reports.py` alongside retained P6/P7
+regressions. The report update review baseline is release commit `ba9c04f`.

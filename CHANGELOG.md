@@ -7,7 +7,30 @@ foundation is upstream commit `8c81edc330b98db0473dcb016e34db835c2fd378`.
 
 ## Unreleased
 
-No additional changes recorded.
+- Brief output schemas now offer contribution/no-project statuses only for project
+  drafts, matching validation for YouTube, learning and product-hypothesis workflows.
+
+- Location chips and filters now use captured source geography when normalized
+  country is absent; regions and multi-country labels retain their source meaning.
+
+- Jobs reports omit unknown-only location/availability filters and add overlapping,
+  explicitly title-based role families with an Other / unclassified fallback.
+
+- Report typeahead now defaults to titles, with an explicit All content scope for
+  description/evidence matches; native search clear and each input update results.
+
+- Replace the machine-learning-only discovery default with a versioned rotation
+  across 13 AI engineering query areas and expose actual query progress.
+- Remove the hard hourly cooldown from user-triggered Jobicy searches; retain the
+  guard for scheduled polling and stop failed actions without automatic retries.
+
+- Generate separate Jobs and Suggested projects HTML reports in ignored `reports/`,
+  with responsive typography, color accents, evidence sections and offline
+  search/filter/clear controls. The second file has Projects and YouTube
+  experiments tabs, with separate counts, limits and filters.
+- Preserve source lifecycle through managed destination binding, pair invalidation,
+  legacy-report migration and failed-write cleanup. The corpus remains outside Git.
+- The presentation update is unreleased; the published v0.1.0 tag is unchanged.
 
 ## v0.1.0 — 2026-09-10
 

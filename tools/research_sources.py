@@ -17,6 +17,53 @@ POLICY_REFERENCE = "https://github.com/Jobicy/remote-jobs-api/blob/c38dc5308768d
 ENDPOINT = "https://jobicy.com/api/v2/remote-jobs"
 
 
+AI_QUERY_REVISION = 'ai-engineering-queries/1'
+# Discovery seeds, not evidence of a responsibility or guarantee of role coverage.
+AI_QUERIES = (
+    ('LLM applications and tools', 'LLM'),
+    ('AI product engineering', 'AI product'),
+    ('Applied AI engineering', 'applied AI'),
+    ('General AI engineering', 'AI engineer'),
+    ('Generative AI applications', 'generative AI'),
+    ('Agents and automation', 'AI agent'),
+    ('Retrieval and knowledge systems', 'retrieval'),
+    ('Evaluation and reliability', 'LLM evaluation'),
+    ('AI security', 'AI security'),
+    ('Inference and deployment', 'inference'),
+    ('AI infrastructure and platforms', 'AI infrastructure'),
+    ('ML operations and pipelines', 'MLOps'),
+    ('Relevant ML engineering and research', 'machine learning'),
+)
+
+
+def ai_query_plan(state, now):
+    attempts = [a['payload'] for a in state['artifacts'].values()
+                if a['kind'] == 'collection-attempt' and a['payload']['source'] == 'jobicy']
+    receipts = [a['payload'] for a in state['artifacts'].values()
+                if a['kind'] == 'receipt' and a['payload']['source'] == 'jobicy']
+    rows = []
+    for area, query in AI_QUERIES:
+        runs = [a for a in attempts if a['query'] == query]
+        captures = [r for r in receipts if r['query'] == query]
+        rows.append({'area': area, 'query': query, 'attempts': len(runs),
+                     'last_attempt': max((a['attempted_at'] for a in runs), default=None),
+                     'successful_requests': sum(r['completeness'] != 'failed' for r in captures),
+                     'returned_observations': sum(p['returned'] for r in captures for p in r['pages']),
+                     'status': 'pending' if not runs else 'attempted-not-proof-of-role-coverage'})
+    selected = min(enumerate(rows), key=lambda pair: (
+        timestamp(pair[1]['last_attempt']) if pair[1]['last_attempt'] else timestamp('1970-01-01T00:00:00Z'), pair[0]))[1]
+    latest = max((timestamp(a['attempted_at']) for a in attempts), default=None)
+    available = latest + timedelta(hours=1) if latest else now
+    return {'revision': AI_QUERY_REVISION, 'source': 'jobicy', 'queries': rows,
+            'next_query': selected['query'], 'next_area': selected['area'],
+            'manual_ready': True, 'scheduled_eligible_at': max(now, available).isoformat(),
+            'scheduled_ready': now >= available,
+            'limitations': ['Discovery seeds are not validated requirements, role labels or measured recall.',
+                           'One query per explicitly invoked collection; no automatic schedule or polling loop.',
+                           'Single remote-biased source; capped/failed/empty results do not establish role absence.',
+                           'Attempt counts and returned revisions are not distinct openings or demand growth.']}
+
+
 class PlainHTML(HTMLParser):
     def __init__(self):
         super().__init__(convert_charrefs=True)
@@ -79,26 +126,33 @@ def fetch_jobicy(query, count):
         return json.loads(body), url
 
 
-def collect_jobicy(store, query="machine learning", count=20, *, fetch=fetch_jobicy):
-    require(isinstance(query, str) and 3 <= len(query) <= 50, "query must be 3–50 characters")
+def collect_jobicy(store, query=None, count=100, *, scheduled=False, fetch=fetch_jobicy):
+    require(type(scheduled) is bool, "scheduled must be a boolean")
+    require(query is None or isinstance(query, str) and 3 <= len(query) <= 50, "query must be 3–50 characters")
     require(type(count) is int and 1 <= count <= 100, "capture count must be 1–100")
     now = store.clock()
     policy = jobicy_policy()
     validate_policy(policy, now)  # before any request or persistence
     with store.transaction() as state:
+        rotation = query is None
+        if rotation:
+            query = ai_query_plan(state, now)["next_query"]
         previous = [a["payload"]["attempted_at"] for a in state["artifacts"].values()
                     if a["kind"] == "collection-attempt" and a["payload"]["source"] == "jobicy"]
-        require(not previous or now - max(map(timestamp, previous)) >= timedelta(hours=1),
-                "Jobicy polling cooldown: wait at least one hour, including after failures")
+        require(not scheduled or not previous or now - max(map(timestamp, previous)) >= timedelta(hours=1),
+                "Scheduled Jobicy polling must wait at least one hour after the last attempt")
         policy_id = store.put(state, "policy", policy, use_until=policy["use_until"])
         attempt = store.put(state, "collection-attempt", {"source": "jobicy", "attempted_at": now.isoformat(),
-                            "query": query, "count": count}, [policy_id])
+                            "query": query, "count": count, "trigger": "scheduled" if scheduled else "manual",
+                            **({"query_pack_revision": AI_QUERY_REVISION} if rotation else {})}, [policy_id])
     receipt = {"schema_version": 1, "source": "jobicy", "kind": "job", "query": query,
                "requested_filters": {"count": count, "tag": query},
                "effective_filters": {"count": count, "tag": query},
                "started_at": now.isoformat(), "finished_at": now.isoformat(), "pages": [],
                "completeness": "partial", "limitations": ["Single capped feed; no total or pagination proof.",
                    "Remote source bias is not a research eligibility filter. Countries/languages may be unknown."]}
+    if rotation:
+        receipt["limitations"].append("Discovery query pack: " + AI_QUERY_REVISION + "; keyword matches are not role classification.")
     try:
         raw, url = fetch(query, count)
         jobs = raw.get("jobs")

@@ -44,7 +44,7 @@ class OperationsTests(unittest.TestCase):
 
     def brief(self, n=1, **kw):
         with self.store.transaction() as state:
-            return self.store.put(state, 'brief', {'kind': 'learning', 'revision': n,
+            return self.store.put(state, 'brief', {'kind': 'project', 'revision': n,
                 'recommendation_id': 'owned-'+str(n), 'evidence_basis': [self.obs], 'revises': None,
                 'markdown': '<script>fetch("https://invalid.example")</script> & "quoted"', **kw}, [self.snap])
 
@@ -52,6 +52,15 @@ class OperationsTests(unittest.TestCase):
         return decide(self.store, {'schema_version': 1, 'brief': brief, 'decision': 'deferred',
                       'reason': 'fixture', 'reviewer': 'fixture', 'decided_at': self.now.isoformat(),
                       'defer_until': defer_until.isoformat(), 'target': None, 'supersedes': None})
+
+    def test_collector_receives_manual_or_scheduled_trigger(self):
+        plan=self.plan(collect={'source':'jobicy','query':'AI product','count':100},report_limit=1000)
+        with patch('tools.research_sources.collect_jobicy',return_value={}) as collect:
+            execute(self.store,plan)
+            self.assertFalse(collect.call_args.kwargs['scheduled'])
+            execute(self.store,plan,scheduled=True)
+            self.assertTrue(collect.call_args.kwargs['scheduled'])
+            self.assertEqual(collect.call_count,2)
 
     def test_inbox_acknowledgment_overflow_not_render_acceptance(self):
         self.brief(1); self.brief(2); self.brief(3)
@@ -80,10 +89,10 @@ class OperationsTests(unittest.TestCase):
     def test_html_escape_no_active_links_script_or_unmanaged_assets(self):
         self.brief(); result = report(self.store)
         html = Path(result['path']).read_text()
-        self.assertNotIn('<script>', html)
+        self.assertEqual(html.count('<script>'), 1)  # fixed hash-authorized UI script only
         self.assertIn('&lt;script&gt;', html)
         self.assertIn('default-src', html)
-        self.assertNotIn('<a ', html)
+        self.assertEqual(html.count('<a '), 2)  # fixed sibling report navigation
         self.assertNotIn('<img', html)
         self.assertIn('Captured evidence', html)
         self.assertEqual(os.stat(result['path']).st_mode & 0o777, 0o600)
@@ -96,7 +105,7 @@ class OperationsTests(unittest.TestCase):
         self.assertTrue((self.home/'backup.json').exists())
         self.store.withdraw(self.obs)
         self.assertFalse((self.home/'backup.json').exists())
-        self.assertFalse((self.home/'research-report.html').exists())
+        self.assertFalse((self.home/'projects.html').exists())
         with self.store.transaction() as state:
             self.assertNotIn(b, state['artifacts'])
             self.assertNotIn('presentation', {a['kind'] for a in state['artifacts'].values()})
@@ -111,7 +120,7 @@ class OperationsTests(unittest.TestCase):
         self.now += timedelta(hours=2)
         self.assertEqual(health(self.store)['counts'], {})
         self.assertFalse((self.store.home/'backup.json').exists())
-        self.assertFalse((self.store.home/'research-report.html').exists())
+        self.assertFalse((self.store.home/'projects.html').exists())
 
     def test_restore_corrupt_primary_and_no_restore_without_journal(self):
         backup(self.store)
@@ -243,7 +252,7 @@ class OperationsTests(unittest.TestCase):
         one, two = self.brief(1), self.brief(2)
         report(self.store, 1)
         self.store.withdraw(max(one, two))
-        self.assertFalse((self.home/'research-report.html').exists())
+        self.assertFalse((self.home/'projects.html').exists())
 
     def test_cleanup_failure_is_recorded_without_source_or_exception_text(self):
         p = self.plan()
@@ -432,4 +441,4 @@ class JourneyTests(unittest.TestCase):
         self.assertNotIn('research-profile', self.store.status()['counts'])
         self.store.withdraw(self.obs)
         self.assertFalse(inbox(self.store)['items'])
-        self.assertFalse((self.store.home/'research-report.html').exists())
+        self.assertFalse((self.store.home/'projects.html').exists())

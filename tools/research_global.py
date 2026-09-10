@@ -37,7 +37,7 @@ def display_json(value):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('action', choices=['registry', 'query-pack', 'coverage', 'protocol', 'capture-assess', 'segments', 'board',
+    parser.add_argument('action', choices=['registry', 'query-pack', 'ai-query-plan', 'coverage', 'protocol', 'capture-assess', 'segments', 'board',
                                          'board-link', 'cohort', 'compare', 'vacancies', 'translate', 'translation-review',
                                          'language-gold', 'language-evaluate', 'inspect'])
     parser.add_argument('--input'); parser.add_argument('--id'); parser.add_argument('--from', dest='start')
@@ -53,7 +53,12 @@ def main():
             require(result['packs'], 'query language not available')
         else:
             store = Store(private_state_path(ROOT, dict(os.environ)))
-            if args.action == 'coverage': result = coverage(store, start=args.start, end=args.end, expected=read_input(args.input) if args.input else None)
+            if args.action == 'ai-query-plan':
+                from tools.research_sources import ai_query_plan
+                with store.transaction() as state:
+                    require('domain_pack' not in state, 'AI query plan belongs to the default AI domain')
+                    result = ai_query_plan(state, store.clock())
+            elif args.action == 'coverage': result = coverage(store, start=args.start, end=args.end, expected=read_input(args.input) if args.input else None)
             elif args.action == 'compare': result = compare(store, args.id)
             elif args.action == 'vacancies': result = vacancy_view(store, args.id)
             elif args.action == 'translate': result = translate(store, args.id, args.language, args.target, refresh=args.refresh)

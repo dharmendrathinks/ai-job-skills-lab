@@ -40,7 +40,7 @@ An operation-plan/1 input has these exact fields:
 
 This concrete default runs cleanup, a deterministic snapshot and local reporting.
 For an explicitly requested research refresh, `collect` can be
-`{"source":"jobicy","query":"machine learning","count":20}`, `analyze` can be
+`{"source":"jobicy","query":"AI product","count":100}`, `analyze` can be
 true and `brief_kinds` can select learning/project/product/youtube. Context and
 profile IDs are explicitly selected existing P3 inputs; no automatic web discovery
 or personal-profile loading occurs. Missing/expired inputs block the affected
@@ -84,17 +84,80 @@ accepted/rejected/duplicate/superseded items leave the inbox. A new revision get
 its own presentation identity. Use the existing `research_decisions` commands to
 choose work, record observed/user-reported outcomes and review profile proposals.
 
-`report` returns the path of one managed private `research-report.html`. It reuses
-upstream `.claude/commands/html-report.md` single-file/escaping conventions with
-an additive research view. All imported/model text is HTML-escaped, including
-captured provenance and source spans. There are no scripts, active source links,
-forms, external assets or network resources; CSP denies them. Expand the evidence
-sections to inspect source observations, analyses, context and snapshot limits.
-The file has 0600 permissions and is bounded to 4 MB; lower the limit if necessary.
-No local web server or dashboard framework is required. Saved content is a dated
-snapshot, not a live inbox: refresh after decisions or new evidence. The browser
+`report` generates two managed private HTML files from existing evidence and briefs:
+
+```sh
+.venv/bin/python -m tools.research_ops report --limit 1000
+```
+
+For the default AI workspace these are `reports/jobs.html` and
+`reports/projects.html` under the development checkout. This location is an
+explicit user-approved exception for generated views only: corpus, profiles,
+credentials, state and journals remain outside the checkout. `reports/` stays
+Git-ignored. Files have 0600 permissions and the directory 0700. Do not force-add
+these files, publish them, or copy them outside managed storage.
+
+Jobs shows conservative deduplicated openings, latest captured descriptions,
+source identity/revisions, availability at capture, missing data, latest analyses
+and collection scope/receipts. The second file has Projects and YouTube experiments tabs for current briefs
+(learning/product-hypothesis types remain in the inbox), including honest no-project/insufficient-evidence
+outcomes and latest decision status. Rejected, accepted and deferred project
+briefs remain inspectable through filters; superseded revisions are excluded.
+The 1–1000 limit applies independently to jobs, project briefs and YouTube briefs,
+with per-tab total/overflow displayed; YouTube shares `projects.html`, not a third file.
+Search and filters cover the generated entries, not entries beyond that limit.
+
+Both pages use responsive typography, separate color accents, metric cards and
+expandable evidence. Jobs filters source/location/availability; the selected brief tab filters
+disposition/decision/capability. Jobs also provide a Role family filter. Versioned
+`report-title-families/1` rules group the latest displayed title into overlapping
+families (machine learning, AI product engineering, applied AI, LLM/generative AI,
+agents/automation, retrieval/knowledge, evaluation/reliability, AI security,
+infrastructure/MLOps, research/applied science, data science, data engineering,
+and general AI engineering). Unmatched titles stay Other / unclassified.
+These are English title navigation hints, not validated AI relevance or requirement
+classifications; no descriptions, collection queries or profiles determine them.
+They do not enter market counts or extraction artifacts. Location uses the normalized country when present, otherwise the captured
+`segments.source_geography`. Fallback chips are labeled source location. Regions,
+Anywhere and multi-country strings stay as published, without guessed country
+codes or country-count changes. Location/availability controls are omitted when
+all displayed listings have unknown values; known and
+unknown values remain filterable together when real values exist. Empty role
+facets are also omitted. Filters reflect the generated sample, not hidden overflow.
+Switching tabs resets search/filter selections and
+rebuilds choices from that tab alone. Clear keeps the active tab. Tabs support
+Arrow Left/Right and Home/End keyboard navigation. Search matches all terms without case sensitivity,
+on each input event. Titles are searched by default; Search in → All content includes
+collapsed descriptions and evidence. Clear filters resets search, scope to Titles, and
+filters within the active tab. These controls
+only change the current browser view and never acknowledge, accept, collect or
+run a model. Source text is escaped. One fixed inline UI script is authorized by
+its exact CSP SHA-256; arbitrary scripts and network connections remain denied.
+Only fixed sibling-page navigation links are active. There are no remote assets,
+external fonts, forms, analytics, local storage or local server.
+
+Private `report-location.json` and `report-origin.json` bind the managed checkout
+location; a workspace ownership marker prevents collisions. Nondefault workspaces
+use `reports/workspace-<workspace-path-hash>/` with the same two filenames. Binding
+rejects symlinks, tracked reports, lost markers and changed repository locations.
+A missing binding fails closed and needs reconciliation of the existing managed
+copies; never delete markers to bypass it. Moving the checkout requires deliberate
+location migration, not editing source data to redirect file writes.
+
+The `offline-report` artifact now has payload version 2 with both HTML pages and
+counts, retaining transitive evidence/decision dependencies. Regenerating replaces
+v1 and removes the old private `research-report.html`. Ordinary persistence removes
+stale copies before state replacement, then materializes valid pages atomically
+one file at a time; failure removes a partially written pair. Interrupted temporary
+files are removed on next access. There is no multi-file/fsync/power-loss guarantee.
+Withdrawal or expiry removes both pages conservatively when their artifact becomes
+invalid; regenerate from survivors. Existing v1 artifacts remain readable until
+regeneration. Do not downgrade the writer after creating v2 report artifacts.
+
+Each page is bounded to 16 MB; lower the generation limit if needed. The browser
 may retain an already-open view; close it after withdrawal/expiry. No browser-cache
-recall or physical erasure is claimed. Never move the file outside managed storage.
+recall, hosted recall or physical erasure is claimed. No source export permission
+is expanded by the approved local destination.
 
 P4 JSON/Markdown interchange stays the reviewed export route. Current Jobicy
 policies prohibit export, including external notification of derived brief data.
@@ -238,3 +301,12 @@ recorded; prompts/schema and the original six-case P2 dataset are reused. See
 [Ollama's generate contract](https://docs.ollama.com/api/generate), inspected
 2026-09-09, and [measured results](phase6-validation.md). No new inference-quality,
 18-GB memory-fit or held-out claim follows from model weight size alone.
+
+Manual `run` collection passes `scheduled=False`; unattended `tick` collection
+passes `scheduled=True` to the shared source helper. Only scheduled collection
+uses the one-hour source guard; explicit searches no longer share that manual
+cooldown. Polling cadence, intent recording, ambiguous-attempt review and no-retry
+behavior remain unchanged. Existing plans keep their explicitly configured queries;
+changing defaults does not mutate private plans. Use `research_global ai-query-plan`
+to inspect the wider default AI discovery seeds and `research_evidence collect`
+for the next seed in a user-triggered search session.

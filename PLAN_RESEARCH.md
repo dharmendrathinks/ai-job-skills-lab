@@ -756,3 +756,19 @@ The complete dependency sequence is:
 **P1 fork/privacy/runtime foundation → P2 evidence and capability analysis → P3 four decision workflows → P4 outcomes and interchange → P6 continuous operation → P7 broader IT domains. P5 global/longitudinal expansion branches from P2 alongside P3–4; its cohort contracts support P6 longitudinal reporting. Conditional providers do not block unrelated capabilities.**
 
 The planning exercise itself completed no implementation phase. Subsequent authorized work completed and pushed P1 and delivered the P2 implementation and automated validation above. Human evaluation acceptance is still open. P3–7 engineering implementation is recorded above. Phase 6 was committed locally as `09bc20d`. No additional implementation phase is invented: the remaining work is the explicit evaluation, source-permission and optional activation gates in these seven phases. Human acceptance, backend/domain quality promotion, real source/language expansion and schedule/delivery activation are not silently treated as completed evidence.
+
+## Approved report presentation amendment
+
+The user requested separate jobs and suggested-project HTML reports in the existing
+checkout’s ignored `reports/` folder, with improved typography/color and offline
+search/filter/clear controls. This is a managed-view location exception only;
+research state and credentials stay external. P6 presentation reuses the evidence
+and outcome helpers, carries the same withdrawal dependencies, and introduces
+payload-v2 reports with a fixed CSP-hashed UI script. No provider, model, architecture
+or phase scope changes. See [operations](docs/research/continuous-operations.md).
+
+The subsequent approved refinement keeps exactly two HTML files: jobs list, and
+Projects / YouTube experiments tabs in `projects.html`. Each brief tab has separate
+counts, filters and limits while sharing lifecycle invalidation. No YouTube
+capability or existing evidence is removed; learning and product-hypothesis briefs
+remain in the review inbox.

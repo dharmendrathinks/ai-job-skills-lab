@@ -4,7 +4,6 @@ No arbitrary shell steps, automatic retries, publishing or application-state use
 """
 from contextlib import contextmanager
 import fcntl
-from html import escape
 import json
 import os
 from pathlib import Path
@@ -104,47 +103,27 @@ def inbox(store, limit=20, *, acknowledge=False):
 
 
 def report(store, limit=20):
-    require(type(limit) is int and 1 <= limit <= 100, 'report limit must be 1–100')
+    from tools.research_reports import render
+    from tools.research_report_files import paths
+    require(type(limit) is int and 1 <= limit <= 1000, 'report limit must be 1–1000')
     with store.transaction() as state:
-        rows = inbox_rows(state, store.clock())
-        eligible = [r for r in rows if r['status'] != 'deferred']
-        selected = sorted(eligible, key=lambda r: (r['presented'], r['brief']))[:limit]
-        dependencies = [r['brief'] for r in rows]
-        dependencies += [r['decision'] for r in rows if r['decision']]
-        # Single-file presentation conventions reused from upstream html-report.md.
-        parts = ['<!doctype html><html lang="en"><meta charset="utf-8">',
-                 '<meta http-equiv="Content-Security-Policy" content="default-src \'none\'; style-src \'unsafe-inline\'; base-uri \'none\'; form-action \'none\'">',
-                 '<meta name="referrer" content="no-referrer"><title>AI Job Radar review</title>',
-                 '<style>body{font:17px system-ui;max-width:960px;margin:2rem auto;padding:1rem;background:#fafafa;color:#17202a}pre{white-space:pre-wrap;overflow-wrap:anywhere}article{background:white;padding:1rem;margin:1rem 0;border:1px solid #ccc}code{overflow-wrap:anywhere}</style>',
-                 '<h1>Research review inbox</h1><p>Drafts require human review. Viewing does not accept a recommendation. No scripts, remote resources or active source links.</p>',
-                 '<p>Generated: ' + escape(store.clock().isoformat()) + '</p>',
-                 f'<p>Showing {len(selected)} of {len(eligible)} available; {len(eligible)-len(selected)} overflow; {sum(r["status"] == "deferred" for r in rows)} deferred.</p>']
-        for row in selected:
-            brief = artifact(state, row['brief'], ('brief',))
-            parts += ['<article><h2>' + escape(row['kind']) + ' · ' + escape(row['status']) + '</h2>',
-                      '<code>' + row['brief'] + '</code><pre>' + escape(brief['markdown']) + '</pre>',
-                      '<details><summary>Captured evidence and provenance</summary>']
-            # Inspect exact source spans/unknowns without Markdown execution.
-            from tools.research_interchange import closure
-            for key in sorted(closure(state, [row['brief']])):
-                a = state['artifacts'][key]
-                if a['kind'] in ('analysis', 'observation', 'context', 'coverage-report', 'snapshot'):
-                    parts.append('<h3>' + escape(a['kind']) + '</h3><pre>' +
-                                 escape(json.dumps(a['payload'], ensure_ascii=False, indent=2)) + '</pre>')
-            parts.append('</details></article>')
-        parts += ['<p>Use research_decisions for decisions/outcomes; research_ops inbox --acknowledge records presentation only. This local file can become stale while a browser remains open. Do not copy it to an unmanaged location.</p></html>']
-        html = '\n'.join(parts)
-        require(len(html.encode()) <= 4_000_000, 'HTML budget exceeded; lower report limit')
+        pages, dependencies, counts = render(state, store.clock().isoformat(), limit)
+        require(all(len(html.encode()) <= 16_000_000 for html in pages.values()),
+                'HTML budget exceeded; lower report limit')
         previous = [k for k,a in state['artifacts'].items() if a['kind'] == 'offline-report']
         revision = 1 + max([state['artifacts'][k]['payload'].get('revision', 0) for k in previous], default=0)
         store.remove(state, previous)
-        key = store.put(state, 'offline-report', {'schema_version': 1, 'revision': revision, 'created_at': store.clock().isoformat(),
-                        'html': html, 'shown': len(selected), 'overflow': len(eligible)-len(selected)}, dependencies)
-    # Reacquire lifecycle lock and sweep immediately before materialization.
+        key = store.put(state, 'offline-report', {'schema_version': 2, 'revision': revision,
+                        'created_at': store.clock().isoformat(), 'pages': pages, 'counts': counts}, dependencies)
     with store.transaction() as state:
         artifact(state, key, ('offline-report',))
-    return {'report': key, 'path': str(store.home / 'research-report.html'),
-            'shown': len(selected), 'overflow': len(eligible)-len(selected)}
+    targets = paths(store)
+    return {'report': key, 'path': str(targets['projects.html']),
+            'jobs': {'path': str(targets['jobs.html']), **counts['jobs']},
+            'projects': {'path': str(targets['projects.html']), **counts['projects']},
+            'youtube': {'path': str(targets['projects.html']), **counts['youtube']},
+            'shown': counts['projects']['shown'] + counts['youtube']['shown'],
+            'overflow': sum(counts[k]['total'] - counts[k]['shown'] for k in ('projects', 'youtube'))}
 
 
 def configure(store, row):
@@ -155,7 +134,7 @@ def configure(store, row):
             'invalid operation plan')
     text(row['reviewer'])
     require(type(row['analysis_limit']) is int and 1 <= row['analysis_limit'] <= 20 and
-            type(row['report_limit']) is int and 1 <= row['report_limit'] <= 100 and
+            type(row['report_limit']) is int and 1 <= row['report_limit'] <= 1000 and
             type(row['interval_seconds']) is int and 3600 <= row['interval_seconds'] <= 604800,
             'invalid operation budgets/cadence')
     from tools.research_briefs import SECTIONS
@@ -241,7 +220,7 @@ def _execute(store, plan_id, *, resume=None, scheduled=False, handlers=None):
 
     step('cleanup', store.status)
     if plan['collect']:
-        step('collect', lambda: collect_jobicy(store, plan['collect']['query'], plan['collect']['count']))
+        step('collect', lambda: collect_jobicy(store, plan['collect']['query'], plan['collect']['count'], scheduled=scheduled))
     model_blocked = any(rid != run_id and r['plan'] == plan_id and
                         any((n.startswith('analyze:') or n.startswith('brief:')) and v['status'] != 'done'
                             for n,v in r['steps'].items()) for rid,r in log['runs'].items())

@@ -168,3 +168,42 @@ apply. Radar 1.1 consumer support remains separate and conditional. Owned domain
 case/evaluation artifacts link to source observations/executions and retain actual
 scores, runtime versions and pending human review; the public evaluation record
 contains only development results over author-owned fixtures.
+
+## Managed HTML report payload v2
+
+`offline-report` payload 2 contains `schema_version`, `revision`, `created_at`,
+`pages` (fixed `jobs.html` and `projects.html` strings), and `counts` for jobs, projects and YouTube. The projects page contains both brief
+tabs; each has its own shown/total counts and generation limit.
+The outer content-addressed artifact envelope remains v1. Both pages depend on
+all observations/receipts/latest analyses contributing to counts plus current
+project/YouTube evidence and decisions, including nonselected tabs and overflow. Withdrawal invalidates the pair conservatively.
+The CLI binds private output-location/origin records to the ignored checkout
+`reports/`; corpus persistence remains external. Nondefault workspaces receive
+separate path-hash subdirectories. See [continuous operations](continuous-operations.md)
+for migration, permissions, interrupted-write cleanup and limits. Report content
+is escaped; one exact-hash-authorized script controls local search/filter/reset,
+without network, storage or execution of source instructions. This approved local
+view location does not grant unmanaged export or publication rights.
+
+## Discovery query revision and collection trigger
+
+`collection-attempt` records may include `trigger` (`manual` or `scheduled`) and
+`query_pack_revision` for default rotating AI seeds. Older records remain readable
+and still inform the scheduled guard. Receipts keep exact request/effective query
+parameters; the selected pack revision is also in limitations. The query-plan view
+separates manual readiness from scheduled eligibility. It counts attempted queries
+and returned observations, not classified roles, openings or market growth. No
+corpus/analysis migration or automatic source activation is implied.
+
+Report role facets use `report-title-families/1`, recorded in the jobs page's
+presentation provenance. They derive solely from the displayed captured title,
+can overlap, and never write RequirementAnalysis, profile or market classifications.
+Unknown-only location/availability facets are omitted from generated controls,
+without filling missing evidence or changing observation values. No state-schema
+migration is required; regenerate the managed v2 HTML artifact to update its UI.
+
+The report's location facet uses captured `country`, falling back to a nonempty
+string in `segments.source_geography`. Source geography is explicitly labeled on
+the card and preserved as a region/multi-country label without parsing it into
+normalized countries. This presentation fallback does not mutate source fields,
+coverage counts or availability. Missing language is labeled separately.

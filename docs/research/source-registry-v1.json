@@ -135,7 +135,7 @@
       "implementation": "tools/research_sources.py",
       "mechanism": "Reviewed API v2 bounded feed",
       "authentication_and_cost": "No account/key; ₹0",
-      "coverage_and_completeness": "Single capped remote feed, no pagination/total proof; hourly cooldown; descriptions, unknown language/country/availability retained",
+      "coverage_and_completeness": "Single capped remote feed, no pagination/total proof; hourly scheduled polling guard, no manual cooldown; descriptions, unknown language/country/availability retained",
       "reference": "https://github.com/Jobicy/remote-jobs-api/blob/c38dc5308768d7a9c0228c4831b453530f4788d9/README.md#fair-use",
       "inspection_evidence": "P2 permitted bounded 20-item call and lifecycle/fixtures documented in phase2-validation.md",
       "gap_and_gate": "Existing narrow path; export false; permission review expires 2026-10-09; no broader promotion",

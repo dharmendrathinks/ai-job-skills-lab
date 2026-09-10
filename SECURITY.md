@@ -40,6 +40,10 @@ Upstream and separate AI Trend Radar deployments have their own security policie
   It rejects malformed output and unsupported policies. It cannot prove semantic
   truth, source permission, commercial demand or a reviewer’s asserted identity.
 - **Private state:** use a separate private data directory outside the checkout.
+  The explicitly approved exception is generated views in ignored `reports/`,
+  bound to the private store and covered by the same withdrawal lifecycle.
+  The HTML permits only a hash-pinned UI script for local search/filter/reset;
+  untrusted text stays escaped and CSP denies network resources and arbitrary code.
   Supported entry points enforce restrictive permissions, template/index checks
   and lock/lineage validation. These do not stop the account owner editing files,
   malware, OS backups or deliberately bypassing the supported interface.

@@ -4,10 +4,8 @@ Reuses the upstream atomic JSON writer. Logical deletion only; not an encrypted
 backup service, physical erasure, hostile-process boundary or power-loss WAL.
 """
 import json
-import os
 from pathlib import Path
 import stat
-import tempfile
 
 from tools.rank_state import save_state
 from tools.research_evidence import VERSION, digest, fields, require, timestamp
@@ -82,30 +80,31 @@ def persist(store, path, state):
             valid = False
         if not valid:
             backup_path.unlink()  # conservative whole-copy invalidation
-    # A stale HTML file is removed before the primary state can advertise deletion.
-    view = store.home / 'research-report.html'
-    regular(view)
-    if view.exists():
-        view.unlink()
+    # Both linked views disappear before the state advertises removal. A failed
+    # second write removes the first too; this is not a multi-file/fsync guarantee.
+    from tools.research_report_files import remove_views, write, NAMES
+    remove_views(store)
     save_state(path, state)
-    reports = [(a['payload']['created_at'], key, a['payload']['html'])
+    reports = [(a['payload']['created_at'], key, a['payload'])
                for key,a in state['artifacts'].items() if a['kind'] == 'offline-report']
     if reports:
-        materialize(store, max(reports)[2])
+        payload = max(reports)[2]
+        try:
+            if payload.get('schema_version') == 2:
+                require(set(payload['pages']) == set(NAMES), 'invalid report pages')
+                for name in NAMES:
+                    write(store, name, payload['pages'][name])
+            else:
+                write(store, 'research-report.html', payload['html'])
+        except Exception:
+            remove_views(store)
+            raise
 
 
 def materialize(store, html):
-    path = store.home / 'research-report.html'
-    regular(path)
-    fd, temporary = tempfile.mkstemp(prefix='.research-view.', dir=store.home)
-    try:
-        with os.fdopen(fd, 'w', encoding='utf-8') as handle:
-            handle.write(html)
-        os.replace(temporary, path)
-    finally:
-        if Path(temporary).exists():
-            Path(temporary).unlink()
-    return path
+    # Retained legacy helper; v2 reports use fixed jobs/projects destinations.
+    from tools.research_report_files import write
+    return write(store, 'research-report.html', html)
 
 
 def validate_state(state):

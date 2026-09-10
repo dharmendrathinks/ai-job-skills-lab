@@ -558,7 +558,7 @@ def main():
     parser.add_argument("--input", type=Path)
     parser.add_argument("--id")
     parser.add_argument("--query")
-    parser.add_argument("--count", type=int, default=20)
+    parser.add_argument("--count", type=int, default=100)
     parser.add_argument("--refresh", action="store_true")
     args = parser.parse_args()
     try:
@@ -581,7 +581,7 @@ def main():
             from tools.research_domains import pack_for
             with store.transaction() as state:
                 pack = pack_for(state)
-                query = args.query or (pack['queries'][0] if pack else 'machine learning')
+                query = args.query or (pack['queries'][0] if pack else None)
             result = collect_jobicy(store, query, args.count)
         elif args.action in ("extract", "analyze"):
             result = store.analyze(args.id, refresh=args.refresh)

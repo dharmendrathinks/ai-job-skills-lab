@@ -182,7 +182,7 @@ class SourceTests(unittest.TestCase):
         self.calls += 1
         return {"jobs": [deepcopy(self.job)]}, "https://jobicy.com/api/v2/remote-jobs?count=20&tag=machine"
 
-    def test_capture_transformation_unknowns_and_cooldown(self):
+    def test_capture_transformation_unknowns_and_scheduled_cooldown(self):
         result = collect_jobicy(self.store, fetch=self.fetch)
         with self.store.transaction() as state:
             row = state["artifacts"][result["observations"][0]]["payload"]
@@ -192,7 +192,7 @@ class SourceTests(unittest.TestCase):
             self.assertIsNone(row["country"])
             self.assertEqual(row["availability"], "unknown")
         with self.assertRaises(EvidenceError):
-            collect_jobicy(self.store, fetch=self.fetch)
+            collect_jobicy(self.store, scheduled=True, fetch=self.fetch)
         self.assertEqual(self.calls, 1)
 
     def test_failed_attempt_is_recorded_and_does_not_auto_retry(self):
@@ -204,7 +204,7 @@ class SourceTests(unittest.TestCase):
         self.assertEqual(self.calls, 1)
         self.assertEqual(self.store.status()["counts"]["receipt"], 1)
         with self.assertRaises(EvidenceError):
-            collect_jobicy(self.store, fetch=fail)
+            collect_jobicy(self.store, scheduled=True, fetch=fail)
         self.assertEqual(self.calls, 1)
 
     def test_stale_policy_stops_before_network_or_state(self):
@@ -219,3 +219,38 @@ class SourceTests(unittest.TestCase):
         with self.assertRaises(EvidenceError):
             collect_jobicy(self.store, fetch=self.fetch)
         self.assertNotIn("observation", self.store.status()["counts"])
+
+
+MANUAL_NOW = datetime(2026, 9, 10, 12, tzinfo=timezone.utc)
+
+
+class ManualDiscoveryTests(unittest.TestCase):
+    def test_manual_queries_do_not_have_one_hour_gate(self):
+        from tools.research_sources import ai_query_plan
+        with tempfile.TemporaryDirectory() as tmp:
+            store=Store(Path(tmp)/'private',clock=lambda: MANUAL_NOW)
+            calls=[]
+            def fetch(query,count):
+                calls.append((query,count))
+                return {'jobs':[]}, 'https://jobicy.com/api/v2/remote-jobs'
+            collect_jobicy(store,fetch=fetch)
+            collect_jobicy(store,fetch=fetch)
+            self.assertEqual(calls,[('LLM',100),('AI product',100)])
+            with store.transaction() as state:
+                plan=ai_query_plan(state,MANUAL_NOW)
+                self.assertTrue(plan['manual_ready']);self.assertFalse(plan['scheduled_ready'])
+                self.assertEqual(plan['next_query'],'applied AI')
+                attempts=[a['payload'] for a in state['artifacts'].values() if a['kind']=='collection-attempt']
+                self.assertTrue(all(a['trigger']=='manual' for a in attempts))
+            with self.assertRaises(EvidenceError):collect_jobicy(store,scheduled=True,fetch=fetch)
+            self.assertEqual(len(calls),2)
+
+    def test_manual_failure_has_no_automatic_retry(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            store=Store(Path(tmp)/'private',clock=lambda: MANUAL_NOW)
+            calls=[]
+            def fail(*args):
+                calls.append(1);raise OSError('owned failure')
+            with self.assertRaises(EvidenceError):collect_jobicy(store,'LLM',fetch=fail)
+            self.assertEqual(calls,[1])
+            self.assertEqual(store.status()['counts']['receipt'],1)

@@ -62,6 +62,7 @@ class DecisionTests(unittest.TestCase):
             def __exit__(self, *args): pass
             def run(self, prompt, schema):
                 owner.calls += 1
+                owner.offered_schema = schema
                 owner.on_run()
                 return deepcopy(owner.output), {'latency_seconds': 0, 'authentication': 'fixture'}
         self.worker = Worker
@@ -116,6 +117,17 @@ class DecisionTests(unittest.TestCase):
     def test_no_project_is_valid(self):
         self.output = self.output_for('project'); self.output['disposition'] = 'no-project'
         self.brief('project')
+
+    def test_nonproject_worker_is_not_offered_project_only_dispositions(self):
+        for kind in ('learning', 'product', 'youtube'):
+            self.output = self.output_for(kind)
+            self.brief(kind)
+            self.assertEqual(self.offered_schema['properties']['disposition']['enum'],
+                             ['propose', 'insufficient-evidence'])
+            # A worker that ignores its schema must still fail validation.
+            self.output['disposition'] = 'contribute'
+            with self.assertRaisesRegex(EvidenceError, 'project-only disposition'):
+                self.brief(kind, refresh=True)
 
     def test_commercial_and_video_claims_need_external_support(self):
         for dimension in ('commercial_validation', 'video_suitability'):

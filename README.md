@@ -98,7 +98,11 @@ Read [evidence operations](docs/research/evidence-operations.md) before importin
 or collecting. Only a narrow, capped Jobicy API path is currently reviewed for
 explicit collection; its policy review expires **2026-10-09**. It is remote-biased
 and does not represent complete worldwide coverage. Other provider candidates
-remain gated. Collection is never activated by cloning or readiness checks.
+remain gated. Default AI discovery now rotates across AI product/applied engineering,
+LLMs, agents, retrieval, evaluation/security, infrastructure and relevant ML, rather
+than repeatedly searching only machine learning. Inspect the plan with
+`.venv/bin/python -m tools.research_global ai-query-plan`. Manual searches have no
+hard hourly cooldown; scheduled polling retains the hourly guard. Collection is never activated by cloning or readiness checks.
 
 Model analysis uses an existing ChatGPT sign-in through a **qualified Codex CLI
 0.153.4 / gpt-5.5 installation**. The current qualification is for the recorded
@@ -126,6 +130,19 @@ capabilities → review and select a brief → build or validate → record outc
 | Inspect source/language coverage and comparable time windows | [Global research](docs/research/global-operations.md) |
 | Incremental runs, inbox, offline HTML, cleanup and managed recovery | [Continuous operations](docs/research/continuous-operations.md) |
 | Opt into backend/platform research in a separate private data workspace | [Domain operations](docs/research/domain-operations.md) |
+
+Generate the two local reports from existing results:
+
+```sh
+.venv/bin/python -m tools.research_ops report --limit 1000
+```
+
+Open `reports/jobs.html` for the jobs list and `reports/projects.html` for
+Projects and YouTube experiments tabs. Both files have offline search, filters
+and a Clear filters button. Search and filters apply to the selected brief tab.
+Reports are private, Git-ignored managed copies; their underlying data stays in
+the private research workspace. This command does not collect or generate new
+recommendations. Learning and product-hypothesis briefs remain available through the review inbox.
 
 AI remains the default. The backend/platform pack reuses the same pipeline with
 an immutable domain binding; it does not reclassify existing AI observations.

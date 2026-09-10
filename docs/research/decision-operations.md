@@ -181,3 +181,10 @@ briefs add revision links and optionally selected `--exchange` assessments;
 old artifact IDs remain addressable. Generic export is still blocked. Only P4's
 exact reviewed projections with compatible source permissions can be released.
 Human-review status is independent of implementation/commit authorization.
+
+The structured-output schema restricts disposition by workflow: project drafts
+may propose, contribute, choose no-project, or report insufficient evidence;
+learning, product and YouTube drafts may propose or report insufficient evidence.
+The validator enforces the same restriction even if a worker ignores its schema.
+Schema/validator digests distinguish corrected generation from historical drafts;
+already valid retained drafts remain readable.

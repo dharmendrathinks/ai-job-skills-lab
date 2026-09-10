@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "baseRef": "10e2ae3",
+  "baseRef": "ba9c04f",
   "checks": {
     "test": ["python3", "-m", "unittest", "discover", "-s", "tests", "-t", "."],
     "lint": ["python3", "tools/lint_skills.py"],

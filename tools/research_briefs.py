@@ -43,7 +43,9 @@ def schema(kind, data=None):
     if data is not None:
         analysis_id['enum'] = list(data['analyses']) or ['unavailable']
         context_id['enum'] = list(data['contexts']) or ['unavailable']
-    return obj({'title': STRING, 'disposition': {'type': 'string', 'enum': ['propose', 'contribute', 'no-project', 'insufficient-evidence']},
+    dispositions = (['propose', 'contribute', 'no-project', 'insufficient-evidence']
+                    if kind == 'project' else ['propose', 'insufficient-evidence'])
+    return obj({'title': STRING, 'disposition': {'type': 'string', 'enum': dispositions},
         'capabilities': array({'type': 'string', 'enum': taxonomy['capabilities']}),
         'prerequisites': array({'type': 'string', 'enum': taxonomy['capabilities']}),
         'market_claims': array(obj({'analysis': analysis_id, 'quote': STRING})),

@@ -26,7 +26,11 @@ a pointer. Frontmatter and instructions do not establish tool isolation.
 4. Report supported and blocked capabilities accurately. Reviewed local imports,
    human/synthetic annotations and deterministic snapshots are available through
    `python3 -m tools.research_evidence`; follow `docs/research/evidence-operations.md`.
-   Explicit `collect` invokes only the reviewed Jobicy path. Run `qualify` before
+   Explicit `collect` invokes only the reviewed Jobicy path. AI defaults rotate
+   across the versioned broad AI query seeds; inspect `research_global ai-query-plan`.
+   User-triggered searches have no hourly application cooldown. Scheduled polling
+   keeps the hourly guard; never misrepresent a poll loop as a manual search.
+   Stop a finite search batch on source refusal/failure instead of retrying. Run `qualify` before
    `analyze --id OBSERVATION_SHA256`; matching runtime identity and compatible
    source policy are required. Inspect managed snapshot JSON/Markdown and pending
    human-review labels. Four drafts and research profile proposals use the P3
@@ -70,7 +74,8 @@ are available. Preflight itself does not enable or invoke either. Never describe
    access does not supply research retention permission.
 2. Collect through the reviewed Jobicy path or import a bounded contract-v1 bundle
    through the deterministic helper.
-   Keep inputs and runtime content outside the public checkout. Do not paste real
+   Keep inputs and runtime content outside the checkout, except the explicitly
+   approved managed HTML views in Git-ignored `reports/`. Do not paste real
    descriptions or reports into Codex while hosted disclosure is unqualified.
 3. Human annotations must cite exact character spans in captured descriptions;
    required/preferred status and capability normalization require actual review.
@@ -209,7 +214,10 @@ The canonical P2–5 rules and source permissions remain in force.
    Crashed external/model intents are ambiguous: inspect results, obtain actual
    operator review, use `resolve`, then resume. Never retry quota failures through
    another provider, API credential, paid tier or hidden fallback.
-3. Inspect `inbox` and managed `report`. Only `inbox --acknowledge` records displayed
+3. Inspect `inbox` and managed `report`. The report command generates separate
+   jobs/projects HTML in ignored `reports/`; the second file has Projects and
+   YouTube experiments tabs with hash-authorized offline search/filter/reset
+   controls. Learning/product-hypothesis briefs remain in the inbox. Only `inbox --acknowledge` records displayed
    items; it is not acceptance, observed work or capability evidence. Use P4 for
    actual decisions/outcomes. Overflow stays pending and deferred items return due.
 4. Keep the managed HTML and single rollback copy private. Use P6 `backup`/`restore`

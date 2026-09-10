@@ -128,8 +128,11 @@ Do not replace the state file manually or bypass its withdrawal ledger.
 
 ## Enabled source and evaluation
 
-The Jobicy path performs one capped API request, records failures, and enforces
-at least one hour between attempts, including failures. The narrow policy review
+The Jobicy path performs one capped API request and records failures. Explicit
+user-triggered searches have no application-imposed hourly cooldown. Scheduled
+polling retains a one-hour guard after any attempt, including failures. This
+separates our scheduler policy from an undocumented request-level API quota.
+Source errors still stop the action; there is no automatic retry or bypass. The narrow policy review
 expires on 2026-10-09. It permits only compatible logical retention and hosted
 processing, preserves source/canonical attribution and forbids unmanaged exports.
 A policy update needs a fresh review, not a date-only extension. Remote sampling,
@@ -146,3 +149,36 @@ See `phase2-validation.md` for actual results, repeatability and remaining revie
 
 P3 and P5 branch independently from P2. Conditional sources do not gate unrelated
 capabilities. Scheduled cleanup, monitoring and broader recovery remain P6.
+
+## Broad AI discovery and manual searches
+
+```sh
+.venv/bin/python -m tools.research_global ai-query-plan
+.venv/bin/python -m tools.research_evidence collect --count 100
+.venv/bin/python -m tools.research_evidence collect --query "AI product" --count 100
+```
+
+The default AI collection rotates through the least recently attempted seed in
+`ai-engineering-queries/1`, defined in `tools/research_sources.py`: LLM, AI product,
+applied AI, AI engineer, generative AI, AI agent, retrieval, LLM evaluation, AI
+security, inference, AI infrastructure, MLOps and machine learning. Backend/domain
+workspaces retain their own query selection. Explicit `--query` remains exact.
+Each call makes one request, defaults to 100, and preserves its query, count,
+source receipt, attempt trigger and (for rotation) query-pack revision. Different
+queries are not sent as an undocumented Boolean or comma-separated expression.
+
+The query-plan view reports actual attempts, returned observations and pending
+queries. None of these establish that a role has been found: classification must
+use captured responsibilities, not query keywords or titles. Empty results and
+failed requests are not evidence of market absence. Cross-query repeats use the
+existing source ID/revision deduplication. Expanded sampling cannot show growth.
+Retained old observations/briefs are not silently reclassified or regenerated.
+
+On 2026-09-10 the official Jobicy README was rechecked for keyword and polling
+semantics: `tag` searches available content, has length 3–50, and the fair-use
+text restricts automated polling frequency. It does not specify a per-query hourly
+HTTP quota for a finite user-triggered search session. The reviewed decision
+removes our blanket manual cooldown, keeps periodic polling hourly, and treats
+server refusals/errors as stopping conditions. This does not grant unlimited
+request volume or relax source/retention policy. No scheduler is activated.
+[Source documentation](https://github.com/Jobicy/remote-jobs-api#fair-use).

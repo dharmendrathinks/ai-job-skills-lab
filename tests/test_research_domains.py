@@ -72,7 +72,7 @@ class DomainTests(unittest.TestCase):
         self.output = self.brief_output(kind)
         return generate(self.store, kind, self.snap, worker_factory=self.worker)['brief']
 
-    def test_ai_default_outputs_remain_byte_identical_to_phase6(self):
+    def test_ai_default_retains_phase6_baseline_except_corrected_dispositions(self):
         # Frozen owned P6 aggregate/schema/prompt expectations were captured from the
         # committed implementation, not computed from this implementation.
         expected = json.loads((Path(__file__).parent/'fixtures/research/ai-phase6-baseline.json').read_text())
@@ -85,7 +85,13 @@ class DomainTests(unittest.TestCase):
         self.assertEqual(digest(actual), expected['aggregate_sha256'])
         self.assertEqual(digest(OUTPUT_SCHEMA), expected['schema_sha256'])
         self.assertEqual(digest(bounded_prompt('owned fixed text')), expected['prompt_sha256'])
-        self.assertEqual(digest(schema('learning')), expected['brief_schema_sha256'])
+        corrected = schema('learning')
+        self.assertEqual(corrected['properties']['disposition']['enum'], ['propose', 'insufficient-evidence'])
+        # P6 accidentally offered project-only choices for every brief type.
+        # Preserve the historical fixture and prove this is the only schema delta.
+        legacy = deepcopy(corrected)
+        legacy['properties']['disposition']['enum'] = ['propose', 'contribute', 'no-project', 'insufficient-evidence']
+        self.assertEqual(digest(legacy), expected['brief_schema_sha256'])
         self.assertEqual(taxonomy_for({}), TAXONOMY)
 
     def test_binding_is_explicit_immutable_and_cannot_retag_existing_ai(self):
@@ -155,7 +161,7 @@ class DomainTests(unittest.TestCase):
             self.assertIn('service-api-design', self.last_schema['properties']['capabilities']['items']['enum'])
             self.assertNotIn('retrieval-knowledge', self.last_schema['properties']['capabilities']['items']['enum'])
         self.assertEqual(len(inbox(self.store)['items']), 4)
-        self.assertIn('domain_fit', Path(report(self.store)['path']).read_text())
+        self.assertIn('domain_fit', Path(report(self.store)['jobs']['path']).read_text())
 
     def test_profile_and_outcome_use_workspace_taxonomy_without_auto_promotion(self):
         self.analysis(); b = self.make_brief()

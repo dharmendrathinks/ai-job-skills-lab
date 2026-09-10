@@ -22,6 +22,9 @@ def main():
     try:
         require(not template_errors(ROOT), 'public template preflight failed')
         store = Store(private_state_path(ROOT, dict(os.environ)))
+        if args.action in ('report', 'run', 'tick'):
+            from tools.research_report_files import bind
+            bind(store, ROOT)
         if args.action == 'configure': result = configure(store, read_input(args.input))
         elif args.action == 'run': result = execute(store, args.plan, resume=args.resume)
         elif args.action == 'tick': result = tick(store, args.plan)
