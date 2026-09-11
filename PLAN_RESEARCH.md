@@ -770,5 +770,30 @@ or phase scope changes. See [operations](docs/research/continuous-operations.md)
 The subsequent approved refinement keeps exactly two HTML files: jobs list, and
 Projects / YouTube experiments tabs in `projects.html`. Each brief tab has separate
 counts, filters and limits while sharing lifecycle invalidation. No YouTube
-capability or existing evidence is removed; learning and product-hypothesis briefs
+capability or existing evidence is removed; historical learning and product-hypothesis briefs
 remain in the review inbox.
+
+
+## Connected learning delivery refinement
+
+[PLAN_LEARN_BUILD_TEACH.md](PLAN_LEARN_BUILD_TEACH.md) extends this active roadmap
+inside P2–6. It implements specific skill evidence and a learning-led report,
+connected projects/teaching and independent progress, and descriptive monthly
+views/cited questions. See [operation contracts](docs/research/learning-operations.md).
+The second report now exposes My learning path, Skills, Projects, YouTube and
+Progress, superseding the earlier two-tab/inbox-only learning presentation.
+
+| Capability | Existing phase ownership | Delivery connection |
+|---|---|---|
+| Typed skill mentions, catalog aliases, unresolved normalization and bounded current-description analysis | P2 | Skill snapshots feed learning decisions |
+| Scoped 30-day skill counts and descriptive adjacent windows | P2/P5 | Analysis denominators and collection limitations precede recommendations |
+| Connected learning milestones, inspected resources and shared project/video experiment | P3 | One path feeds existing brief/context helpers |
+| Selection/deferral/rejection, independent work records and scoped profile proposals | P4 | Actual work informs refresh; market withdrawal does not invent loss of independently evidenced work |
+| Learning-led report and resumable detailed refresh | P6 | Two managed HTML files remain private |
+| Deterministic counts, bounded cited explanations and same-input learning baseline | P3/P5/P6 | Retrieval serves explanation; counters and cohort gates remain deterministic |
+
+Delivery order is skills/report → connected learning; monthly views and evidence
+questions branch from skills alongside connected learning. No conditional provider
+or optional embedding experiment blocks these capabilities. Representative human
+evaluation, stable complete source histories and any optional activation remain
+evidence gates; code tests must not be reported as those outcomes.

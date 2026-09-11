@@ -12,24 +12,32 @@ from tools.research_recovery import backup, restore
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('action', choices=['configure', 'run', 'tick', 'inbox', 'report', 'cleanup', 'health',
-                                         'backup', 'restore', 'launchd', 'notify-preview', 'notify-approve', 'notify-send', 'resolve'])
+                                         'backup', 'restore', 'launchd', 'notify-preview', 'notify-approve', 'notify-send', 'resolve', 'learn-refresh'])
     parser.add_argument('--input')
     parser.add_argument('--plan')
     parser.add_argument('--resume')
     parser.add_argument('--limit', type=int, default=20)
     parser.add_argument('--acknowledge', action='store_true')
+    parser.add_argument('--days', type=int, default=30)
+    parser.add_argument('--basis', choices=['capture', 'publication'], default='capture')
     args = parser.parse_args()
     try:
         require(not template_errors(ROOT), 'public template preflight failed')
         store = Store(private_state_path(ROOT, dict(os.environ)))
-        if args.action in ('report', 'run', 'tick'):
+        if args.action in ('report', 'run', 'tick', 'learn-refresh'):
             from tools.research_report_files import bind
             bind(store, ROOT)
-        if args.action == 'configure': result = configure(store, read_input(args.input))
+        if args.action == 'learn-refresh':
+            plan = args.plan or configure(store, {'schema_version': 1, 'collect': None, 'analyze': True,
+                'skill_details': True, 'brief_kinds': [], 'contexts': [], 'profile': None,
+                'analysis_limit': min(args.limit, 20), 'report_limit': 1000, 'backup': False,
+                'interval_seconds': 86400, 'reviewer': 'Explicit local learn-refresh invocation'})['plan']
+            result = execute(store, plan, resume=args.resume)
+        elif args.action == 'configure': result = configure(store, read_input(args.input))
         elif args.action == 'run': result = execute(store, args.plan, resume=args.resume)
         elif args.action == 'tick': result = tick(store, args.plan)
         elif args.action == 'inbox': result = inbox(store, args.limit, acknowledge=args.acknowledge)
-        elif args.action == 'report': result = report(store, args.limit)
+        elif args.action == 'report': result = report(store, args.limit, days=args.days, basis=args.basis)
         elif args.action == 'cleanup': result = health(store)
         elif args.action == 'health': result = health(store)
         elif args.action == 'backup': result = backup(store)

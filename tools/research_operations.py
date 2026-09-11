@@ -102,12 +102,12 @@ def inbox(store, limit=20, *, acknowledge=False):
                 'previously_presented': sum(r['presented'] for r in rows)}
 
 
-def report(store, limit=20):
+def report(store, limit=20, *, days=30, basis='capture'):
     from tools.research_reports import render
     from tools.research_report_files import paths
     require(type(limit) is int and 1 <= limit <= 1000, 'report limit must be 1–1000')
     with store.transaction() as state:
-        pages, dependencies, counts = render(state, store.clock().isoformat(), limit)
+        pages, dependencies, counts = render(state, store.clock().isoformat(), limit, days=days, basis=basis)
         require(all(len(html.encode()) <= 16_000_000 for html in pages.values()),
                 'HTML budget exceeded; lower report limit')
         previous = [k for k,a in state['artifacts'].items() if a['kind'] == 'offline-report']
@@ -129,7 +129,8 @@ def report(store, limit=20):
 def configure(store, row):
     fields(row, ['schema_version', 'collect', 'analyze', 'brief_kinds', 'contexts', 'profile',
                  'analysis_limit', 'report_limit', 'backup', 'interval_seconds', 'reviewer'],
-           ['unattended_qualification'])
+           ['unattended_qualification', 'skill_details'])
+    require(type(row.get('skill_details', False)) is bool, 'invalid skill extraction mode')
     require(row['schema_version'] == 1 and type(row['analyze']) is bool and type(row['backup']) is bool,
             'invalid operation plan')
     text(row['reviewer'])
@@ -149,6 +150,7 @@ def configure(store, row):
                 type(row['collect']['count']) is int and 1 <= row['collect']['count'] <= 100,
                 'invalid capture request')
     with store.transaction() as state:
+        require(not row.get('skill_details') or 'domain_pack' not in state, 'fine-grained skills are AI-only')
         for key in row['contexts']:
             artifact(state, key, ('context',))
         deps = list(row['contexts'])
@@ -232,21 +234,35 @@ def _execute(store, plan_id, *, resume=None, scheduled=False, handlers=None):
             with store.transaction() as state:
                 from tools.research_analysis import analysis_versions
                 from tools.research_domains import pack_for
-                expected = analysis_versions({}, pack_for(state))
+                expected = analysis_versions({}, pack_for(state), plan.get('skill_details', False))
                 expected.pop('runtime')  # runtime qualification is checked before new invocations
                 done = set()
                 for a in state['artifacts'].values():
                     if a['kind'] != 'analysis':
                         continue
                     if a['payload'].get('method') != 'codex-extraction':
-                        done.add(a['payload']['observation']); continue
+                        if not plan.get('skill_details'): done.add(a['payload']['observation'])
+                        continue
                     execution = state['artifacts'].get(a['payload'].get('execution'), {}).get('payload', {})
                     if all(execution.get('versions', {}).get(k) == v for k,v in expected.items()):
                         done.add(a['payload']['observation'])
                 # Prior failed executions require review; no quota retry loop across scheduled runs.
                 blocked = {a['payload']['input_revision'] for a in state['artifacts'].values()
                            if a['kind'] == 'execution' and a['payload']['status'] != 'validated'}
-                pending = sorted(k for k,a in state['artifacts'].items() if a['kind'] == 'observation' and k not in done | blocked)
+                if plan.get('skill_details'):
+                    from tools.research_evidence import aggregate
+                    current, _ = aggregate(state)
+                    candidates = {o for g in current['openings'] for o in g['observations']}
+                    # Earlier description evidence only prioritizes the queue;
+                    # unknown/adjacent/out-of-domain observations remain queued.
+                    from tools.research_skills import latest_analysis
+                    old_analyses = latest_analysis(state, candidates)
+                    known_ai = {o for o,k in old_analyses.items() if state['artifacts'][k]['payload'].get('ai_domain') == 'in-domain'}
+                else:
+                    candidates = {k for k,a in state['artifacts'].items() if a['kind'] == 'observation'}
+                    known_ai = set()
+                pending = sorted(candidates - done - blocked,
+                                 key=lambda k: (k in known_ai, state['artifacts'][k]['payload']['captured_at'], k), reverse=True)
                 # Include ambiguous ops from earlier runs, even if source helpers did not commit an execution.
                 uncertain = {name.split(':', 1)[1] for r in log['runs'].values() for name, v in r['steps'].items()
                              if name.startswith('analyze:') and v['status'] != 'done'}
@@ -257,9 +273,12 @@ def _execute(store, plan_id, *, resume=None, scheduled=False, handlers=None):
         for key in run['analysis_queue']:
             if model_blocked:
                 run['steps'].setdefault('analyze:' + key, {'status': 'deferred', 'ids': []})
-            elif not step('analyze:' + key, lambda key=key: analyze(store, key)):
+            elif not step('analyze:' + key, lambda key=key: analyze(store, key, **({'skill_details': True} if plan.get('skill_details') else {}))):
                 model_blocked = True
     snap = step('snapshot', store.snapshot)
+    if plan.get('skill_details'):
+        from tools.research_skills import snapshot as skills_snapshot
+        step('skills-snapshot', lambda: skills_snapshot(store))
     if snap and run['model_gate'] == 'open':
         for kind in plan['brief_kinds']:
             # Semantic repetition checks remain in P4. Uncertain attempts with the
@@ -299,6 +318,11 @@ def resolve_step(store, run_id, name, action, reviewer, reason):
                 'limitation': 'Retry may duplicate an uncertain prior invocation; skip is not proof of success.'}, [run['plan']])
         run['steps'][name] = {'status': 'retry-approved' if action == 'retry' else 'done',
                               'ids': [], 'resolution': review, 'skipped': action == 'skip'}
+        if action == 'retry':
+            # A retried acquisition/analysis can change the data behind views.
+            # Preserve completed external intents, but recompute local projections.
+            for local in ('snapshot', 'skills-snapshot', 'report', 'backup'):
+                run['steps'].pop(local, None)
         save_ledger(store, log)
         return {'review': review, 'run': run_id, 'resume_required': True}
 

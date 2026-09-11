@@ -99,8 +99,8 @@ these files, publish them, or copy them outside managed storage.
 
 Jobs shows conservative deduplicated openings, latest captured descriptions,
 source identity/revisions, availability at capture, missing data, latest analyses
-and collection scope/receipts. The second file has Projects and YouTube experiments tabs for current briefs
-(learning/product-hypothesis types remain in the inbox), including honest no-project/insufficient-evidence
+and collection scope/receipts. The second file has My learning path, Skills, Projects, YouTube and Progress tabs
+(secondary product hypotheses and the existing inbox remain available), including honest no-project/insufficient-evidence
 outcomes and latest decision status. Rejected, accepted and deferred project
 briefs remain inspectable through filters; superseded revisions are excluded.
 The 1–1000 limit applies independently to jobs, project briefs and YouTube briefs,
@@ -310,3 +310,7 @@ behavior remain unchanged. Existing plans keep their explicitly configured queri
 changing defaults does not mutate private plans. Use `research_global ai-query-plan`
 to inspect the wider default AI discovery seeds and `research_evidence collect`
 for the next seed in a user-triggered search session.
+
+The connected learning refinement and `learn-refresh` operation are documented in
+[learning operations](learning-operations.md). Legacy plans default to v1 extraction;
+reviewed AI plans can enable `skill_details: true` for latest-observation v2 analysis.

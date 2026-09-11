@@ -25,6 +25,15 @@ remain **private**. MIT licensing does not change repository visibility.
 See the [changelog](CHANGELOG.md), [release notes](docs/releases/v0.1.0.md) and
 [active roadmap](PLAN_RESEARCH.md).
 
+## Learn, build and teach
+
+The [learning delivery plan](PLAN_LEARN_BUILD_TEACH.md) connects specific skills
+from job descriptions to one practical learning effort and its teaching experiment.
+Use the [learning operations guide](docs/research/learning-operations.md) for bounded
+detailed analysis, 30-day skill views, path selection, progress and cited questions.
+Extraction coverage and human-quality review are shown separately; a completed
+implementation does not mean every retained listing has been analysed.
+
 ## What it does
 
 Research starts with AI product engineering, LLM applications and agents,
@@ -138,11 +147,11 @@ Generate the two local reports from existing results:
 ```
 
 Open `reports/jobs.html` for the jobs list and `reports/projects.html` for
-Projects and YouTube experiments tabs. Both files have offline search, filters
+My learning path, Skills, Projects, YouTube and Progress tabs. Both files have offline search, filters
 and a Clear filters button. Search and filters apply to the selected brief tab.
 Reports are private, Git-ignored managed copies; their underlying data stays in
 the private research workspace. This command does not collect or generate new
-recommendations. Learning and product-hypothesis briefs remain available through the review inbox.
+recommendations. Standalone learning drafts and secondary product hypotheses remain available; the review inbox is retained.
 
 AI remains the default. The backend/platform pack reuses the same pipeline with
 an immutable domain binding; it does not reclassify existing AI observations.

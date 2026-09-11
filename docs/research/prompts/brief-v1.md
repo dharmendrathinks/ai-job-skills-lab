@@ -21,7 +21,7 @@ Alternatives must reference supplied inspected repository/product context IDs.
 Do not name an uninspected alternative in prose. A README-only inspection cannot
 establish code behavior, test performance or completeness of alternatives.
 
-Sections are proposed work, conditional hypotheses and assumptions. Never state
+Sections are proposed work, conditional hypotheses and assumptions. Never invent
 that an experiment succeeded, customers were interviewed, users will pay, revenue
 or market size exists, a product is novel, or a video will receive views. Jobs
 support relevance, not software demand or audience demand. Do not fabricate pains,
@@ -75,6 +75,16 @@ and a separate discussion/audience-validation plan. Do not script actual results
 
 All types require explicit limitations and unknowns. Use insufficient-evidence
 when no evidence supports a worthwhile brief. Return exactly the requested schema.
+
+If learning_path is supplied, keep its experiment, selected skills and milestones
+as the shared learning effort. Projects implement that experiment; YouTube briefs
+teach that same experiment through actual future results, not a separate idea.
+Do not invent completion, ability or audience demand. A practice exercise can
+reproduce existing work, but a contribution still needs inspected additional value.
+When learning_progress supplies observed reproduced results, cite matching supplied
+result contexts to discuss actual findings under their recorded conditions. A
+self-reported completion is not a reproduced result. Explain failed tests and
+corrections honestly; do not turn an inspected narrow result into general mastery.
 
 Recommendation memory contains explicit reviewed decisions, not success labels.
 Respect deferrals, rejected/duplicate proposals and the reasons recorded. Do not

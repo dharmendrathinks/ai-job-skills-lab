@@ -207,3 +207,12 @@ string in `segments.source_geography`. Source geography is explicitly labeled on
 the card and preserved as a region/multi-country label without parsing it into
 normalized countries. This presentation fallback does not mutate source fields,
 coverage counts or availability. Missing language is labeled separately.
+
+## Connected learning contracts
+
+The additive Analysis v2, SkillCatalog/SkillSnapshot, LearningPath, independently
+sourced LearningProgress and EvidenceAnswer contracts are specified in
+[learning operations](learning-operations.md). Existing v1 analyses stay readable.
+All new derived records, model intents and managed report copies inherit their
+actual dependencies and expiry. Hash-only path associations do not copy job prose
+into independent work records. No new unmanaged export permission is implied.

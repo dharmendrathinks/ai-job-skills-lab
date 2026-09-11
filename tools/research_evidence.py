@@ -396,8 +396,10 @@ def validate_annotation(annotation, state, now, *, automated=False):
     from tools.research_domains import taxonomy_for
     taxonomy = taxonomy_for(state)
     fields(annotation, ["schema_version", "observation", "method", "reviewer", "reviewed_at",
-                        "taxonomy_version", "responsibility_class", "claims", "unknowns"])
-    require(annotation["schema_version"] == VERSION, "unsupported analysis schema")
+                        "taxonomy_version", "responsibility_class", "claims", "unknowns"], ['skill_mentions'])
+    require(annotation["schema_version"] in (1, 2), "unsupported analysis schema")
+    require((annotation['schema_version'] == 2) == ('skill_mentions' in annotation), 'analysis version/skills mismatch')
+    require(annotation['schema_version'] == 1 or automated, 'detailed skills require qualified extraction')
     require(annotation["taxonomy_version"] == taxonomy["version"], "unknown taxonomy")
     allowed = ("codex-extraction",) if automated else ("human-reviewed", "synthetic-fixture")
     require(annotation["method"] in allowed,

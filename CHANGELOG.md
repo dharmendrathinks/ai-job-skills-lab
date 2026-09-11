@@ -7,6 +7,15 @@ foundation is upstream commit `8c81edc330b98db0473dcb016e34db835c2fd378`.
 
 ## Unreleased
 
+- Add typed fine-grained skills, reviewed alias mapping, exact source spans and
+  denominator-aware 30-day skill snapshots alongside legacy analyses.
+- Make the second report a learning workspace with connected paths, skill evidence,
+  projects, YouTube experiments and independently sourced progress.
+- Add bounded resumable skill refresh, path decisions/profile proposals, descriptive
+  monthly history, deterministic counts, cited explanations and a same-input learning
+  baseline. Retain source expiry and the qualified tool-free model boundary.
+
+
 - Brief output schemas now offer contribution/no-project statuses only for project
   drafts, matching validation for YouTube, learning and product-hypothesis workflows.
 

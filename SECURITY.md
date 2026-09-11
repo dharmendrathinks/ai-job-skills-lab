@@ -79,3 +79,10 @@ unattended-operation qualification is implied by this policy.
 Application mode retains upstream agent permissions and instruction-level web
 safeguards; it does not inherit the research worker’s tool restriction. See
 [application mode](docs/application-mode.md) before personal onboarding.
+
+Connected learning records and rejected model responses inherit the same managed
+source lifecycle. Progress can survive withdrawal of market justification only
+when supported by its own policy and independent work evidence; a path hash is
+not permission to copy restricted prose into another policy. Exact quote checks
+do not prove semantic accuracy. Browser controls do not persist progress or grant
+publication approval. See [learning contracts](docs/research/learning-operations.md).

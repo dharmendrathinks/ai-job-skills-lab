@@ -217,7 +217,7 @@ The canonical P2–5 rules and source permissions remain in force.
 3. Inspect `inbox` and managed `report`. The report command generates separate
    jobs/projects HTML in ignored `reports/`; the second file has Projects and
    YouTube experiments tabs with hash-authorized offline search/filter/reset
-   controls. Learning/product-hypothesis briefs remain in the inbox. Only `inbox --acknowledge` records displayed
+   controls. The second file now opens on My learning path and includes Skills and Progress; secondary product hypotheses and the inbox remain available. Only `inbox --acknowledge` records displayed
    items; it is not acceptance, observed work or capability evidence. Use P4 for
    actual decisions/outcomes. Overflow stays pending and deferred items return due.
 4. Keep the managed HTML and single rollback copy private. Use P6 `backup`/`restore`
@@ -270,3 +270,26 @@ Do not create a second development checkout or copy a corpus to initialize it.
    context/profile/feedback. Validate the frozen dataset revision and the actual
    model results; do not mark provisional labels or generated ratings human-reviewed.
    More domains need reviewed packs and their own evidence, not automatic activation.
+
+
+## Connected learning refinement (P2–6)
+
+Follow `docs/research/learning-operations.md` and `PLAN_LEARN_BUILD_TEACH.md`.
+Use `research_ops learn-refresh` for bounded latest-observation v2 skill extraction
+and reports. This invokes no collector and preserves qualification, lifecycle,
+quota and interrupted-run review. Existing application/domain APIs stay separate.
+Skills retain exact words, typed aliases, unresolved mappings and honest analysed
+denominators. Monthly observations are not growth; partial feeds remain partial.
+
+Choose skills from a managed snapshot, inspect learning resources and repository
+alternatives through existing context acquisition, and use `path-propose`. Select
+a path only on the user's actual choice. `path-briefs` links the project and video
+to that experiment. Missing resources or alternative evidence remain limitations.
+Record actual progress using its own evidence/policy; generation is not learning.
+Profile proposals require the existing review. Research preferences personalize
+paths after market analysis and never change corpus admission.
+
+Use deterministic `ask --intent count` for counts and bounded cited explanation
+for questions. No vector database or paid fallback is needed. Before retrying an
+ambiguous learning intent, inspect it and supply an actual operator retry reason;
+never fabricate review text to automate retries. Publication/outreach remain gated.

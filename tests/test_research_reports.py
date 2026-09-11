@@ -257,8 +257,10 @@ cards.forEach((c,i)=>{c.attrs['data-capability']=JSON.stringify([i?'video-only':
 const tabs=[element({tab:'project',total:'1'}),element({tab:'youtube',total:'1'})];
 tabs.forEach(t=>{t.id='tab-'+t.dataset.tab});
 const filter=element({filter:'capability'});
+filter.parentElement={hidden:false};
+const jumps=[];
 const ids=Object.fromEntries(['search','search-scope','clear','result-count','no-results','available-count','report-results','brief-tabs'].map(k=>[k,element()]));
-const document={querySelectorAll(s){return {'[data-card]':cards,'[data-filter]':[filter],'[data-tab]':tabs}[s]},
+const document={querySelectorAll(s){return {'[data-card]':cards,'[data-filter]':[filter],'[data-tab]':tabs,'[data-jump]':jumps}[s]},
  getElementById(k){return ids[k]}, createElement(){return element()}};
 vm.runInNewContext(source,{document});
 assert.equal(cards[0].hidden,false);assert.equal(cards[1].hidden,true);
@@ -284,6 +286,25 @@ let prevented=false;tabs[1].events.keydown({key:'ArrowLeft',preventDefault(){pre
 assert.equal(prevented,true);assert.equal(cards[0].hidden,false);assert.equal(cards[1].hidden,true);
 assert.equal(filter.value,'');assert.equal(tabs[0].tabIndex,0);assert.equal(tabs[1].tabIndex,-1);
 assert.equal(ids['report-results'].attrs['aria-labelledby'],'tab-project');
+// Connected workspace: five tabs, cross-tab links and empty-filter hiding.
+const originals=cards.slice();
+cards.length=0;tabs.length=0;
+for(const kind of ['path','skill','project','youtube','progress']) {
+ const card=element({kind});card.textContent=kind;card.querySelector=()=>({textContent:kind});cards.push(card);
+ const tab=element({tab:kind,total:'1'});tab.id='tab-'+kind;tabs.push(tab);
+}
+cards[1].attrs['data-capability']=JSON.stringify(['ai-product-engineering']);
+jumps.push(element({jump:'youtube'}),element({jump:'path'}));
+vm.runInNewContext(source,{document});
+assert.equal(cards[0].hidden,false);assert.equal(filter.parentElement.hidden,true);
+tabs[1].events.click();assert.equal(filter.parentElement.hidden,false);
+ids.search.value='missing';ids.search.events.input();
+jumps[0].events.click();assert.equal(cards[3].hidden,false);assert.equal(ids.search.value,'');
+assert.equal(ids['report-results'].attrs['aria-labelledby'],'tab-youtube');
+tabs[3].events.keydown({key:'End',preventDefault(){}});assert.equal(cards[4].hidden,false);
+jumps[1].events.click();assert.equal(cards[0].hidden,false);
+tabs[0].events.keydown({key:'ArrowLeft',preventDefault(){}});assert.equal(cards[4].hidden,false);
+cards.length=0;cards.push(...originals);jumps.length=0;
 // The jobs page has no tabs: input, paste and deletion still update counts.
 tabs.length=0;ids.search.value='';ids['search-scope'].value='titles';
 vm.runInNewContext(source,{document});

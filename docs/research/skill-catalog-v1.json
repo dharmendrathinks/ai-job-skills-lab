@@ -1,0 +1,441 @@
+{
+  "schema_version": 1,
+  "revision": "ai-skills/1",
+  "basis": "Maintainer-authored terminology catalog; not demand evidence. Exact case-insensitive aliases only; ambiguous concepts require review.",
+  "skills": [
+    {
+      "id": "python",
+      "name": "Python",
+      "kind": "technology",
+      "aliases": [],
+      "capabilities": [
+        "ai-product-engineering",
+        "ml-engineering"
+      ],
+      "definition": "Programming language used for applications and data/model work."
+    },
+    {
+      "id": "typescript",
+      "name": "TypeScript",
+      "kind": "technology",
+      "aliases": [],
+      "capabilities": [
+        "ai-product-engineering"
+      ],
+      "definition": "Typed JavaScript for application development."
+    },
+    {
+      "id": "javascript",
+      "name": "JavaScript",
+      "kind": "technology",
+      "aliases": [],
+      "capabilities": [
+        "ai-product-engineering"
+      ],
+      "definition": "Programming language used for web applications."
+    },
+    {
+      "id": "sql",
+      "name": "SQL",
+      "kind": "technology",
+      "aliases": [],
+      "capabilities": [
+        "data-pipelines"
+      ],
+      "definition": "Querying and transforming relational data."
+    },
+    {
+      "id": "postgresql",
+      "name": "PostgreSQL",
+      "kind": "technology",
+      "aliases": [
+        "Postgres",
+        "PostgresDB"
+      ],
+      "capabilities": [
+        "data-pipelines"
+      ],
+      "definition": "Relational database system; deployment and operational requirements depend on context."
+    },
+    {
+      "id": "langgraph",
+      "name": "LangGraph",
+      "kind": "technology",
+      "aliases": [],
+      "capabilities": [
+        "agent-tool-engineering"
+      ],
+      "definition": "Library for stateful agent workflows."
+    },
+    {
+      "id": "langchain",
+      "name": "LangChain",
+      "kind": "technology",
+      "aliases": [],
+      "capabilities": [
+        "ai-product-engineering"
+      ],
+      "definition": "Library ecosystem for LLM applications."
+    },
+    {
+      "id": "pytorch",
+      "name": "PyTorch",
+      "kind": "technology",
+      "aliases": [],
+      "capabilities": [
+        "ml-engineering"
+      ],
+      "definition": "Tensor and machine-learning framework."
+    },
+    {
+      "id": "docker",
+      "name": "Docker",
+      "kind": "technology",
+      "aliases": [],
+      "capabilities": [
+        "inference-deployment"
+      ],
+      "definition": "Container tooling."
+    },
+    {
+      "id": "kubernetes",
+      "name": "Kubernetes",
+      "kind": "technology",
+      "aliases": [
+        "K8s"
+      ],
+      "capabilities": [
+        "inference-deployment"
+      ],
+      "definition": "Container orchestration system."
+    },
+    {
+      "id": "aws",
+      "name": "AWS",
+      "kind": "technology",
+      "aliases": [
+        "Amazon Web Services"
+      ],
+      "capabilities": [
+        "inference-deployment"
+      ],
+      "definition": "Cloud platform; specific services remain distinct skills."
+    },
+    {
+      "id": "azure",
+      "name": "Azure",
+      "kind": "technology",
+      "aliases": [
+        "Microsoft Azure"
+      ],
+      "capabilities": [
+        "inference-deployment"
+      ],
+      "definition": "Cloud platform; specific services remain distinct skills."
+    },
+    {
+      "id": "gcp",
+      "name": "Google Cloud",
+      "kind": "technology",
+      "aliases": [
+        "GCP",
+        "Google Cloud Platform"
+      ],
+      "capabilities": [
+        "inference-deployment"
+      ],
+      "definition": "Cloud platform; not an alias for every Google product."
+    },
+    {
+      "id": "airflow",
+      "name": "Apache Airflow",
+      "kind": "technology",
+      "aliases": [
+        "Airflow"
+      ],
+      "capabilities": [
+        "data-pipelines"
+      ],
+      "definition": "Workflow orchestration tooling."
+    },
+    {
+      "id": "mlflow",
+      "name": "MLflow",
+      "kind": "technology",
+      "aliases": [],
+      "capabilities": [
+        "ml-engineering"
+      ],
+      "definition": "Model lifecycle and experiment tooling."
+    },
+    {
+      "id": "opentelemetry",
+      "name": "OpenTelemetry",
+      "kind": "technology",
+      "aliases": [],
+      "capabilities": [
+        "reliability-observability"
+      ],
+      "definition": "Telemetry instrumentation ecosystem."
+    },
+    {
+      "id": "pgvector",
+      "name": "pgvector",
+      "kind": "technology",
+      "aliases": [],
+      "capabilities": [
+        "retrieval-knowledge"
+      ],
+      "definition": "PostgreSQL vector similarity extension."
+    },
+    {
+      "id": "redis",
+      "name": "Redis",
+      "kind": "technology",
+      "aliases": [],
+      "capabilities": [
+        "data-pipelines"
+      ],
+      "definition": "Data store with context-specific caching and messaging uses."
+    },
+    {
+      "id": "vllm",
+      "name": "vLLM",
+      "kind": "technology",
+      "aliases": [],
+      "capabilities": [
+        "inference-deployment"
+      ],
+      "definition": "Model serving engine."
+    },
+    {
+      "id": "pydantic",
+      "name": "Pydantic",
+      "kind": "technology",
+      "aliases": [],
+      "capabilities": [
+        "ai-product-engineering"
+      ],
+      "definition": "Data validation library."
+    },
+    {
+      "id": "rag",
+      "name": "Retrieval-augmented generation",
+      "kind": "knowledge",
+      "aliases": [
+        "RAG",
+        "retrieval augmented generation"
+      ],
+      "capabilities": [
+        "retrieval-knowledge"
+      ],
+      "definition": "Retrieving external evidence to inform generated answers."
+    },
+    {
+      "id": "hybrid-search",
+      "name": "Hybrid search",
+      "kind": "knowledge",
+      "aliases": [
+        "hybrid retrieval"
+      ],
+      "capabilities": [
+        "retrieval-knowledge"
+      ],
+      "definition": "Combining lexical and semantic retrieval; actual methods need source evidence."
+    },
+    {
+      "id": "embeddings",
+      "name": "Embeddings",
+      "kind": "knowledge",
+      "aliases": [
+        "text embeddings",
+        "vector embeddings"
+      ],
+      "capabilities": [
+        "retrieval-knowledge"
+      ],
+      "definition": "Vector representations used for similarity and related tasks."
+    },
+    {
+      "id": "reranking",
+      "name": "Reranking",
+      "kind": "knowledge",
+      "aliases": [
+        "re-ranking"
+      ],
+      "capabilities": [
+        "retrieval-knowledge"
+      ],
+      "definition": "Ordering retrieved candidates using a subsequent relevance assessment."
+    },
+    {
+      "id": "structured-output",
+      "name": "Structured outputs",
+      "kind": "knowledge",
+      "aliases": [
+        "structured output"
+      ],
+      "capabilities": [
+        "ai-product-engineering"
+      ],
+      "definition": "Generating and validating outputs against a declared structure."
+    },
+    {
+      "id": "tool-calling",
+      "name": "Tool calling",
+      "kind": "knowledge",
+      "aliases": [
+        "function calling"
+      ],
+      "capabilities": [
+        "agent-tool-engineering"
+      ],
+      "definition": "Model-selected invocation of declared external operations."
+    },
+    {
+      "id": "prompt-injection",
+      "name": "Prompt injection",
+      "kind": "knowledge",
+      "aliases": [],
+      "capabilities": [
+        "security"
+      ],
+      "definition": "Untrusted content attempting to redirect model behaviour."
+    },
+    {
+      "id": "model-evaluation",
+      "name": "Model evaluation",
+      "kind": "practice",
+      "aliases": [
+        "evaluate models"
+      ],
+      "capabilities": [
+        "evaluation"
+      ],
+      "definition": "Assessing model behaviour against specified tasks and failure conditions."
+    },
+    {
+      "id": "llm-evaluation",
+      "name": "LLM evaluation",
+      "kind": "practice",
+      "aliases": [
+        "LLM evaluations"
+      ],
+      "capabilities": [
+        "evaluation"
+      ],
+      "definition": "Evaluating language-model application behaviour."
+    },
+    {
+      "id": "retrieval-evaluation",
+      "name": "Retrieval evaluation",
+      "kind": "practice",
+      "aliases": [],
+      "capabilities": [
+        "retrieval-knowledge",
+        "evaluation"
+      ],
+      "definition": "Testing whether a retriever returns relevant evidence."
+    },
+    {
+      "id": "data-pipelines",
+      "name": "Data pipelines",
+      "kind": "practice",
+      "aliases": [],
+      "capabilities": [
+        "data-pipelines"
+      ],
+      "definition": "Building and maintaining flows that collect and transform data."
+    },
+    {
+      "id": "fine-tuning",
+      "name": "Fine-tuning",
+      "kind": "practice",
+      "aliases": [
+        "fine tuning",
+        "finetuning"
+      ],
+      "capabilities": [
+        "ml-engineering"
+      ],
+      "definition": "Adapting model parameters using task-specific training."
+    },
+    {
+      "id": "prompt-engineering",
+      "name": "Prompt engineering",
+      "kind": "practice",
+      "aliases": [],
+      "capabilities": [
+        "ai-product-engineering"
+      ],
+      "definition": "Designing and testing model instructions."
+    },
+    {
+      "id": "ci-cd",
+      "name": "CI/CD",
+      "kind": "practice",
+      "aliases": [
+        "continuous integration and delivery"
+      ],
+      "capabilities": [
+        "reliability-observability"
+      ],
+      "definition": "Automated integration, verification and delivery of changes."
+    },
+    {
+      "id": "observability",
+      "name": "Observability",
+      "kind": "practice",
+      "aliases": [],
+      "capabilities": [
+        "reliability-observability"
+      ],
+      "definition": "Instrumenting systems to understand their behaviour."
+    },
+    {
+      "id": "mcp",
+      "name": "Model Context Protocol",
+      "kind": "knowledge",
+      "aliases": [
+        "MCP"
+      ],
+      "capabilities": [
+        "agent-tool-engineering"
+      ],
+      "definition": "Protocol for connecting AI applications to tools and context."
+    },
+    {
+      "id": "evaluation-datasets",
+      "name": "Evaluation datasets",
+      "kind": "knowledge",
+      "aliases": [
+        "evaluation dataset",
+        "eval datasets"
+      ],
+      "capabilities": [
+        "evaluation"
+      ],
+      "definition": "Examples and labels used to measure system behaviour."
+    },
+    {
+      "id": "json-schema",
+      "name": "JSON Schema",
+      "kind": "technology",
+      "aliases": [],
+      "capabilities": [
+        "ai-product-engineering"
+      ],
+      "definition": "Vocabulary for describing and validating JSON structure."
+    },
+    {
+      "id": "git",
+      "name": "Git",
+      "kind": "technology",
+      "aliases": [],
+      "capabilities": [
+        "ai-product-engineering"
+      ],
+      "definition": "Version-control system."
+    }
+  ]
+}

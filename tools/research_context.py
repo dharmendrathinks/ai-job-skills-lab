@@ -18,7 +18,7 @@ from tools.research_evidence import (EvidenceError, digest, fields, require, str
                                      timestamp, validate_policy, validate_receipt)
 from tools.research_sources import NoRedirect, html_text
 
-TYPES = ('repository', 'product', 'problem', 'discussion', 'trend', 'experiment-result', 'imported-assessment')
+TYPES = ('repository', 'product', 'problem', 'discussion', 'trend', 'experiment-result', 'imported-assessment', 'learning-resource')
 
 
 def content_fingerprints(row):

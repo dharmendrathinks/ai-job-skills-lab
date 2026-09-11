@@ -165,10 +165,28 @@ def validate(output, kind, data):
     return output
 
 
-def generate(store, kind, snapshot, contexts=(), profile=None, *, refresh=False, worker_factory=CodexWorker, reconsideration=None, exchanges=()):
+def generate(store, kind, snapshot, contexts=(), profile=None, *, refresh=False, worker_factory=CodexWorker, reconsideration=None, exchanges=(), learning_path=None):
     require(kind in SECTIONS and len(contexts) <= 10 and len(exchanges) <= 10, 'invalid brief request')
     with store.transaction() as state:
         data = inputs(state, snapshot, contexts, profile, store.clock())
+        learning_deps = []
+        if learning_path:
+            path = artifact(state, learning_path, ('learning-path',))
+            require(path['market_snapshot'] == snapshot and set(contexts) == set(path['contexts']), 'path/brief evidence differs')
+            data['learning_path'] = {'id': learning_path, 'proposal': path['proposal'], 'preferences': path['preferences']}
+            hosted_eligible(state, [learning_path])
+            progress = {k:a['payload'] for k,a in state['artifacts'].items() if a['kind'] == 'learning-progress' and a['payload']['path'] == learning_path}
+            corrected = {p['supersedes'] for p in progress.values()}
+            progress = {k:p for k,p in progress.items() if k not in corrected}
+            require(len(progress) <= 100, 'learning history needs review before synthesis')
+            learning_deps = list(progress)
+            work_contexts = {c for p in progress.values() if p['basis'] == 'observed' for c in p['evidence']}
+            contexts = sorted(set(contexts) | work_contexts)
+            require(len(contexts) <= 10, 'select a bounded set of learning/result contexts before synthesis')
+            enriched = inputs(state, snapshot, contexts, profile, store.clock())
+            data['contexts'] = enriched['contexts']
+            data['learning_progress'] = progress
+            if learning_deps: hosted_eligible(state, learning_deps)
         data['interchange_assessments'] = {k: artifact(state, k, ('interchange-item',)) for k in exchanges}
         if exchanges: hosted_eligible(state, exchanges)
         basis = evidence_basis(state, snapshot, contexts)
@@ -176,7 +194,7 @@ def generate(store, kind, snapshot, contexts=(), profile=None, *, refresh=False,
         feedback = memory(state, kind)
         work_memory = outcome_memory(state, kind)
         require(len(feedback) + len(work_memory) <= 100, 'memory review budget exceeded; no silent history truncation')
-        memory_deps = [r['id'] for r in [*feedback, *work_memory]] + ([reconsideration] if reconsideration else [])
+        memory_deps = [r['id'] for r in [*feedback, *work_memory]] + ([reconsideration] if reconsideration else []) + ([learning_path] if learning_path else []) + learning_deps
         if memory_deps or exchanges: hosted_eligible(state, [*memory_deps, *exchanges])
         data['recommendation_memory'] = feedback
         data['outcome_memory'] = work_memory
@@ -193,7 +211,9 @@ def generate(store, kind, snapshot, contexts=(), profile=None, *, refresh=False,
     prompt = PROMPT.read_text() + '\nRequested workflow: ' + kind + '\nUntrusted evidence JSON:\n' + json.dumps(data, ensure_ascii=False)
     # CodexWorker applies its existing input/output/turn budgets and empty registry.
     try:
-        with worker_factory(store.home) as worker:
+        worker = worker_factory(store.home)
+        if learning_path and isinstance(worker, CodexWorker): worker.timeout = 240
+        with worker:
             with store.transaction() as state:
                 inputs(state, snapshot, contexts, profile, store.clock()); qualified(state)
                 require(memory(state, kind) == feedback and outcome_memory(state, kind) == work_memory, 'feedback changed before invocation')
@@ -209,6 +229,9 @@ def generate(store, kind, snapshot, contexts=(), profile=None, *, refresh=False,
         raise
     with store.transaction() as state:
         current = inputs(state, snapshot, contexts, profile, store.clock()); qualified(state)
+        if learning_path:
+            require(not any(a['kind'] == 'learning-progress' and a['payload']['path'] == learning_path and k not in learning_deps and
+                            a['payload']['supersedes'] in learning_deps for k,a in state['artifacts'].items()), 'learning progress corrected during synthesis')
         require(memory(state, kind) == feedback and outcome_memory(state, kind) == work_memory, 'feedback changed during generation; retry review')
         if memory_deps or exchanges: hosted_eligible(state, [*memory_deps, *exchanges])
         error = None
@@ -229,6 +252,7 @@ def generate(store, kind, snapshot, contexts=(), profile=None, *, refresh=False,
                   'profile_evidence': current['profile'],
                   'evidence_limits': [*current['limitations'], *[x for r in current['contexts'].values() for x in r['limitations']]],
                   'notice': 'Sections and judgments are model proposals, not observed outcomes or demonstrated demand.'}
+            if learning_path: record['learning_path'] = learning_path
             if current.get('domain_pack'):
                 record['source_scope'] = current['source_scope']
                 record['evidence_limits'].append('Source scope: ' + current['source_scope'] + '. Synthetic examples are not hiring or market evidence.')
