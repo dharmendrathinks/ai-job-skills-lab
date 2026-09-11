@@ -1,6 +1,6 @@
-# Contributing to AI Job Radar
+# Contributing to AI Job Skills Lab
 
-AI Job Radar extends the AI Job Search foundation for global AI engineering
+AI Job Skills Lab extends the AI Job Search foundation for global AI engineering
 research. Follow [PLAN_RESEARCH.md](PLAN_RESEARCH.md) and [AGENTS.md](AGENTS.md).
 The repository is private for now; these guidelines apply to invited collaborators
 and prepare it for possible future open-source collaboration. No contribution or
@@ -72,8 +72,8 @@ external sends in ordinary CI. Synthetic fixtures must be identified as such.
    read or restore; never silently reclassify historical evidence.
 4. Review staged files for private content, source permissions and third-party
    provenance. Tests do not replace human review of model semantics or security.
-5. Open the PR against **dharmendrathinks/ai-job-radar**, not upstream. Use
-   `gh pr create --repo dharmendrathinks/ai-job-radar` only when authorized to
+5. Open the PR against **dharmendrathinks/ai-job-skills-lab**, not upstream. Use
+   `gh pr create --repo dharmendrathinks/ai-job-skills-lab` only when authorized to
    publish the PR. Include the problem, resulting behavior, checks and limitations.
 
 For maintainers with the PR Ready skill installed, run its analyzer using

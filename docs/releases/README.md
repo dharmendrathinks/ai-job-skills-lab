@@ -1,6 +1,6 @@
 # Release procedure
 
-AI Job Radar releases belong to **dharmendrathinks/ai-job-radar**. This repository
+AI Job Skills Lab releases belong to **dharmendrathinks/ai-job-skills-lab**. This repository
 is private and must remain private until the owner explicitly authorizes a change.
 Publishing a GitHub release does not require changing visibility. Use explicit
 `--repo` on every GitHub CLI operation: the inherited default may select upstream.
@@ -33,11 +33,11 @@ The commands below are a template; select the actual reviewed version and commit
 Never let `gh release create` manufacture a tag at an unintended branch tip.
 
 ```sh
-gh repo view dharmendrathinks/ai-job-radar --json visibility,defaultBranchRef
-git tag -a v0.1.0 -m 'AI Job Radar v0.1.0' RELEASE_COMMIT_SHA
+gh repo view dharmendrathinks/ai-job-skills-lab --json visibility,defaultBranchRef
+git tag -a v0.1.0 -m 'AI Job Skills Lab v0.1.0' RELEASE_COMMIT_SHA
 git push origin refs/tags/v0.1.0
-gh release create v0.1.0 --repo dharmendrathinks/ai-job-radar \
-  --verify-tag --prerelease --title 'AI Job Radar v0.1.0' \
+gh release create v0.1.0 --repo dharmendrathinks/ai-job-skills-lab \
+  --verify-tag --prerelease --title 'AI Job Skills Lab v0.1.0' \
   --notes-file docs/releases/v0.1.0.md
 ```
 

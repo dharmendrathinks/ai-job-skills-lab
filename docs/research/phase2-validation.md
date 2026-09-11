@@ -1,6 +1,6 @@
 # Phase 2 implementation and acceptance evidence
 
-Updated 2026-09-09. Work is in the required `ai-job-radar` checkout on
+Updated 2026-09-09. Work is in the required `ai-job-skills-lab` checkout on
 `research/phase2`, based on approved/pushed P1 commit `d102a88`.
 The source-to-analysis implementation and automated validation are delivered.
 **Human evaluation acceptance is still pending.** This distinction preserves the

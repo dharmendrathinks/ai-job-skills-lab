@@ -11,7 +11,8 @@ from tools.research_evidence import digest, fields, require, strings, text, time
 from tools.research_outcomes import artifact
 
 SCHEMA = 'radar-interchange/1.0'
-PRODUCER = 'ai-job-radar'
+PRODUCER = 'ai-job-skills-lab'
+PRODUCER_ALIASES = {PRODUCER, 'ai-job-radar'}  # Preserve withdrawal of pre-rename echoes.
 
 
 def closure(state, keys):
@@ -52,7 +53,7 @@ def withdrawal_tokens(row):
     result = {digest(['interchange-origin', row['origin']]),
               digest(['interchange-content', row['content'], row['sources']])}
     # Withdraw the echoed original, never all unrelated ancestor policies.
-    if row['origin']['producer'] == PRODUCER and re.fullmatch('[0-9a-f]{64}', row['origin']['id']):
+    if row['origin']['producer'] in PRODUCER_ALIASES and re.fullmatch('[0-9a-f]{64}', row['origin']['id']):
         result.add(row['origin']['id'])
     return result
 

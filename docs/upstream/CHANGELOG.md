@@ -1,6 +1,6 @@
 > **Inherited upstream history:** preserved from MadsLorentzen/ai-job-search at
 > `8c81edc330b98db0473dcb016e34db835c2fd378`. Versions and results below belong to
-> upstream. See [AI Job Radar’s changelog](../../CHANGELOG.md) for this fork.
+> upstream. See [AI Job Skills Lab’s changelog](../../CHANGELOG.md) for this fork.
 > Only relative SETUP links were adjusted for this file’s location.
 
 # Changelog

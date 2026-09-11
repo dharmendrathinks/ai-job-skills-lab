@@ -8,7 +8,7 @@
   "report_language": "en",
   "retain_original_language": true,
   "sources_enabled": [],
-  "state_path_environment": "AI_JOB_RADAR_HOME",
+  "state_path_environment": "AI_JOB_SKILLS_LAB_HOME",
   "inference": {
     "authentication": "existing_codex_subscription",
     "additional_spending_inr": 0,

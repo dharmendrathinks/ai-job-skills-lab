@@ -32,7 +32,7 @@ def preview_notification(store, webhook, limit=10):
             require(selected, 'no undelivered changes; uncertain deliveries require manual reconciliation')
             exportable(state, [r['brief'] for r in selected], store.clock())
             # No generated prose, private profile, title, URL, tracking or automatic link unfurl.
-            payload = {'text': 'AI Job Radar: ' + str(len(selected)) + ' research drafts ready for local review.\n' +
+            payload = {'text': 'AI Job Skills Lab: ' + str(len(selected)) + ' research drafts ready for local review.\n' +
                        '\n'.join(r['kind'] + ' revision ' + str(r['revision']) + ': ' + r['brief'] for r in selected),
                        'unfurl_links': False, 'unfurl_media': False}
             row = {'schema_version': 1, 'destination': target, 'items': [r['identity'] for r in selected],

@@ -4,6 +4,7 @@ import json
 import os
 from tools.research_evidence import ROOT, Store, private_state_path, require, template_errors
 from tools.research_domains import PACKS, initialize, pack_for, reference, compare_workspaces
+from tools.research_preflight import LEGACY_STATE_ENV
 
 
 def main():
@@ -18,13 +19,13 @@ def main():
         if args.action == 'packs':
             result = {'default': 'ai-engineering', 'opt_in': {k:json.loads(v.read_text()) for k,v in PACKS.items()}}
         elif args.action == 'init':
-            require(os.environ.get('AI_JOB_RADAR_HOME'), 'explicit private AI_JOB_RADAR_HOME required for opt-in')
+            require(os.environ.get('AI_JOB_SKILLS_LAB_HOME') or os.environ.get(LEGACY_STATE_ENV), 'explicit private AI_JOB_SKILLS_LAB_HOME required for opt-in')
             result = initialize(store, args.pack)
         elif args.action == 'status':
             with store.transaction() as state: result = {'domain': reference(pack_for(state))}
         elif args.action == 'compare':
             require(args.other_home, 'explicit other workspace required')
-            other = Store(private_state_path(ROOT, {'AI_JOB_RADAR_HOME': args.other_home}))
+            other = Store(private_state_path(ROOT, {'AI_JOB_SKILLS_LAB_HOME': args.other_home}))
             result = compare_workspaces(store, other, args.start, args.end)
         else:
             from tools.evaluate_domains import evaluate

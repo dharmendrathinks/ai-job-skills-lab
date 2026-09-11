@@ -1,11 +1,12 @@
 {
   "schema_version": 1,
   "upstream_commit": "8c81edc330b98db0473dcb016e34db835c2fd378",
-  "review_note": "Approved public placeholder content only. Two CLAUDE.md hashes allow upstream and fork routing headers; never automatically rebaseline personal content.",
+  "review_note": "Reviewed public placeholders only. CLAUDE.md allows the upstream header, previous fork routing header and product rename header; no profile fields changed.",
   "files": {
     "CLAUDE.md": [
       "64b28491710841945fce7b6f0f444fce854bc001568923ecb63b64bbb3d68f56",
-      "9b46325800dafccb3ec3357fba6da4626d1b1e366d405f18bad88b8478081f98"
+      "9b46325800dafccb3ec3357fba6da4626d1b1e366d405f18bad88b8478081f98",
+      "30a94e1c8a658e6f4cef6ff31b8e16668e3be4bf2f9c4bd5e545cb48031f7d93"
     ],
     "cv/main_example.tex": [
       "e29c4832c8d9e7ac3087967a9debb94f3746c4a927eb45401332ca018925ac3d"

@@ -1,9 +1,9 @@
 ---
 name: Bug report or improvement
-about: A reproducible defect or focused improvement in AI Job Radar
+about: A reproducible defect or focused improvement in AI Job Skills Lab
 ---
 
-<!-- Target dharmendrathinks/ai-job-radar, not the upstream repository.
+<!-- Target dharmendrathinks/ai-job-skills-lab, not the upstream repository.
 Do not include private profiles, descriptions, credentials or runtime state.
 For security findings follow SECURITY.md. Use owned, sanitized fixtures. -->
 

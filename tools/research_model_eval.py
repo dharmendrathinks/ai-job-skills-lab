@@ -83,7 +83,7 @@ def probe_unattended(store):
     codex = shutil.which('codex')
     require(codex, 'Codex unavailable')
     env = {'HOME': str(Path.home()), 'PATH': str(Path(codex).parent) + ':/usr/bin:/bin:/usr/sbin:/sbin',
-           'AI_JOB_RADAR_HOME': str(store.home), 'LANG': 'en_US.UTF-8'}
+           'AI_JOB_SKILLS_LAB_HOME': str(store.home), 'LANG': 'en_US.UTF-8'}
     started = time.monotonic()
     result = subprocess.run([sys.executable, '-m', 'tools.research_model_eval', 'probe-child'],
                             cwd=ROOT, env=env, stdin=subprocess.DEVNULL, capture_output=True, timeout=120)

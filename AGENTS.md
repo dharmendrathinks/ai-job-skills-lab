@@ -6,7 +6,7 @@ framework_version: 1.0.2
 
 ## Research fork routing — read before loading candidate data
 
-This is AI Job Radar, extending MadsLorentzen/ai-job-search. The active roadmap is
+This is AI Job Skills Lab, extending MadsLorentzen/ai-job-search. The active roadmap is
 [PLAN_RESEARCH.md](PLAN_RESEARCH.md). Research requests use the canonical
 [research specification](.claude/skills/research/SKILL.md) before any application
 profile, tracker, or fit rule is loaded. Research is the default product mode;

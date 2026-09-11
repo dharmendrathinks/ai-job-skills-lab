@@ -1,4 +1,4 @@
-# AI Job Radar — global AI engineering research
+# AI Job Skills Lab — global AI engineering research
 
 **Planning date:** 8 September 2026.
 
@@ -13,7 +13,7 @@ was performed. The repository stays private until separately authorized otherwis
 
 ## 1. Product vision and boundaries
 
-AI Job Radar will extend a fork of **MadsLorentzen/ai-job-search** into a personal engineering-research workspace.
+AI Job Skills Lab will extend a fork of **MadsLorentzen/ai-job-search** into a personal engineering-research workspace.
 
 Its central question is:
 
@@ -179,8 +179,8 @@ Use only to understand gaps absent from upstream: internal endpoints, detail ava
 ## 4. Fork, workspace, and maintenance strategy
 
 Phase 1 implementation was subsequently authorized for the existing repository
-`https://github.com/dharmendrathinks/ai-job-radar`. The user requires all development
-in `/Users/dhasharma/Dharmendra/Projects/ai-job-radar`; this supersedes the earlier
+`https://github.com/dharmendrathinks/ai-job-skills-lab`. The user requires all development
+in `/Users/dhasharma/Dharmendra/Projects/ai-job-skills-lab`; this supersedes the earlier
 separate-checkout proposal. Publishing and GitHub configuration changes remain
 separate external-write steps.
 
@@ -190,7 +190,7 @@ separate external-write steps.
 4. Use the supplied existing repository rather than create another GitHub fork. Inspection found it private, empty, and not a GitHub-network fork. Git ancestry provides the fork-first implementation foundation; do not claim GitHub fork metadata or change repository visibility.
 5. Keep `origin` pointing to the supplied repository and `upstream` to MadsLorentzen/ai-job-search. Do not alter unrelated repositories or push without explicit authorization.
 6. Keep `PLAN_RESEARCH.md` as the active roadmap in this folder. Preserve `PLAN.md` unchanged as ignored local historical context; do not rename the active plan or create a second active roadmap.
-7. Keep research interests, profiles, observations, model outputs, and outcomes outside tracked source. Default macOS location: `~/Library/Application Support/ai-job-radar`, overridable through `AI_JOB_RADAR_HOME`.
+7. Keep research interests, profiles, observations, model outputs, and outcomes outside tracked source. Default macOS location: `~/Library/Application Support/ai-job-skills-lab`, overridable through `AI_JOB_SKILLS_LAB_HOME`.
 8. Keep public candidate templates as placeholders. Personal application setup uses a separate private local workspace with public pushing disabled by default; verify any future private remote before use.
 
 Adding tracked profile files to `.gitignore` is not a privacy solution. Public setup must not populate tracked templates with personal data. Existing accidental public exposure, if discovered, requires a separate remediation decision; no silent history rewriting.

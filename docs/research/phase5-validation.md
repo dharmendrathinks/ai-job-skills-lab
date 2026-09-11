@@ -1,7 +1,7 @@
 # Phase 5 implementation and validation — 2026-09-09
 
 Phase 4 was committed locally as **`ff5babf`** before this work. Phase 5 was
-implemented on `research/phase5`, in the same required `ai-job-radar` folder.
+implemented on `research/phase5`, in the same required `ai-job-skills-lab` folder.
 No new worktree, dependency installation, JobSpy integration, provider data
 subscription, extra model spending, publishing or push occurred. AI Trend Radar
 and upstream application workflows were not modified.

@@ -1,7 +1,7 @@
 # Phase 4 implementation and validation — 2026-09-09
 
 Phase 3 was already committed as `5d8fc8f` when Phase 4 began. Phase 4 was
-implemented on `research/phase4` in the same required `ai-job-radar` checkout.
+implemented on `research/phase4` in the same required `ai-job-skills-lab` checkout.
 No sibling worktree, dependency installation, new provider collection, personal
 profile setup, real feedback fabrication, repository push or publication occurred.
 The tests use temporary owned fixtures; the existing private Jobicy policies,

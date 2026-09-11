@@ -41,7 +41,7 @@ jobs:
     name: Triage upstream commits
     # No-op on the upstream template itself. Pinned by
     # tests/test_upstream_triage.py so a template clone never runs it by surprise.
-    if: github.event_name == 'workflow_dispatch' && inputs.publish_issue && vars.AI_JOB_RADAR_ENABLE_UPSTREAM_ISSUES == 'true' && github.repository != 'MadsLorentzen/ai-job-search'
+    if: github.event_name == 'workflow_dispatch' && inputs.publish_issue && vars.AI_JOB_SKILLS_LAB_ENABLE_UPSTREAM_ISSUES == 'true' && github.repository != 'MadsLorentzen/ai-job-search'
     permissions:
       contents: read
       issues: write

@@ -1,7 +1,7 @@
 # Phase 1 completion evidence
 
 Validation date: 2026-09-08. Development and all deliverables are in the
-user-requested `ai-job-radar` checkout. Branch: `research/phase1`.
+user-requested `ai-job-skills-lab` checkout. Branch: `research/phase1`.
 Foundation: `8c81edc330b98db0473dcb016e34db835c2fd378`.
 
 ## Delivered and verified

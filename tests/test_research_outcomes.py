@@ -21,6 +21,13 @@ class OutcomeTests(unittest.TestCase):
     output_for = fixtures.DecisionTests.output_for
     brief = fixtures.DecisionTests.brief
     context = fixtures.DecisionTests.context
+
+    def test_renamed_producer_preserves_legacy_echo_withdrawal(self):
+        from tools.research_interchange import PRODUCER, withdrawal_tokens
+        self.assertEqual(PRODUCER,'ai-job-skills-lab')
+        for producer in (PRODUCER,'ai-job-radar'):
+            row={'origin':{'producer':producer,'id':'a'*64,'revision':'a'*64},'content':{},'sources':[]}
+            self.assertIn('a'*64,withdrawal_tokens(row))
     def make_brief(self):
         self.output = self.output_for('learning')
         return self.brief()['brief']

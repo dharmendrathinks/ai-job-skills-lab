@@ -2,7 +2,9 @@
   <img src="assets/mascot/pip_flight_loop.gif" alt="Pip, the upstream courier bird mascot" width="160">
 </p>
 
-# AI Job Radar
+# AI Job Skills Lab
+
+**Learn the skills AI jobs require. Build useful projects. Share what you learn.**
 
 Learn from the engineering problems organizations advertise. Turn inspected job
 requirements into learning priorities, useful open-source work, product hypotheses
@@ -12,7 +14,7 @@ and engineering experiments for Dharmendra Thinks.
 > are worth learning, building for, validating commercially, or explaining through
 > a real experiment?
 
-AI Job Radar extends [Mads Lorentzen’s AI Job Search](https://github.com/MadsLorentzen/ai-job-search).
+AI Job Skills Lab extends [Mads Lorentzen’s AI Job Search](https://github.com/MadsLorentzen/ai-job-search).
 Its Markdown workflows, portal tools, state helpers, conventions and tests are our
 implementation foundation, pinned initially at
 [`8c81edc`](https://github.com/MadsLorentzen/ai-job-search/tree/8c81edc330b98db0473dcb016e34db835c2fd378).
@@ -62,8 +64,8 @@ The four outputs are assessed separately; there is no combined popularity score.
 For collaborators with access to this private repository:
 
 ```sh
-gh repo clone dharmendrathinks/ai-job-radar
-cd ai-job-radar
+gh repo clone dharmendrathinks/ai-job-skills-lab
+cd ai-job-skills-lab
 ```
 
 Keep this origin private. The upstream command `gh repo fork MadsLorentzen/ai-job-search`
@@ -97,9 +99,11 @@ runtimes are not assumed to reproduce the complete qualified workflow.
 
 ### 3. Review permission and runtime requirements
 
-Research state defaults outside Git: `~/Library/Application Support/ai-job-radar`
-on macOS, or `$XDG_DATA_HOME/ai-job-radar` (default `~/.local/share/ai-job-radar`)
-on Linux. An absolute `AI_JOB_RADAR_HOME` selects another private data workspace.
+Research state defaults outside Git: `~/Library/Application Support/ai-job-skills-lab`
+on macOS, or `$XDG_DATA_HOME/ai-job-skills-lab` (default `~/.local/share/ai-job-skills-lab`)
+on Linux. An absolute `AI_JOB_SKILLS_LAB_HOME` selects another private data workspace.
+Existing installations retain access to the previous default and environment
+variable; see the [rename and migration notes](docs/research/project-rename.md).
 Do not point it at, inside, or above the development checkout. Runtime commands
 can create state and apply expiry; the preflight above is read-only.
 
@@ -190,7 +194,7 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md), [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md
 and [the contracts](docs/research/contracts.md). For updates, use the
 [upstream synchronization ledger](docs/research/maintenance.md); for publishing,
 use the [release procedure](docs/releases/README.md). Always select
-`--repo dharmendrathinks/ai-job-radar` with GitHub CLI commands: an inherited CLI
+`--repo dharmendrathinks/ai-job-skills-lab` with GitHub CLI commands: an inherited CLI
 default can point at the upstream project.
 
 ## License and attribution
@@ -202,6 +206,6 @@ The original Mads Lorentzen copyright is preserved. Thanks also to
 Inherited release history is preserved [separately](docs/upstream/CHANGELOG.md).
 Source-data permissions are separate from the software license.
 
-AI Job Radar is maintained by [Dharmendra Thinks](https://github.com/dharmendrathinks).
+AI Job Skills Lab is maintained by [Dharmendra Thinks](https://github.com/dharmendrathinks).
 It is independent of OpenAI and Anthropic; references to their products describe
 the toolchain, not endorsement.

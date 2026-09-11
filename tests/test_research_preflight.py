@@ -5,6 +5,7 @@ from pathlib import Path
 import subprocess
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from tools.research_preflight import assess, private_state_path, template_errors, portal_skills
 
@@ -24,7 +25,7 @@ class PreflightTests(unittest.TestCase):
             "schema_version": 1,
             "files": {"CLAUDE.md": [hashlib.sha256(self.public).hexdigest()]}}))
         self.git("add", "CLAUDE.md", ".gitignore")
-        self.env = {"AI_JOB_RADAR_HOME": str(self.base / "private-state")}
+        self.env = {"AI_JOB_SKILLS_LAB_HOME": str(self.base / "private-state")}
 
     def git(self, *args):
         return subprocess.run(["git", *args], cwd=self.root, check=True, capture_output=True)
@@ -95,11 +96,27 @@ class PreflightTests(unittest.TestCase):
         for path in [str(self.root), str(self.root / "state"), str(self.base),
                      str(alias / "state"), "relative/path", ""]:
             with self.subTest(path=path), self.assertRaises(ValueError):
-                private_state_path(self.root, {"AI_JOB_RADAR_HOME": path})
+                private_state_path(self.root, {"AI_JOB_SKILLS_LAB_HOME": path})
 
     def test_missing_manifest_or_template_fails_closed(self):
         (self.root / "research-template-manifest.json").unlink()
         self.assertEqual(self.run_action()["status"], "blocked")
+
+    def test_rename_keeps_legacy_workspace_without_creating_empty_state(self):
+        home=self.base/'home';old=home/'Library/Application Support/ai-job-radar';old.mkdir(parents=True)
+        with patch('tools.research_preflight.Path.home',return_value=home), patch('tools.research_preflight.sys.platform','darwin'):
+            self.assertEqual(private_state_path(self.root,{}),old)
+            new=old.with_name('ai-job-skills-lab');old.rename(new)
+            self.assertEqual(private_state_path(self.root,{}),new)
+            old.mkdir()
+            with self.assertRaises(ValueError):private_state_path(self.root,{})
+            self.assertEqual(private_state_path(self.root,{'AI_JOB_SKILLS_LAB_HOME':str(new)}),new)
+
+    def test_legacy_environment_alias_and_conflicts(self):
+        target=str(self.base/'private')
+        self.assertEqual(private_state_path(self.root,{'AI_JOB_RADAR_HOME':target}),Path(target))
+        with self.assertRaises(ValueError):
+            private_state_path(self.root,{'AI_JOB_RADAR_HOME':target,'AI_JOB_SKILLS_LAB_HOME':target+'-other'})
 
     def test_research_pointer_is_not_discovered_as_portal(self):
         for name in ["research", "sample-search"]:

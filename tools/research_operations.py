@@ -372,9 +372,9 @@ def launchd(store, plan_id):
         artifact(state, plan_id, ('operation-plan',))
     root = Path(__file__).resolve().parents[1]
     executable = Path(sys.executable).absolute()  # preserve venv path, don't resolve its symlink
-    row = {'Label': 'local.ai-job-radar.' + plan_id[:12], 'ProgramArguments': [str(executable), '-m',
+    row = {'Label': 'local.ai-job-skills-lab.' + plan_id[:12], 'ProgramArguments': [str(executable), '-m',
            'tools.research_ops', 'tick', '--plan', plan_id], 'WorkingDirectory': str(root),
-           'EnvironmentVariables': {'AI_JOB_RADAR_HOME': str(store.home), 'PATH': '/usr/bin:/bin:/usr/sbin:/sbin',
+           'EnvironmentVariables': {'AI_JOB_SKILLS_LAB_HOME': str(store.home), 'PATH': '/usr/bin:/bin:/usr/sbin:/sbin',
                                     'HOME': str(Path.home())},
            'StartInterval': 300, 'RunAtLoad': True, 'ProcessType': 'Background', 'Umask': 0o077,
            'StandardOutPath': '/dev/null', 'StandardErrorPath': '/dev/null'}

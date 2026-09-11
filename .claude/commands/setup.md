@@ -1,6 +1,6 @@
 # /setup - Profile Onboarding
 
-## AI Job Radar template preflight — before every path and --section update
+## AI Job Skills Lab template preflight — before every path and --section update
 
 If this checkout contains `research-template-manifest.json`, run
 `python3 tools/research_preflight.py --mode application --action setup` before

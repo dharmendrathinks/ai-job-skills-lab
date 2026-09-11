@@ -2,8 +2,8 @@
 
 ## Repository transition
 
-Development uses only `/Users/dhasharma/Dharmendra/Projects/ai-job-radar`.
-`origin` is `https://github.com/dharmendrathinks/ai-job-radar.git`; GitHub
+Development uses only `/Users/dhasharma/Dharmendra/Projects/ai-job-skills-lab`.
+`origin` is `https://github.com/dharmendrathinks/ai-job-skills-lab.git`; GitHub
 inspection initially found it private, empty, and not a GitHub-network fork. `upstream`
 is `https://github.com/MadsLorentzen/ai-job-search.git`.
 
@@ -20,13 +20,13 @@ empty directory removed at the user's request; it is not a second workspace.
 ignored from publication (original SHA-256:
 `870e78df2bf0938c9aaf9ad7cdaaf69dadee97f332db50f9b7cf1a9bbc3c6fde`).
 The upstream MIT terms and Mads Lorentzen copyright are preserved; the release
-adds attribution for AI Job Radar additions. README attribution links to the original application guide; upstream
+adds attribution for AI Job Skills Lab additions. README attribution links to the original application guide; upstream
 author results are not presented as this research fork’s evaluation. No AI Trend Radar or JobSpy source was imported.
 
 ## Public template and private data
 
 `research_preflight.py` is read-only. It resolves the macOS default
-`~/Library/Application Support/ai-job-radar`, with `AI_JOB_RADAR_HOME` as an
+`~/Library/Application Support/ai-job-skills-lab`, with `AI_JOB_SKILLS_LAB_HOME` as an
 absolute override; non-macOS defaults use XDG data storage. It rejects overlapping
 checkout paths, including symlink aliases, and does not create the destination.
 P2 owns actual private persistence and restrictive file creation permissions.
@@ -88,7 +88,7 @@ files are recognized by the version checker. Before synchronization:
 
 The upstream issue workflow has no schedule. It requires manual dispatch with
 `publish_issue=true` AND repository variable
-`AI_JOB_RADAR_ENABLE_UPSTREAM_ISSUES=true`. Neither was enabled here. Its retained
+`AI_JOB_SKILLS_LAB_ENABLE_UPSTREAM_ISSUES=true`. Neither was enabled here. Its retained
 built-in token is scoped to this repository. Local helpers need no issue writes.
 
 ## Development checks

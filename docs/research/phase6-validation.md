@@ -1,7 +1,7 @@
 # Phase 6 validation — 2026-09-09
 
 Phase 5 was committed locally as `121bdcd` before this work. Phase 6 was implemented
-in the same `/Users/dhasharma/Dharmendra/Projects/ai-job-radar` checkout, on branch
+in the same `/Users/dhasharma/Dharmendra/Projects/ai-job-skills-lab` checkout, on branch
 `research/phase6`. No fork, remote change, dependency/model installation, schedule
 activation, notification send, publishing or push was performed.
 

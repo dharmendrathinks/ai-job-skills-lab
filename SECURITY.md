@@ -2,9 +2,9 @@
 
 ## Report privately
 
-Report AI Job Radar vulnerabilities to this repository’s owner, Dharmendra Thinks,
+Report AI Job Skills Lab vulnerabilities to this repository’s owner, Dharmendra Thinks,
 through an existing private contact channel. If available, use this repository’s
-[private vulnerability form](https://github.com/dharmendrathinks/ai-job-radar/security/advisories/new).
+[private vulnerability form](https://github.com/dharmendrathinks/ai-job-skills-lab/security/advisories/new).
 Do not send fork-specific reports to the upstream maintainer. If no private route
 is available, ask for a private contact route without including exploit details,
 credentials, source captures or personal data. The issue tracker is not a secret
@@ -17,7 +17,7 @@ the maintainer; do not publish another user’s data as a reproduction.
 
 ## Supported scope
 
-The current v0.1.0 prerelease is the initial AI Job Radar release. Fixes target
+The current v0.1.0 prerelease is the initial AI Job Skills Lab release. Fixes target
 current `main`; no older release or long-term support line is promised. An
 incompatible runtime change requires inspection and qualification before use.
 Upstream and separate AI Trend Radar deployments have their own security policies.

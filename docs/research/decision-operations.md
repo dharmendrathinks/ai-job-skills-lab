@@ -163,7 +163,7 @@ capability that should receive deeper practice, and a project request with no
 inspected alternatives that must abstain. It uses a separate private child store
 `phase3-evaluation`, never the real corpus or user profile. Its synthetic profile
 review is fixture setup, not a human evaluation claim. Inspect a resulting draft
-by setting `AI_JOB_RADAR_HOME` to that child directory and using `inspect --id`.
+by setting `AI_JOB_SKILLS_LAB_HOME` to that child directory and using `inspect --id`.
 No scenario result establishes market demand or the user's demonstrated ability.
 
 New project drafts must distinguish existing behavior from a concrete addition.

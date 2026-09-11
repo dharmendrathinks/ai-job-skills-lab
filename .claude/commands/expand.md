@@ -1,6 +1,6 @@
 # /expand - Competency Expansion from Documents and Online Presence
 
-## AI Job Radar routing and template preflight
+## AI Job Skills Lab routing and template preflight
 
 For research, follow `.claude/skills/research/SKILL.md` before reading candidate
 files. Research enrichment is a P3 capability, not application `/expand`.

@@ -25,7 +25,7 @@ Choose an **empty private data directory outside Git**, not another development
 checkout. For example:
 
 ```sh
-export AI_JOB_RADAR_HOME="$HOME/Library/Application Support/ai-job-radar/backend-platform"
+export AI_JOB_SKILLS_LAB_HOME="$HOME/Library/Application Support/ai-job-skills-lab/backend-platform"
 python3 -m tools.research_domain init --pack backend-platform
 python3 -m tools.research_domain status
 ```
@@ -34,7 +34,7 @@ This is an explicit persistent opt-in. It cannot retag an existing AI corpus or
 change a workspace's pack revision. The default AI directory is reserved even
 when empty; non-AI selection requires a different data directory. Ordinary commands use that directory's pinned
 binding; they do not select a domain by title, user profile or source keyword.
-Unset `AI_JOB_RADAR_HOME` to return to the original default AI data directory.
+Unset `AI_JOB_SKILLS_LAB_HOME` to return to the original default AI data directory.
 Application commands and their candidate trackers remain unchanged.
 
 A non-AI workspace adds `domain_pack` to the version-1 state envelope and an

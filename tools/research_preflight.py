@@ -17,26 +17,35 @@ import sys
 ROOT = Path(__file__).resolve().parent.parent
 MANIFEST = "research-template-manifest.json"
 CANONICAL = ".claude/skills/research/SKILL.md"
+STATE_ENV = "AI_JOB_SKILLS_LAB_HOME"
+LEGACY_STATE_ENV = "AI_JOB_RADAR_HOME"  # Compatibility with existing private workspaces.
 FUTURE = {"collect": 2, "import": 2, "analyze": 2, "brief": 3,
           "outcome": 4, "refresh": 2, "export": 2, "coverage": 5, "compare": 5, "translate": 5, "domain": 7}
 
 
 def private_state_path(root: Path, env: dict[str, str]) -> Path:
     """Resolve without creating a directory; reject paths overlapping source."""
-    configured = env.get("AI_JOB_RADAR_HOME")
+    configured = env.get(STATE_ENV)
+    legacy = env.get(LEGACY_STATE_ENV)
+    if configured is not None and legacy is not None and Path(configured).expanduser() != Path(legacy).expanduser():
+        raise ValueError("conflicting current and legacy research workspace variables")
+    if configured is None: configured = legacy
     if configured is not None:
         if not configured.strip():
-            raise ValueError("AI_JOB_RADAR_HOME must not be empty")
+            raise ValueError("AI_JOB_SKILLS_LAB_HOME must not be empty")
         candidate = Path(configured).expanduser()
         if not candidate.is_absolute():
-            raise ValueError("AI_JOB_RADAR_HOME must be absolute")
-    elif sys.platform == "darwin":
-        candidate = Path.home() / "Library/Application Support/ai-job-radar"
+            raise ValueError("AI_JOB_SKILLS_LAB_HOME must be absolute")
     else:
-        base = Path(env.get("XDG_DATA_HOME", str(Path.home() / ".local/share")))
+        base = Path.home() / "Library/Application Support" if sys.platform == "darwin" else Path(env.get("XDG_DATA_HOME", str(Path.home() / ".local/share")))
         if not base.is_absolute():
             raise ValueError("XDG_DATA_HOME must be absolute")
-        candidate = base / "ai-job-radar"
+        candidate = base / "ai-job-skills-lab"
+        previous = base / "ai-job-radar"
+        if previous.exists():
+            if candidate.exists():
+                raise ValueError("both current and legacy data directories exist; select an explicit private workspace")
+            candidate = previous  # Never hide an existing corpus behind an empty new default.
     candidate, root = candidate.resolve(), root.resolve()
     if candidate == root or root in candidate.parents or candidate in root.parents:
         raise ValueError("research state must be outside, and not contain, the checkout")

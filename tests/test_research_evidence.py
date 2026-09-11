@@ -307,7 +307,7 @@ class EvidenceTests(unittest.TestCase):
         data["observations"][0]["captured_at"] = "2026-09-07T10:01:00Z"
         input_path = Path(self.temp.name) / "input.json"
         input_path.write_text(json.dumps(data))
-        env = dict(os.environ, AI_JOB_RADAR_HOME=str(self.home))
+        env = dict(os.environ, AI_JOB_SKILLS_LAB_HOME=str(self.home))
 
         def invoke(*args):
             return subprocess.run([sys.executable, "-m", "tools.research_evidence", *args],

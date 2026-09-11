@@ -131,7 +131,7 @@ def fetch_public(url):
     addresses = socket.getaddrinfo(parsed.hostname, 443, type=socket.SOCK_STREAM)
     require(addresses and all(ipaddress.ip_address(a[4][0]).is_global for a in addresses), 'nonpublic destination')
     with build_opener(ProxyHandler({}), NoRedirect).open(Request(url, headers={
-            'User-Agent': 'AI-Job-Radar/0.3 (explicit bounded research)', 'Accept': 'text/plain,text/html'}), timeout=20) as response:
+            'User-Agent': 'AI-Job-Skills-Lab/0.3 (explicit bounded research)', 'Accept': 'text/plain,text/html'}), timeout=20) as response:
         content_type = response.headers.get('Content-Type', '')
         require(any(t in content_type for t in ('text/plain', 'text/html', 'text/markdown')), 'unsupported context representation')
         body = response.read(60_001)

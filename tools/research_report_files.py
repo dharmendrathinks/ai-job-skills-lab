@@ -77,6 +77,36 @@ def paths(store):
     return {name: target / name for name in NAMES}
 
 
+def relocate_default(store, previous_repository, repository, previous_home):
+    """Repair binding metadata after an explicit move of checkout + default state.
+
+    Stop writers and move both directories first. Content-addressed artifacts,
+    withdrawal history and backups are untouched. Partial metadata updates can be
+    resumed with these exact arguments; ordinary operations fail closed meanwhile.
+    """
+    from tools.research_recovery import read
+    old_repo, repo, old_home = map(Path, (previous_repository, repository, previous_home))
+    require(all(p.is_absolute() and p == p.resolve() for p in (old_repo, repo, old_home)), 'relocation needs canonical absolute paths')
+    require(not old_repo.exists() and not old_home.exists() and old_repo != repo and old_home != store.home.resolve(),
+            'move original directories first; do not retain a second writer')
+    require(store.home.resolve() == private_state_path(repo, {}), 'relocation supports the default workspace only')
+    with store.locked():
+        target = checked_directory(store, repo)
+        require(target.is_dir() and target.stat().st_mode & 0o077 == 0, 'moved reports directory must remain private')
+        old = {'schema_version': 1, 'repository': str(old_repo)}
+        new = {'schema_version': 1, 'repository': str(repo)}
+        old_owner = {'schema_version': 1, 'workspace': digest(str(old_home))}
+        new_owner = {'schema_version': 1, 'workspace': digest(str(store.home.resolve()))}
+        for name in ('report-location.json', 'report-origin.json'):
+            require(read(store.home / name) in (old, new), 'unexpected report binding; no relocation')
+        owner = target / '.research-owner.json'
+        require(read(owner) in (old_owner, new_owner), 'moved reports belong to another workspace')
+        save_state(owner, new_owner)
+        save_state(store.home / 'report-origin.json', new)
+        save_state(store.home / 'report-location.json', new)
+    return {'repository': str(repo), 'state': str(store.home), 'reports': str(target)}
+
+
 def remove_views(store):
     from tools.research_recovery import regular
     targets = [store.home / 'research-report.html', *paths(store).values()]

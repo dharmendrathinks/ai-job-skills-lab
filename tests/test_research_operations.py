@@ -207,7 +207,7 @@ class OperationsTests(unittest.TestCase):
         p = self.plan(); row = plistlib.loads(launchd(self.store, p).encode())
         self.assertTrue(Path(row['ProgramArguments'][0]).is_absolute())
         self.assertEqual(row['ProgramArguments'][1:4], ['-m', 'tools.research_ops', 'tick'])
-        self.assertEqual(row['EnvironmentVariables']['AI_JOB_RADAR_HOME'], str(self.home))
+        self.assertEqual(row['EnvironmentVariables']['AI_JOB_SKILLS_LAB_HOME'], str(self.home))
         self.assertEqual(row['StandardOutPath'], '/dev/null')
         self.assertNotIn('OPENAI_API_KEY', row['EnvironmentVariables'])
         self.assertNotIn('KeepAlive', row)

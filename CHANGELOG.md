@@ -1,4 +1,15 @@
-# AI Job Radar changelog
+# AI Job Skills Lab changelog
+
+## Project rename — 2026-09-11
+
+- Renamed the product, repository and development folder to AI Job Skills Lab
+  (`ai-job-skills-lab`); updated documentation, reports, release references,
+  runtime branding, source user agents and workflow identifiers.
+- Renamed the private default directory and current environment variable without
+  rewriting captured evidence. Preserved legacy workspace lookup and interchange
+  withdrawal identity; added checked report-binding relocation.
+- MIT attribution, application behavior and repository privacy remain preserved.
+  See [migration notes](docs/research/project-rename.md).
 
 Fork releases use their own version sequence. They are distinct from upstream
 releases and the per-file `framework_version` markers. The initial implementation
@@ -63,7 +74,7 @@ quality reviews or activation gates complete.
 - Updated README, contributor/security/conduct guidance, application setup routing,
   release procedure and GitHub templates for this project. Removed the inherited
   sponsorship configuration; upstream attribution remains visible.
-- Preserved the upstream MIT notice, added copyright for AI Job Radar additions,
+- Preserved the upstream MIT notice, added copyright for AI Job Skills Lab additions,
   and retained Apache-2.0 provenance for the identified runtime adaptation.
 
 See [release notes](docs/releases/v0.1.0.md) for validation, compatibility and

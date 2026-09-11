@@ -1,4 +1,4 @@
-# Make AI Job Radar guide what you learn, build and teach
+# Make AI Job Skills Lab guide what you learn, build and teach
 
 Status: approved plan, implemented with evaluation and corpus-coverage gates still open.
 See [the operations guide](docs/research/learning-operations.md) and

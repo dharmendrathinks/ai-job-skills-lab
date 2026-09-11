@@ -1,4 +1,4 @@
-<!-- Confirm base repository: dharmendrathinks/ai-job-radar.
+<!-- Confirm base repository: dharmendrathinks/ai-job-skills-lab.
 Read CONTRIBUTING.md. Do not include private data, credentials or source captures. -->
 
 ## Problem and resulting behavior

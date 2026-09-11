@@ -50,7 +50,7 @@ python3 -m tools.research_evidence status
 python3 -m tools.research_evidence withdraw --id ARTIFACT_SHA256
 ```
 
-Use `AI_JOB_RADAR_HOME` for an absolute private destination outside the checkout.
+Use `AI_JOB_SKILLS_LAB_HOME` for an absolute private destination outside the checkout.
 The preflight is read-only. Evidence helper operations initialize state when
 needed and apply pending expiry, including `status`. Stdout carries IDs/counts
 only; detailed errors omit imported content. Invalid input produces a blocked

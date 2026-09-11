@@ -13,8 +13,8 @@ Use the existing checkout and its venv. State defaults to the private directory
 outside Git. Commands below do not install a schedule or send a notification.
 
 ```sh
-/Users/dhasharma/Dharmendra/Projects/ai-job-radar/.venv/bin/python -m tools.research_ops health
-/Users/dhasharma/Dharmendra/Projects/ai-job-radar/.venv/bin/python -m tools.research_ops configure --input /absolute/private/operation-plan.json
+/Users/dhasharma/Dharmendra/Projects/ai-job-skills-lab/.venv/bin/python -m tools.research_ops health
+/Users/dhasharma/Dharmendra/Projects/ai-job-skills-lab/.venv/bin/python -m tools.research_ops configure --input /absolute/private/operation-plan.json
 python3 -m tools.research_ops run --plan PLAN_ID
 python3 -m tools.research_ops inbox --limit 10
 python3 -m tools.research_ops report --limit 10

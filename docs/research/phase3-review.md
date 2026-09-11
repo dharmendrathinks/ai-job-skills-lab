@@ -26,7 +26,7 @@ report. Use a terminal whose history is compatible with the source policy.
 For the two **fictional** completion scenarios, use the separate private store:
 
 ```sh
-AI_JOB_RADAR_HOME="$HOME/Library/Application Support/ai-job-radar/phase3-evaluation" \
+AI_JOB_SKILLS_LAB_HOME="$HOME/Library/Application Support/ai-job-skills-lab/phase3-evaluation" \
   .venv/bin/python -m tools.research_decisions inspect --id BRIEF_ID
 ```
 

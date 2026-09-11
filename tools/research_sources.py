@@ -117,7 +117,7 @@ class NoRedirect(HTTPRedirectHandler):
 
 def fetch_jobicy(query, count):
     url = ENDPOINT + "?" + urlencode({"count": count, "tag": query})
-    request = Request(url, headers={"User-Agent": "AI-Job-Radar/0.2 (bounded research; no automated retries)",
+    request = Request(url, headers={"User-Agent": "AI-Job-Skills-Lab/0.2 (bounded research; no automated retries)",
                                    "Accept": "application/json"})
     with build_opener(NoRedirect).open(request, timeout=25) as response:
         body = response.read(2_000_001)

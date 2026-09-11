@@ -1,6 +1,6 @@
 # Retained application mode
 
-AI Job Radar’s default is engineering research. Explicit application requests use
+AI Job Skills Lab’s default is engineering research. Explicit application requests use
 the retained AI Job Search lifecycle: `/setup` → `/scrape` → `/rank` → `/apply` →
 `/interview` → `/outcome`, plus `/expand`, `/upskill` and the existing supporting
 commands. Their canonical specifications remain under `.claude/`; portal CLIs
@@ -27,7 +27,7 @@ establish compatibility with the research extraction worker.
 For the original user guide, command descriptions and upstream author’s own job
 search results, consult the
 [pinned upstream README](https://github.com/MadsLorentzen/ai-job-search/blob/8c81edc330b98db0473dcb016e34db835c2fd378/README.md).
-Those results belong to the upstream author; they are not AI Job Radar evaluations.
+Those results belong to the upstream author; they are not AI Job Skills Lab evaluations.
 Review [security boundaries](../SECURITY.md) and source-specific conditions before
 running retained portal tools. An installed portal is not automatically permitted
 for research. No application, message or publication is sent just by selecting a job.

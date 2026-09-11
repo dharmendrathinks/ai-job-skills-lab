@@ -115,7 +115,7 @@ class CodexWorker:
                                          stderr=subprocess.PIPE, text=True, start_new_session=True)
             threading.Thread(target=self._read, daemon=True).start()
             threading.Thread(target=self._discard_errors, daemon=True).start()
-            self.rpc("initialize", {"clientInfo": {"name": "ai_job_radar", "version": "2"},
+            self.rpc("initialize", {"clientInfo": {"name": "ai_job_skills_lab", "version": "2"},
                                     "capabilities": {"experimentalApi": True}})
             self.send({"method": "initialized"})
             effective = self.rpc("config/read", {"includeLayers": False, "cwd": str(self.workdir)})

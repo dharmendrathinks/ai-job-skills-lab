@@ -10,7 +10,7 @@ from unittest.mock import patch
 
 from tools.research_evidence import Store
 from tools.research_operations import report
-from tools.research_report_files import bind, directory
+from tools.research_report_files import bind, directory, relocate_default
 from tools.research_reports import SCRIPT, report_location
 from tools.research_report_roles import role_families, OTHER
 from tests.test_research_evidence import bundle, NOW
@@ -44,6 +44,31 @@ class ReportTests(unittest.TestCase):
         self.assertIn('Build &lt;unsafe&gt; &amp; useful',projects)
         self.assertIn('synthetic test corpus',jobs)
         self.assertNotIn('research-profile',projects)
+
+    def test_explicit_rename_preserves_manifest_and_withdrawal_behavior(self):
+        with patch('tools.research_report_files.private_state_path',return_value=self.store.home):bind(self.store,self.repo)
+        original=self.store.home/'research-state.json';before=original.read_bytes()
+        previous_home=self.store.home;previous_repo=self.repo
+        new_home=self.root/'renamed-state';new_repo=self.root/'renamed-repo'
+        previous_repo.rename(new_repo);previous_home.rename(new_home)
+        moved=Store(new_home,clock=lambda:self.now)
+        with patch('tools.research_report_files.private_state_path',return_value=new_home):
+            relocate_default(moved,previous_repo,new_repo,previous_home)
+            relocate_default(moved,previous_repo,new_repo,previous_home)
+            self.assertEqual((new_home/'research-state.json').read_bytes(),before)
+            self.assertEqual(directory(moved),new_repo/'reports')
+            result=report(moved);moved.withdraw(self.obs)
+            self.assertFalse(Path(result['jobs']['path']).exists())
+
+    def test_rename_rejects_unrelated_report_owner(self):
+        from tools.rank_state import save_state
+        with patch('tools.research_report_files.private_state_path',return_value=self.store.home):bind(self.store,self.repo)
+        old_home=self.store.home;old_repo=self.repo
+        new_home=self.root/'renamed-state';new_repo=self.root/'renamed-repo'
+        old_repo.rename(new_repo);old_home.rename(new_home)
+        save_state(new_repo/'reports/.research-owner.json',{'schema_version':1,'workspace':'unrelated'})
+        with patch('tools.research_report_files.private_state_path',return_value=new_home), self.assertRaises(ValueError):
+            relocate_default(Store(new_home),old_repo,new_repo,old_home)
 
     def test_unknown_filters_hidden_then_known_values_exposed(self):
         data=bundle('unknown','unknown-job')
