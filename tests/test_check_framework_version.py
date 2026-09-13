@@ -53,13 +53,13 @@ class CheckerRepoFixture(unittest.TestCase):
             text=True,
         )
 
-    def run_checker(self):
+    def run_checker(self, *args):
         # Strip GitHub Actions variables so get_base_commit() takes the
         # local path (uncommitted changes vs HEAD) regardless of where the
         # test suite itself runs.
         env = {k: v for k, v in os.environ.items() if not k.startswith("GITHUB_")}
         return subprocess.run(
-            [sys.executable, str(self.root / "tools" / "check_framework_version.py")],
+            [sys.executable, str(self.root / "tools" / "check_framework_version.py"), *args],
             capture_output=True,
             text=True,
             env=env,
@@ -67,6 +67,15 @@ class CheckerRepoFixture(unittest.TestCase):
 
 
 class FrameworkVersionGateTests(CheckerRepoFixture):
+    def test_explicit_base_catches_committed_unbumped_edit(self):
+        self.framework_file.write_text(FRONTMATTER + BODY + '\nCommitted unbumped edit.\n')
+        self.git('add', '-A'); self.git('commit', '-q', '-m', 'unbumped')
+        self.assertEqual(self.run_checker().returncode, 0)
+        self.assertEqual(self.run_checker('--base', 'HEAD~1').returncode, 1)
+
+    def test_invalid_explicit_base_fails_closed(self):
+        self.assertEqual(self.run_checker('--base', 'unavailable-review-base').returncode, 1)
+
     def test_clean_tree_passes(self):
         result = self.run_checker()
 

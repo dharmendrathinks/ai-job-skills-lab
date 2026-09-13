@@ -39,6 +39,10 @@ workflow routing and human review likewise do not constitute isolation.
 
 ## Reproducible qualification
 
+Start with the [verified binary acquisition and command-scoped PATH recipe](quickstart.md#enable-real-analysis-on-the-supported-runtime).
+It preserves the normal development CLI and checks both archive and binary hashes.
+
+
 - Binary SHA-256: `b973d440acac501fd2594a43e7ca9ce41e0a65b9dfb28d0d7a7837c99e1261e3`.
 - Source tag `rust-v0.153.4`, commit `3d2ee51ca2d5db578f328aa75e20aa22c0197c9a`.
 - gpt-5.5 record digest: `7935feee7a55829ad98ac4b2311f14607a04ef84f77584d2f6dd370c1d07be63`.
@@ -87,10 +91,11 @@ rechecked after startup, before submission and before commit; a response receive
 after withdrawal is discarded and never becomes an analysis.
 
 Input/output limits are 100 KB, source response/import limits 2 MB, and worker
-turn timeout 90 seconds. Errors are sanitized and no application-level retry or
+turn timeout 90 seconds by default (240 seconds for detailed skill extraction
+and learning-path/comparison generation). Errors are sanitized and no application-level retry or
 paid fallback occurs. The Codex transport may have its own internal retry behavior;
-this implementation does not promise one network request per turn. Unattended
-operation and broader recovery remain P6.
+this implementation does not promise one network request per turn. Unattended operation has separate
+qualification gates; see the implemented [P6 operations guide](continuous-operations.md).
 
 The app-server experimental API is version-sensitive. Official references:
 [app-server protocol](https://developers.openai.com/codex/app-server),

@@ -146,5 +146,6 @@ def restore(store):
         validate_state(state)
         apply_journal(store, state)
         store.sweep(state)
+        store.retract_corrected_progress(state)
         persist(store, store.home / 'research-state.json', state)
         return {'restored_artifacts': len(state['artifacts']), 'withdrawn_hashes': len(state['withdrawn'])}

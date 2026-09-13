@@ -216,3 +216,12 @@ sourced LearningProgress and EvidenceAnswer contracts are specified in
 All new derived records, model intents and managed report copies inherit their
 actual dependencies and expiry. Hash-only path associations do not copy job prose
 into independent work records. No new unmanaged export permission is implied.
+
+## Learning correction lifecycle
+
+LearningProgress v1 keeps `supersedes` as retained history. All non-history
+consumers of superseded progress are invalidated through existing transitive
+withdrawal, including briefs and reports, on write and on the next supported
+operation for older stores. New reports depend only on current progress records.
+Independent result contexts require explicit withdrawal if their content is also
+invalid. This changes lifecycle enforcement without changing the v1 schema.

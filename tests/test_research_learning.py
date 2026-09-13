@@ -256,7 +256,7 @@ class LearningTests(unittest.TestCase):
         record_progress(self.store,self.progress(path,event='completed',summary='Fixture author completed this bounded exercise.'))
         self.assertIn('All milestones explicitly recorded complete',Path(report(self.store)['path']).read_text())
 
-    def test_linked_teaching_receives_observed_work_and_same_experiment(self):
+    def linked_teaching(self):
         import json
         from tools.research_briefs import generate, SECTIONS, DIMENSIONS
         path=self.path()
@@ -281,6 +281,62 @@ class LearningTests(unittest.TestCase):
         self.assertEqual(supplied['learning_path']['proposal']['experiment'],p['proposal']['experiment'])
         self.assertIn(progress,supplied['learning_progress']);self.assertIn(cid,supplied['contexts'])
         with self.store.transaction() as state:self.assertEqual(state['artifacts'][result['brief']]['payload']['learning_path'],path)
+        return path, progress, result['brief']
+
+    def test_linked_teaching_receives_observed_work_and_same_experiment(self):
+        self.linked_teaching()
+
+    def test_correction_retracts_brief_and_managed_report_preserving_history(self):
+        path, old, brief = self.linked_teaching()
+        page = Path(report(self.store)['path'])
+        self.assertIn('Owned parser test passed.', page.read_text())
+        with self.store.transaction() as state:
+            unrelated = self.store.put(state, 'owned-unrelated', {'keep': True})
+        self.now += timedelta(seconds=1)
+        correction = record_progress(self.store, self.progress(path, event='correction', supersedes=old,
+            summary='The parser success claim was invalid; the test did not exercise it.'))['progress']
+        self.assertFalse(page.exists())
+        with self.store.transaction() as state:
+            self.assertNotIn(brief, state['artifacts'])
+            self.assertIn(brief, state['withdrawn'])
+            for key in (path, old, correction, unrelated): self.assertIn(key, state['artifacts'])
+        html = Path(report(self.store)['path']).read_text()
+        self.assertNotIn('brief-' + brief, html)
+        self.assertNotIn('Owned parser test passed.', html)
+        self.assertIn('parser success claim was invalid', html)
+        # A second correction retains the audit chain without invalidating new views.
+        self.now += timedelta(seconds=1)
+        record_progress(self.store, self.progress(path, event='correction', supersedes=correction,
+            summary='A replacement test still needs to be run.'))
+        self.assertIn('replacement test still needs', Path(report(self.store)['path']).read_text())
+
+    def test_old_writer_stale_brief_is_retracted_on_next_operation(self):
+        path, old, brief = self.linked_teaching()
+        page = Path(report(self.store)['path'])
+        # Simulate the previous writer retaining a brief after correction.
+        with patch.object(self.store, 'retract_corrected_progress', return_value=0):
+            record_progress(self.store, self.progress(path, event='correction', supersedes=old,
+                summary='Prior result retracted.'))
+            self.assertTrue(page.exists())
+        self.store.status()
+        self.assertFalse(page.exists())
+        with self.store.transaction() as state:
+            self.assertNotIn(brief, state['artifacts'])
+            self.assertIn(old, state['artifacts'])
+
+    def test_restoring_old_writer_backup_reconciles_before_rendering(self):
+        from tools.research_recovery import backup, restore
+        path, old, brief = self.linked_teaching()
+        page = Path(report(self.store)['path'])
+        with patch.object(self.store, 'retract_corrected_progress', return_value=0):
+            record_progress(self.store, self.progress(path, event='correction', supersedes=old,
+                summary='Prior result retracted before backup.'))
+            backup(self.store)
+        restore(self.store)
+        self.assertFalse(page.exists())
+        with self.store.transaction() as state:
+            self.assertNotIn(brief, state['artifacts'])
+            self.assertIn(old, state['artifacts'])
 
     def test_linked_pair_resumes_only_failed_half_after_explicit_review(self):
         from tools.research_learning import path_briefs

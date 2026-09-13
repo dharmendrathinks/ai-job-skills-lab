@@ -20,12 +20,17 @@ implementation foundation, pinned initially at
 [`8c81edc`](https://github.com/MadsLorentzen/ai-job-search/tree/8c81edc330b98db0473dcb016e34db835c2fd378).
 Application mode is retained with separate rules.
 
-**Release: v0.1.0, a prerelease for engineering evaluation.** The seven roadmap
-phases have implementations and recorded validation; human quality acceptance
-and several activation gates remain open. The repository and its GitHub release
-remain **private**. MIT licensing does not change repository visibility.
-See the [changelog](CHANGELOG.md), [release notes](docs/releases/v0.1.0.md) and
-[active roadmap](PLAN_RESEARCH.md).
+**Development version: v0.2.0 (unreleased).** This README describes current
+`main`, including the connected learning workflow. The existing `v0.1.0` tag
+points to `ba9c04f173ceca15e93fb2edb67b78613253f556`, before that workflow and the
+rename. Do not use that tag expecting the current features. The repository remains
+**private** until the owner explicitly changes visibility.
+
+The seven roadmap phases have implementations and recorded validation; human
+quality acceptance and several activation gates remain open. Start with the
+[offline demo and setup guide](docs/research/quickstart.md), then consult the
+[changelog](CHANGELOG.md), [next release notes](docs/releases/v0.2.0.md),
+[historical v0.1.0 notes](docs/releases/v0.1.0.md) and [active roadmap](PLAN_RESEARCH.md).
 
 ## Learn, build and teach
 
@@ -59,16 +64,26 @@ The four outputs are assessed separately; there is no combined popularity score.
 
 ## Start here
 
-### 1. Fork and clone
+### 1. Clone and try the offline demo
 
-For collaborators with access to this private repository:
+Clone the project (collaborator access is required while it is private):
 
 ```sh
 gh repo clone dharmendrathinks/ai-job-skills-lab
 cd ai-job-skills-lab
+python3 -m tools.research_demo
 ```
 
-Keep this origin private. The upstream command `gh repo fork MadsLorentzen/ai-job-search`
+Open the printed HTML paths. Each run creates a fresh `reports/demo-…/` folder
+with synthetic job evidence, skill cards, a learning path and project/YouTube
+examples. No account, collection, model or personal setup is needed. These are
+prepared examples, not measured extraction quality or successful experiments.
+See the [quickstart](docs/research/quickstart.md) for supported runtime setup.
+
+Use your own fork for contributions when repository access and GitHub permit it;
+otherwise create a branch in a checkout you are authorized to write to. A clone,
+contribution or release never authorizes changing repository visibility.
+The upstream command `gh repo fork MadsLorentzen/ai-job-search`
 creates a fork of a public repository; it is not the private-repository setup used
 here. In application mode, upstream `/setup` writes personal data into tracked
 files. This development template blocks those writes. See
@@ -121,7 +136,8 @@ Model analysis uses an existing ChatGPT sign-in through a **qualified Codex CLI
 0.153.4 / gpt-5.5 installation**. The current qualification is for the recorded
 macOS arm64 binary and configuration; arbitrary installs, upgrades and Linux model
 execution are not qualified by this release. Consult the
-[runtime decision and qualification procedure](docs/research/runtime.md).
+[pinned binary setup](docs/research/quickstart.md#enable-real-analysis-on-the-supported-runtime)
+and [runtime qualification procedure](docs/research/runtime.md).
 No binary or model is bundled. Job-data services cost ₹0; no paid API fallback,
 additional subscription or hosted service is configured. Quota exhaustion defers work.
 
@@ -201,6 +217,8 @@ default can point at the upstream project.
 
 Project additions are [MIT licensed](LICENSE), except for the identified
 Apache-2.0 runtime adaptation in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Bundled Lato and Raleway fonts retain SIL Open Font License 1.1; their full
+licenses and copyright notices are included beside the font files.
 The original Mads Lorentzen copyright is preserved. Thanks also to
 [Mikkel Krogholm](https://github.com/mikkelkrogsholm) for upstream portal skills.
 Inherited release history is preserved [separately](docs/upstream/CHANGELOG.md).

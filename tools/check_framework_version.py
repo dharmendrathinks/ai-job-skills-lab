@@ -8,6 +8,7 @@ Also ensures all framework files have a valid 'framework_version' frontmatter ke
 
 from __future__ import annotations
 import os
+import argparse
 import re
 import subprocess
 import sys
@@ -107,7 +108,10 @@ def has_non_trivial_changes(file_path: Path, base_commit: str) -> bool:
     # If there are meaningful changes but the version was not changed
     return meaningful_changes > 0
 
-def main() -> int:
+def main(argv=None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--base', help='Explicit reviewed Git base, including committed and working changes')
+    args = parser.parse_args(argv)
     errors = []
     
     # 1. Lint: Check that all framework files have framework_version in frontmatter
@@ -118,7 +122,13 @@ def main() -> int:
             errors.append(f"{rel_path}: missing 'framework_version' in frontmatter")
             
     # 2. Check for missing version bumps in modified files
-    base_commit = get_base_commit()
+    base_commit = args.base or get_base_commit()
+    if args.base:
+        rc, resolved, _ = run_git(['rev-parse', '--verify', '--end-of-options', args.base + '^{commit}'])
+        if rc:
+            print('Framework Version Check Failed: explicit base is not an available commit')
+            return 1
+        base_commit = resolved.strip()
     if base_commit:
         print(f"Comparing HEAD against base commit: {base_commit}")
         for path in FRAMEWORK_FILES:

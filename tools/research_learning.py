@@ -238,11 +238,8 @@ def record_progress(store, row):
         if row['supersedes']:
             old = artifact(state, row['supersedes'], ('learning-progress',))
             require(old['path'] == row['path'] and old['milestone'] == row['milestone'], 'correction targets another effort')
-            # Retract evidence-profile proposals/reviews derived from the corrected
-            # event, while retaining that event as the correction's audit history.
-            profiles = [k for k,a in state['artifacts'].items() if a['kind'] == 'profile-proposal' and
-                        row['supersedes'] in a['dependencies']]
-            store.remove(state, profiles)
+            # The transaction retracts all consumers of superseded progress,
+            # including briefs, profiles and managed reports; retain audit events.
         policy = store.put(state, 'policy', row['policy'], use_until=row['policy'].get('use_until'))
         payload = {k:v for k,v in row.items() if k != 'policy'}
         # path is a hash-only association, NOT source-derived copied prose. Own

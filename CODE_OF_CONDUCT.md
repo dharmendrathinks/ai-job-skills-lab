@@ -9,10 +9,11 @@ act on. Do not pressure contributors to publish private data, buy services or
 work to an invented deadline. These expectations apply to project issues, pull
 requests and other project-managed discussions, including this private repository.
 
-For a conduct concern, contact the repository owner through an existing private
-channel. If none is available, ask for a private contact route without identifying
-affected people or disclosing sensitive details. Security reports follow
-[SECURITY.md](SECURITY.md). No response-time guarantee is offered.
+Conduct concerns use the maintainer's private reporting contact in
+[SECURITY.md](SECURITY.md). That route is awaiting maintainer confirmation and is
+a public-release prerequisite. Existing collaborators can use an established
+private channel; otherwise request contact details without identifying affected
+people or disclosing sensitive details. No response-time guarantee is offered.
 
 Maintainers may remove harmful content, restrict participation or close disruptive
 threads according to context. Apply these rules consistently, preserve reporters’

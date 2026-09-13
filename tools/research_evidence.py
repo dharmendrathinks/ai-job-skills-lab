@@ -238,15 +238,29 @@ class Store:
             check_binding(self.home, state)
             apply_journal(self, state)
             self.sweep(state)
+            self.retract_corrected_progress(state)
             persist(self, path, state)  # expiry withdrawal is durable even if the action fails
             try:
                 yield state
             except Exception:
                 raise
             else:
+                self.retract_corrected_progress(state)
                 expired = self.sweep(state)  # authorization can expire during work
                 persist(self, path, state)
                 require(not expired, "evidence expired during operation; retry on surviving state")
+
+    def retract_corrected_progress(self, state):
+        """Withdraw stale derivatives, including those saved by older writers.
+
+        Progress events themselves remain correction history. All other direct
+        consumers and their descendants use the normal journal/report lifecycle.
+        """
+        corrected = {a['payload']['supersedes'] for a in state['artifacts'].values()
+                     if a['kind'] == 'learning-progress' and a['payload']['supersedes']}
+        obsolete = [key for key, a in state['artifacts'].items()
+                    if a['kind'] != 'learning-progress' and corrected.intersection(a['dependencies'])]
+        return self.remove(state, obsolete)
 
     def remove(self, state, ids):
         removed = set(ids)

@@ -1,0 +1,71 @@
+{
+  "notice": "Author-written synthetic fixture. No real jobs, model output or observed experiments.",
+  "bundle": {
+    "schema_version": 1,
+    "policy": {
+      "schema_version": 1,
+      "source": "synthetic-owned",
+      "method": "reviewed-local-import",
+      "reviewed_by": "synthetic fixture author",
+      "reviewed_at": "2026-09-08T09:00:00Z",
+      "permission_basis": "Author-owned synthetic test content, no real employer or listing.",
+      "permission_reference": "examples/offline-demo.json",
+      "local_processing": true,
+      "retention": "indefinite-logical-deletion",
+      "hosted_disclosure": false,
+      "export": false,
+      "audit_hashes": true,
+      "limitations": [
+        "Synthetic content cannot establish market demand."
+      ]
+    },
+    "receipt": {
+      "schema_version": 1,
+      "source": "synthetic-owned",
+      "kind": "synthetic",
+      "query": "explicit author-owned example",
+      "requested_filters": {},
+      "effective_filters": {},
+      "started_at": "2026-09-08T10:00:00Z",
+      "finished_at": "2026-09-08T10:02:00Z",
+      "pages": [
+        {
+          "locator": "owned example",
+          "status": "ok",
+          "returned": 1,
+          "next_cursor": null
+        }
+      ],
+      "completeness": "complete-request",
+      "limitations": [
+        "No network collection."
+      ]
+    },
+    "observations": [
+      {
+        "native_id": "req-1",
+        "employer_name": "Example Company (fictional)",
+        "employer_domain": "employer.example",
+        "employer_requisition": "req-1",
+        "url": "https://employer.example/jobs/req-1",
+        "title": "Synthetic AI Product Engineer",
+        "description": "Build retrieval pipelines in Python. Evaluate failures with held-out examples.",
+        "captured_at": "2026-09-08T10:01:00Z",
+        "source_revision": "fixture-v1",
+        "posted_at_original": null,
+        "posted_at": null,
+        "language": "en",
+        "country": "Example region",
+        "availability": "open",
+        "availability_evidence": "Synthetic example declares open at capture.",
+        "segments": {
+          "arrangement": "onsite",
+          "seniority": "senior"
+        },
+        "limitations": [
+          "Fictional job, no actual opening."
+        ]
+      }
+    ]
+  }
+}

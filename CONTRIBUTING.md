@@ -2,9 +2,10 @@
 
 AI Job Skills Lab extends the AI Job Search foundation for global AI engineering
 research. Follow [PLAN_RESEARCH.md](PLAN_RESEARCH.md) and [AGENTS.md](AGENTS.md).
-The repository is private for now; these guidelines apply to invited collaborators
-and prepare it for possible future open-source collaboration. No contribution or
-release changes its visibility automatically.
+Contributions can improve code, documentation, evidence quality and usability.
+While the repository is private, access requires an invitation. Once accessible,
+use a fork and pull request where GitHub permits, or an authorized topic branch.
+Contributing does not authorize a repository visibility change.
 
 ## Scope and design
 
@@ -24,9 +25,12 @@ No JobSpy dependency, access-control evasion or mandatory paid data service.
 ## Development setup
 
 Use one development checkout. Keep personal profiles, source captures, credentials,
-reports and generated research state outside it, even while origin is private.
+and generated research state outside it. Managed HTML reports and the synthetic
+offline demo belong in the Git-ignored `reports/` directory.
 Read [maintenance](docs/research/maintenance.md) and [security](SECURITY.md).
 Never rebaseline the public-template manifest to accept personal content.
+
+Try the [offline quickstart](docs/research/quickstart.md) before model setup.
 
 Research tools use Python 3.10+ on macOS/Linux and the standard library. To prepare
 a contributor environment, if these tools are not already installed:
@@ -48,9 +52,7 @@ Run from the root, with the venv and Bun on PATH:
 
 ```sh
 python3 tools/lint_skills.py
-python3 tools/check_framework_version.py
-python3 tools/security_guards.py
-python3 tools/research_preflight.py --mode research --action status
+python3 tools/check_release.py
 python3 -m unittest discover -s tests -t .
 ```
 
@@ -79,6 +81,10 @@ external sends in ordinary CI. Synthetic fixtures must be identified as such.
 For maintainers with the PR Ready skill installed, run its analyzer using
 `.pr-ready.json` before reporting completion. The baseline is a recorded review
 checkpoint, not a release version; update it deliberately for a new review scope.
+`check_release.py` runs security, template preflight and the framework-version
+check against that same explicit base, including committed changes. A bad or
+unavailable base fails; update `.pr-ready.json` to the intended review base before
+a new review. This avoids a clean working tree hiding a committed version error.
 The plugin is not a repository runtime dependency. Contributors without it can
 run the listed checks and attach their results for maintainer review.
 
@@ -90,7 +96,8 @@ through [SECURITY.md](SECURITY.md), and follow [CODE_OF_CONDUCT.md](CODE_OF_COND
 
 Contributions follow the [MIT license](LICENSE) unless explicitly identified
 otherwise. Changes to the Apache-2.0 Codex adaptation must preserve its license
-and [notices](THIRD_PARTY_NOTICES.md). Identify copied/adapted code, the source
+and [notices](THIRD_PARTY_NOTICES.md). Bundled Lato/Raleway fonts retain their
+SIL Open Font License and copyright notices. Identify copied/adapted code, the source
 revision and license; credit reports and coauthors accurately. Do not submit data
 whose license or retention requirements are incompatible with distribution.
 

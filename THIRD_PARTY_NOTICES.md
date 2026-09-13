@@ -18,3 +18,17 @@ The rest of this project's original additions retain the repository MIT license.
 Jobicy data is governed by its API fair-use rules, not the MIT license of its
 example repository. No real job descriptions are included in the public source
 tree. JobSpy and AI Trend Radar code have not been imported.
+
+## Bundled cover-letter fonts
+
+The unchanged Lato TTF and Raleway OTF files under
+`cover_letters/OpenFonts/fonts/` are SIL Open Font License 1.1 assets, not MIT.
+Their embedded copyright/reserved-name notices and the full license are preserved
+in [Lato OFL.txt](cover_letters/OpenFonts/fonts/lato/OFL.txt) and
+[Raleway OFL.txt](cover_letters/OpenFonts/fonts/raleway/OFL.txt).
+
+Notices were read from every bundled font's `name` table on 2026-09-11. The
+license text comes from [SIL's official text](https://openfontlicense.org/documents/OFL.txt).
+The binaries are inherited unchanged from AI Job Search; no font has been renamed
+or relicensed. The font license does not impose its terms on documents rendered
+with these fonts. Preserve these notices when redistributing the assets.

@@ -4,6 +4,6 @@
   "checks": {
     "test": ["python3", "-m", "unittest", "discover", "-s", "tests", "-t", "."],
     "lint": ["python3", "tools/lint_skills.py"],
-    "static": ["python3", "tools/security_guards.py"]
+    "static": ["python3", "tools/check_release.py"]
   }
 }

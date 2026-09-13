@@ -16,7 +16,16 @@ releases and the per-file `framework_version` markers. The initial implementatio
 foundation is upstream commit `8c81edc330b98db0473dcb016e34db835c2fd378`.
 [Inherited upstream history](docs/upstream/CHANGELOG.md) is preserved separately.
 
-## Unreleased
+## Unreleased — v0.2.0
+
+- Fix correction propagation to withdraw stale learning briefs and managed reports,
+  including artifacts retained by previous writers, while preserving audit history.
+- Bump the AGENTS framework marker and include its committed-change guard in local
+  release checks; an unavailable review base now fails closed.
+- Restore complete OFL notices for bundled Lato/Raleway fonts; original additions
+  remain MIT and the Codex adaptation retains Apache-2.0.
+- Add a synthetic offline report demo and verified, command-scoped pinned-runtime
+  installation instructions. Clarify development versus historical release features.
 
 - Add typed fine-grained skills, reviewed alias mapping, exact source spans and
   denominator-aware 30-day skill snapshots alongside legacy analyses.

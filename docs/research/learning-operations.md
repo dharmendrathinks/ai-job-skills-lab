@@ -174,3 +174,21 @@ otherwise unchanged evidence; refresh does not convert old context into fresh ev
 
 See [implementation validation](learning-validation.md) for executed checks and
 the remaining human evaluation and coverage gates.
+
+### Correction propagation and upgrades
+
+A superseding learning-progress record retracts every non-history consumer of the
+old event and its descendants: generated briefs/executions, profile proposals and
+accepted profiles, managed reports, and any dependent export/delivery artifacts.
+The old event and correction chain remain audit history. Unrelated evidence and
+the learning path survive. Regenerate briefs using the latest surviving progress;
+previous success statements must not remain active drafts. A correction alone
+does not withdraw an independently inspected result context: withdraw that context
+too when the source itself is invalid, so every other consumer is invalidated.
+
+The same reconciliation runs at each supported store transaction, including on
+existing stores written before this fix. It uses the existing withdrawal journal
+and report cleanup; no schema rewrite or requalification is required. Reports
+render only current progress events. Close browser copies and regenerate managed
+reports after corrections. Old writers do not provide these semantics; do not
+downgrade or restore an old manifest to recover withdrawn drafts.

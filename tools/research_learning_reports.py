@@ -92,6 +92,7 @@ def cards(state, now, limit, *, days=30, basis='capture'):
     for key, p in sorted(progress, key=lambda kv:kv[1]['recorded_at'], reverse=True)[:limit]:
         exists = p['path'] in paths
         result['progress'].append('<article class="card progress" data-card data-kind="progress" ' + attrs({'category':[p['event']], 'basis':[p['basis']]}) + '><div class="eyebrow">' + e(p['basis']) + '</div><h2>' + e(p['event'].capitalize() + ': ' + p['milestone']) + '</h2><p class="prose">' + e(p['summary']) + '</p><p class="meta">' + e(p['occurred_at']) + '</p><p>' + ('Linked learning path available.' if exists else 'Market justification unavailable or withdrawn; independently sourced work record retained.') + '</p>' + detail('Conditions and inspected results', {'conditions':p['conditions'], 'quotes':p['result_quotes'], 'evidence':p['evidence']}) + '</article>')
-    deps += [k for k,a in arts.items() if a['kind'] in ('learning-path', 'learning-selection', 'learning-progress', 'learning-decision')]
+    deps += [k for k,a in arts.items() if a['kind'] in ('learning-path', 'learning-selection', 'learning-decision')]
+    deps += [k for k, _ in progress]
     deps += [k for k,_ in legacy]
     return result, totals, deps, snapshot, cited_observations
