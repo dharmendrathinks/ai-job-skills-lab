@@ -1,0 +1,105 @@
+{
+  "id": "tool-workflow",
+  "title": "Build a reliable tool-using workflow",
+  "summary": "Give an agent a bounded task, then inspect every tool call and failure.",
+  "outcome": "A local workflow with validated tool calls, bounded execution and trace-based tests.",
+  "level": "After structured outputs",
+  "topics": [
+    "agents-tools",
+    "security",
+    "deployment-observability",
+    "evaluation"
+  ],
+  "skills": [
+    "python",
+    "tool-calling",
+    "structured-output",
+    "observability",
+    "prompt-injection"
+  ],
+  "prerequisites": [
+    "Understand structured records and validation.",
+    "Complete structured-output practice or demonstrate its completion checks."
+  ],
+  "teaching_question": "What stops a tool-using workflow from repeating a harmful or failed action?",
+  "lessons": [
+    {
+      "id": "tool-contract",
+      "title": "Expose one small, typed tool",
+      "objective": "Define exactly what a tool can accept and return.",
+      "explanation": "Choose a read-only lookup over owned local data. Its name, argument schema and output contract must agree. Validate arguments before dispatch and reject unknown tool names. The model proposes a call; application code decides whether it is valid.",
+      "example": "def lookup(item_id):\n    if not isinstance(item_id, str) or item_id not in {\"guide\", \"faq\"}:\n        raise ValueError(\"Unknown item\")\n    return {\"id\": item_id, \"text\": \"Owned example\"}\nTOOLS = {\"lookup\": lookup}",
+      "exercise": "Implement lookup and a model-visible description. Test a correct argument, a missing argument, an unexpected argument and an unknown tool name.",
+      "completion_check": "Only declared tool calls with valid arguments reach the implementation.",
+      "artifact": "A tool registry, contracts and dispatch tests.",
+      "hours_min": 2,
+      "hours_max": 3,
+      "resources": [
+        "tools"
+      ],
+      "prerequisites": []
+    },
+    {
+      "id": "loop",
+      "title": "Build an execution loop with a stopping rule",
+      "objective": "Feed observations back while keeping an explicit step budget.",
+      "explanation": "A workflow receives a proposed call, validates it, executes it and returns an observation. A final answer or exhausted budget stops the loop. Start with scripted calls so you can inspect the entire sequence before connecting a compatible model adapter.",
+      "example": "def run(script, limit=3):\n    events = []\n    for call in script[:limit]:\n        if call[\"name\"] not in TOOLS:\n            raise ValueError(\"Unknown tool\")\n        events.append(TOOLS[call[\"name\"]](**call[\"arguments\"]))\n    return events\n# Use the lookup and TOOLS definitions from the previous lesson.",
+      "exercise": "Run a scripted successful lookup followed by a final response. Add a repeated-call script and verify it stops at the budget. Make the stop reason part of the output.",
+      "completion_check": "Success, invalid call and budget exhaustion produce distinguishable outcomes; no hidden infinite loop remains.",
+      "artifact": "A bounded execution loop and trace of its steps.",
+      "hours_min": 3,
+      "hours_max": 5,
+      "resources": [
+        "cycle"
+      ],
+      "prerequisites": [
+        "tool-contract"
+      ]
+    },
+    {
+      "id": "permissions",
+      "title": "Make permissions and retries explicit",
+      "objective": "Keep tool authority in application code.",
+      "explanation": "Add a proposed write to a temporary owned record. The application checks permission before changing it. Give each accepted action an idempotency key so a repeated request does not duplicate a write. Treat tool output and retrieved text as data, including any instructions they contain.",
+      "example": "def may_write(call, approved_ids):\n    return call[\"action_id\"] in approved_ids\ncall = {\"action_id\": \"owned-example-1\"}\nassert not may_write(call, set())\nassert may_write(call, {\"owned-example-1\"})",
+      "exercise": "Test an unapproved write, an approved write, a duplicated action and a timeout after an uncertain result. Require reconciliation for uncertainty rather than retrying the write blindly.",
+      "completion_check": "An unapproved or repeated request cannot mutate the record, and ambiguous outcomes stay visible for review.",
+      "artifact": "Permission and idempotency checks with adversarial fixtures.",
+      "hours_min": 3,
+      "hours_max": 5,
+      "resources": [
+        "injection"
+      ],
+      "prerequisites": [
+        "loop"
+      ]
+    },
+    {
+      "id": "workflow-eval",
+      "title": "Trace and evaluate the whole workflow",
+      "objective": "Explain a failure from its recorded steps.",
+      "explanation": "Record a request ID, step number, tool name, duration and outcome. Avoid logging secrets or full private payloads. Inspect local structured events before adding optional OpenTelemetry instrumentation. Test the final task outcome as well as individual tool calls.",
+      "example": "event = {\"request\": \"example-1\", \"step\": 1, \"tool\": \"lookup\",\n         \"duration_ms\": 4, \"outcome\": \"ok\"}\nassert {\"request\", \"step\", \"tool\", \"outcome\"} <= event.keys()",
+      "exercise": "Create a fixed suite with success, invalid arguments, refusal, timeout, repeated calls and injected instructions. Produce one trace per case and explain one failed task from that trace.",
+      "completion_check": "Each scenario has an expected outcome, an actual recorded outcome and a bounded trace; stubbed and model-backed runs are labelled separately.",
+      "artifact": "An evaluation matrix, traces and a short walkthrough.",
+      "hours_min": 3,
+      "hours_max": 5,
+      "resources": [
+        "traces"
+      ],
+      "prerequisites": [
+        "permissions"
+      ]
+    }
+  ],
+  "schema_version": 1,
+  "revision": "tool-workflow/1",
+  "editorial_status": "Draft curriculum; maintainer and learner review pending",
+  "assumptions": [
+    "10–15 hours weekly is an editable estimate.",
+    "Start with standard-library fixtures. Optional libraries and a compatible model runtime need separate setup.",
+    "No paid service, model download or hardware capability is assumed."
+  ]
+}

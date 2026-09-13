@@ -69,7 +69,7 @@ regenerate and explicitly review them before activation. This installation had n
 matching launchd plist at inspection. An old workflow variable must be deliberately
 carried to the current name before its optional issue-publishing gate can be used;
 rename does not enable publication. Generated report paths remain
-`reports/jobs.html` and `reports/projects.html` in the renamed checkout.
+`reports/jobs.html` and `reports/workspace.html` in the renamed checkout.
 
 ## Executed verification
 

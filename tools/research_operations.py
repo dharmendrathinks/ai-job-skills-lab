@@ -113,15 +113,15 @@ def report(store, limit=20, *, days=30, basis='capture'):
         previous = [k for k,a in state['artifacts'].items() if a['kind'] == 'offline-report']
         revision = 1 + max([state['artifacts'][k]['payload'].get('revision', 0) for k in previous], default=0)
         store.remove(state, previous)
-        key = store.put(state, 'offline-report', {'schema_version': 2, 'revision': revision,
+        key = store.put(state, 'offline-report', {'schema_version': 3, 'revision': revision,
                         'created_at': store.clock().isoformat(), 'pages': pages, 'counts': counts}, dependencies)
     with store.transaction() as state:
         artifact(state, key, ('offline-report',))
     targets = paths(store)
-    return {'report': key, 'path': str(targets['projects.html']),
+    return {'report': key, 'path': str(targets['workspace.html']),
             'jobs': {'path': str(targets['jobs.html']), **counts['jobs']},
-            'projects': {'path': str(targets['projects.html']), **counts['projects']},
-            'youtube': {'path': str(targets['projects.html']), **counts['youtube']},
+            'projects': {'path': str(targets['workspace.html']), **counts['projects']},
+            'youtube': {'path': str(targets['workspace.html']), **counts['youtube']},
             'shown': counts['projects']['shown'] + counts['youtube']['shown'],
             'overflow': sum(counts[k]['total'] - counts[k]['shown'] for k in ('projects', 'youtube'))}
 

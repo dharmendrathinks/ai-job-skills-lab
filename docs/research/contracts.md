@@ -169,14 +169,19 @@ case/evaluation artifacts link to source observations/executions and retain actu
 scores, runtime versions and pending human review; the public evaluation record
 contains only development results over author-owned fixtures.
 
-## Managed HTML report payload v2
+## Managed HTML report payload v3
 
-`offline-report` payload 2 contains `schema_version`, `revision`, `created_at`,
-`pages` (fixed `jobs.html` and `projects.html` strings), and `counts` for jobs, projects and YouTube. The projects page contains both brief
+`offline-report` payload 3 contains `schema_version`, `revision`, `created_at`,
+`pages` (fixed `jobs.html`, `workspace.html` and `projects.html` strings), and
+`counts` for jobs, projects and YouTube. `projects.html` is a data-free local
+redirect that preserves query strings and fragments. The workspace contains both brief
 tabs; each has its own shown/total counts and generation limit.
 The outer content-addressed artifact envelope remains v1. Both pages depend on
 all observations/receipts/latest analyses contributing to counts plus current
-project/YouTube evidence and decisions, including nonselected tabs and overflow. Withdrawal invalidates the pair conservatively.
+project/YouTube evidence and decisions, including nonselected tabs and overflow. Withdrawal invalidates all three files conservatively.
+Legacy v2 payloads are projected into the new destinations without rewriting the
+immutable artifact; v1 remains readable. Regeneration emits v3. Do not downgrade
+the writer after creating v3 artifacts.
 The CLI binds private output-location/origin records to the ignored checkout
 `reports/`; corpus persistence remains external. Nondefault workspaces receive
 separate path-hash subdirectories. See [continuous operations](continuous-operations.md)
@@ -225,3 +230,27 @@ withdrawal, including briefs and reports, on write and on the next supported
 operation for older stores. New reports depend only on current progress records.
 Independent result contexts require explicit withdrawal if their content is also
 invalid. This changes lifecycle enforcement without changing the v1 schema.
+
+
+## Curated learning workspace contracts
+
+See [the workspace guide](learning-workspace.md) for commands and compatibility.
+The versioned curriculum library is original editorial content, not job evidence.
+LearningPath v2 freezes its curriculum revision, resources, foundations, preferences
+and optional adaptation. Market/skill snapshots are nullable for curriculum-only
+paths; v1 records remain readable. Selection and progress keep their v1 contracts.
+A `curriculum-adaptation` proposal uses the existing model-operation intent, policy,
+qualification, schema, retry and lifecycle checks and cannot reorder lessons.
+
+Curriculum-only project/YouTube briefs carry `basis_kind: curriculum`, a curriculum
+basis digest and no market snapshot. They integrate with existing decision memory,
+progress correction and report invalidation; a rejected draft cannot be bypassed
+by regeneration. These are practice/planning drafts and make no novel contribution,
+market or audience claim. Evidence-bound briefs retain the original model workflow.
+
+SkillSnapshot v1 gains additive original-normalization references on evidence;
+new snapshots may project exact typed aliases through their recorded current catalog.
+Historical analyses and snapshots are unchanged. SkillHistory v2 optionally depends
+on a reviewed cohort comparison, retains both exact windows and publishes percentage
+point changes only after collection, detailed analysis and normalization gates pass.
+Without a reviewed cohort it remains descriptive and has null change indicators.

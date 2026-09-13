@@ -11,7 +11,7 @@ python3 -m tools.research_demo
 ```
 
 While the repository is private, cloning requires collaborator access. Open the
-printed `jobs.html` and `projects.html` paths in a browser. Each run creates a
+printed `jobs.html` and `workspace.html` paths in a browser. Each run creates a
 fresh `reports/demo-…/` directory, leaving existing reports untouched. The second
 report shows a learning path, Python skill evidence, a project draft and a linked
 YouTube experiment. Try title search, All content search, filters and Clear filters.

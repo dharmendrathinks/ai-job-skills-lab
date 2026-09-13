@@ -2,6 +2,8 @@
 
 ## Project rename — 2026-09-11
 
+- Rename the learning report to `workspace.html`; preserve `projects.html` bookmarks with a local redirect and retain legacy report recovery.
+
 - Renamed the product, repository and development folder to AI Job Skills Lab
   (`ai-job-skills-lab`); updated documentation, reports, release references,
   runtime branding, source user agents and workflow identifiers.
@@ -17,6 +19,17 @@ foundation is upstream commit `8c81edc330b98db0473dcb016e34db835c2fd378`.
 [Inherited upstream history](docs/upstream/CHANGELOG.md) is preserved separately.
 
 ## Unreleased — v0.2.0
+
+- Add three versioned AI learning curricula, shared foundation refreshers, inspected
+  resources, lesson navigation and original runnable examples.
+- Keep Skills as a standalone explorer with topic/frequency/name sorting, source
+  terms awaiting review, and skill-share changes gated by existing cohort checks.
+- Add curriculum inspection and v2 path proposals with private preferences,
+  optional qualified adaptation and offline curriculum-only planning briefs.
+- Replace opaque skill instructions with named Codex handoffs and repair fragment
+  navigation across tabs, lessons and evidence disclosures.
+- Expand the synthetic offline demo and add curriculum/resource/alias contribution
+  guidance. Editorial and learner acceptance remain separate release gates.
 
 - Fix correction propagation to withdraw stale learning briefs and managed reports,
   including artifacts retained by previous writers, while preserving audit history.

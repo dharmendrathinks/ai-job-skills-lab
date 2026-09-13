@@ -17,11 +17,14 @@ class DemoTests(unittest.TestCase):
                  patch('tools.research_runtime.CodexWorker.__enter__', side_effect=AssertionError('model forbidden')):
                 paths = generate_demo(root)
             self.assertEqual(existing.read_text(), 'existing private report')
-            for name in ('jobs.html', 'projects.html'):
+            for name in ('jobs.html', 'workspace.html'):
                 page = Path(paths[name])
                 self.assertIn(NOTICE, page.read_text())
                 self.assertEqual(page.stat().st_mode & 0o777, 0o600)
-            html = Path(paths['projects.html']).read_text()
+            html = Path(paths['workspace.html']).read_text()
+            redirect=Path(paths['projects.html'])
+            self.assertIn('window.location.replace',redirect.read_text())
+            self.assertEqual(redirect.stat().st_mode & 0o777,0o600)
             for expected in ('tab-path', 'tab-skill', 'tab-project', 'tab-youtube', 'Python', 'held-out'):
                 self.assertIn(expected, html)
             self.assertFalse(list(root.rglob('research-state.json')))

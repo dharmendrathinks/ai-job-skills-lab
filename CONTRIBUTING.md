@@ -88,6 +88,15 @@ a new review. This avoids a clean working tree hiding a committed version error.
 The plugin is not a repository runtime dependency. Contributors without it can
 run the listed checks and attach their results for maintainer review.
 
+## Learning content and skill terminology
+
+Read the [curriculum contribution guide](docs/research/curricula/README.md) to
+improve a lesson, exercise or resource. Use the learning-content issue template
+for a concrete learner problem and the skill-alias template for terminology or
+topic corrections. Examples must be owned or suitably licensed; do not copy
+private report content. Resource inspection, automated checks and human learner
+review must be reported separately.
+
 ## Reports, conduct and licensing
 
 Use this repository’s issue tracker for sanitized defects and proposals. Do not

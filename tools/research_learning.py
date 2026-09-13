@@ -12,7 +12,7 @@ from tools.research_outcomes import artifact
 
 PATH_PROMPT = ROOT/'docs/research/prompts/learning-path-v1.md'
 DEFAULT_PREFERENCES = {'direction': 'applied AI products', 'starting_point': 'software builder, growing AI',
-                       'hours_per_week': [10, 15], 'hardware': 'M3 Pro, 18 GB unified memory',
+                       'hours_per_week': [10, 15], 'hardware': 'Not specified; confirm before choosing a model runtime',
                        'additional_spending_inr': 0}
 
 
@@ -45,7 +45,7 @@ def model_operation(store, kind, data, schema, prompt, deps, validator, *, worke
         with store.transaction() as state:
             artifact(state, intent, ('learning-intent',)); hosted_eligible(state, deps)
             require(qualified(state)[1] == identity, 'runtime changed')
-            if kind == 'learning-path':
+            if kind in ('learning-path', 'curriculum-adaptation'):
                 require([p for _,p in path_decisions(state).values()] == data['decision_memory'], 'learning decisions changed during generation')
             validated = validator(output, data)
             key = store.put(state, kind, {'schema_version': 1, 'created_at': store.clock().isoformat(),
@@ -177,6 +177,12 @@ def select_path(store, key, reviewer):
 def path_briefs(store, key, *, worker_factory=CodexWorker, retry_review=None, refresh=False):
     """Resume the linked pair without regenerating its already completed half."""
     from tools.research_briefs import generate
+    with store.transaction() as state:
+        path = artifact(state,key,('learning-path',))
+        curriculum_only = path.get('schema_version') == 2 and not path.get('market_snapshot')
+    if curriculum_only:
+        from tools.research_curricula import curriculum_briefs
+        return curriculum_briefs(store,key)
     result = {}
     for kind in ('project', 'youtube'):
         with store.transaction() as state:
@@ -292,7 +298,8 @@ def path_decisions(state):
 def compare_path(store, key, *, worker_factory=CodexWorker, retry_review=None):
     """Same frozen evidence/preferences, straightforward-prompt learning baseline."""
     with store.transaction() as state:
-        artifact(state, key, ('learning-path',))
+        path = artifact(state, key, ('learning-path',))
+        require(path.get('schema_version') != 2, 'curriculum paths use a reviewed syllabus; compare their exercises and adaptations through curriculum-inspect')
         intent = artifact(state, state['artifacts'][key]['dependencies'][0], ('learning-intent',))
         data = intent['input']
     return model_operation(store, 'learning-comparison', data, path_schema(data),

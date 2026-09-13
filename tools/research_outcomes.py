@@ -36,6 +36,8 @@ def evidence_basis(state, snapshot, contexts):
 
 def brief_basis(state, brief):
     row = artifact(state, brief, ('brief',))
+    if row.get('basis_kind') == 'curriculum':
+        return row['evidence_basis']
     return evidence_basis(state, row['snapshot'], row['contexts'])
 
 

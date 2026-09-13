@@ -7,7 +7,8 @@ import tempfile
 from tools.research_evidence import digest, require, private_state_path
 from tools.rank_state import save_state
 
-NAMES = ('jobs.html', 'projects.html')
+NAMES = ('jobs.html', 'workspace.html', 'projects.html')
+LEGACY_NAMES = ('jobs.html', 'projects.html')
 
 
 def checked_directory(store, repository):

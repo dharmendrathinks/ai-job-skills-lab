@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "revision": "ai-skills/1",
+  "revision": "ai-skills/2",
   "basis": "Maintainer-authored terminology catalog; not demand evidence. Exact case-insensitive aliases only; ambiguous concepts require review.",
   "skills": [
     {
@@ -224,6 +224,7 @@
       "kind": "knowledge",
       "aliases": [
         "RAG",
+        "RAG pipeline",
         "retrieval augmented generation"
       ],
       "capabilities": [
@@ -285,7 +286,10 @@
       "name": "Tool calling",
       "kind": "knowledge",
       "aliases": [
-        "function calling"
+        "LLM tool call",
+        "function calling",
+        "tool-calling",
+        "tool/function calling"
       ],
       "capabilities": [
         "agent-tool-engineering"
@@ -436,6 +440,319 @@
         "ai-product-engineering"
       ],
       "definition": "Version-control system."
+    },
+    {
+      "id": "llms",
+      "name": "Large language models",
+      "kind": "knowledge",
+      "aliases": [
+        "LLMs",
+        "LLM"
+      ],
+      "capabilities": [
+        "ai-product-engineering"
+      ],
+      "definition": "Language models that predict and generate sequences of text tokens."
+    },
+    {
+      "id": "ai-agents",
+      "name": "AI agents",
+      "kind": "knowledge",
+      "aliases": [],
+      "capabilities": [
+        "agent-tool-engineering"
+      ],
+      "definition": "Systems that use model outputs to propose steps and tools within an application-controlled workflow."
+    },
+    {
+      "id": "vector-databases",
+      "name": "Vector databases",
+      "kind": "technology",
+      "aliases": [],
+      "capabilities": [
+        "retrieval-knowledge"
+      ],
+      "definition": "Databases with similarity search over stored vectors."
+    },
+    {
+      "id": "elasticsearch",
+      "name": "Elasticsearch",
+      "kind": "technology",
+      "aliases": [],
+      "capabilities": [
+        "retrieval-knowledge"
+      ],
+      "definition": "Search engine supporting text and vector retrieval."
+    },
+    {
+      "id": "mysql",
+      "name": "MySQL",
+      "kind": "technology",
+      "aliases": [],
+      "capabilities": [
+        "data-pipelines"
+      ],
+      "definition": "Relational database management system."
+    },
+    {
+      "id": "terraform",
+      "name": "Terraform",
+      "kind": "technology",
+      "aliases": [],
+      "capabilities": [
+        "inference-deployment"
+      ],
+      "definition": "Infrastructure configuration and provisioning tool."
+    },
+    {
+      "id": "aws-bedrock",
+      "name": "Amazon Bedrock",
+      "kind": "technology",
+      "aliases": [
+        "Bedrock"
+      ],
+      "capabilities": [
+        "inference-deployment"
+      ],
+      "definition": "AWS service for accessing foundation models and related application capabilities."
+    },
+    {
+      "id": "aws-cdk",
+      "name": "AWS CDK",
+      "kind": "technology",
+      "aliases": [
+        "CDK"
+      ],
+      "capabilities": [
+        "inference-deployment"
+      ],
+      "definition": "Infrastructure definitions using general-purpose programming languages."
+    },
+    {
+      "id": "aws-cloudfront",
+      "name": "Amazon CloudFront",
+      "kind": "technology",
+      "aliases": [
+        "CloudFront"
+      ],
+      "capabilities": [
+        "inference-deployment"
+      ],
+      "definition": "Content delivery network service."
+    },
+    {
+      "id": "aws-cognito",
+      "name": "Amazon Cognito",
+      "kind": "technology",
+      "aliases": [
+        "Cognito"
+      ],
+      "capabilities": [
+        "security"
+      ],
+      "definition": "Application identity and authentication service."
+    },
+    {
+      "id": "aws-ecr",
+      "name": "Amazon ECR",
+      "kind": "technology",
+      "aliases": [
+        "ECR"
+      ],
+      "capabilities": [
+        "inference-deployment"
+      ],
+      "definition": "Container image registry service."
+    },
+    {
+      "id": "aws-s3",
+      "name": "Amazon S3",
+      "kind": "technology",
+      "aliases": [
+        "S3"
+      ],
+      "capabilities": [
+        "data-pipelines"
+      ],
+      "definition": "Object storage service."
+    },
+    {
+      "id": "datadog",
+      "name": "Datadog",
+      "kind": "technology",
+      "aliases": [],
+      "capabilities": [
+        "reliability-observability"
+      ],
+      "definition": "Observability platform for application and infrastructure signals."
+    },
+    {
+      "id": "langfuse",
+      "name": "Langfuse",
+      "kind": "technology",
+      "aliases": [],
+      "capabilities": [
+        "reliability-observability"
+      ],
+      "definition": "Tooling for inspecting and evaluating LLM application traces."
+    },
+    {
+      "id": "temporal",
+      "name": "Temporal",
+      "kind": "technology",
+      "aliases": [],
+      "capabilities": [
+        "reliability-observability"
+      ],
+      "definition": "Durable workflow execution platform."
+    },
+    {
+      "id": "http-apis",
+      "name": "HTTP APIs",
+      "kind": "knowledge",
+      "aliases": [],
+      "capabilities": [
+        "ai-product-engineering"
+      ],
+      "definition": "Application interfaces exposed using HTTP requests and responses."
+    },
+    {
+      "id": "webhooks",
+      "name": "Webhooks",
+      "kind": "knowledge",
+      "aliases": [],
+      "capabilities": [
+        "ai-product-engineering"
+      ],
+      "definition": "Event notifications delivered to an application endpoint."
+    },
+    {
+      "id": "streaming",
+      "name": "Response streaming",
+      "kind": "knowledge",
+      "aliases": [
+        "streaming responses"
+      ],
+      "capabilities": [
+        "ai-product-engineering"
+      ],
+      "definition": "Delivering a response incrementally as its parts become available."
+    },
+    {
+      "id": "sse",
+      "name": "Server-sent events",
+      "kind": "knowledge",
+      "aliases": [
+        "SSE"
+      ],
+      "capabilities": [
+        "ai-product-engineering"
+      ],
+      "definition": "One-way server event streams delivered over HTTP."
+    },
+    {
+      "id": "schema-design",
+      "name": "Schema design",
+      "kind": "practice",
+      "aliases": [],
+      "capabilities": [
+        "ai-product-engineering"
+      ],
+      "definition": "Defining explicit structure and constraints for application data."
+    },
+    {
+      "id": "data-validation",
+      "name": "Data validation",
+      "kind": "practice",
+      "aliases": [],
+      "capabilities": [
+        "ai-product-engineering"
+      ],
+      "definition": "Checking incoming values against declared types and application rules."
+    },
+    {
+      "id": "retry-logic",
+      "name": "Retry logic",
+      "kind": "practice",
+      "aliases": [],
+      "capabilities": [
+        "reliability-observability"
+      ],
+      "definition": "Handling repeat attempts with explicit budgets and failure semantics."
+    },
+    {
+      "id": "prompt-management",
+      "name": "Prompt management",
+      "kind": "practice",
+      "aliases": [],
+      "capabilities": [
+        "ai-product-engineering"
+      ],
+      "definition": "Versioning and maintaining prompts used by an application."
+    },
+    {
+      "id": "prompt-caching",
+      "name": "Prompt caching",
+      "kind": "knowledge",
+      "aliases": [
+        "prompt caching strategies"
+      ],
+      "capabilities": [
+        "inference-deployment"
+      ],
+      "definition": "Reusing supported repeated prompt computation to manage latency or cost."
+    },
+    {
+      "id": "token-budgets",
+      "name": "Token budgets",
+      "kind": "knowledge",
+      "aliases": [],
+      "capabilities": [
+        "inference-deployment"
+      ],
+      "definition": "Explicit limits on input, output and context token use."
+    },
+    {
+      "id": "async-python",
+      "name": "Async Python",
+      "kind": "practice",
+      "aliases": [],
+      "capabilities": [
+        "ai-product-engineering"
+      ],
+      "definition": "Using Python asynchronous execution for concurrent I/O."
+    },
+    {
+      "id": "infrastructure-as-code",
+      "name": "Infrastructure as code",
+      "kind": "practice",
+      "aliases": [
+        "Infrastructure-as-code"
+      ],
+      "capabilities": [
+        "inference-deployment"
+      ],
+      "definition": "Managing infrastructure through reviewed, versioned configuration."
+    },
+    {
+      "id": "dataset-management",
+      "name": "Dataset management",
+      "kind": "practice",
+      "aliases": [],
+      "capabilities": [
+        "data-pipelines"
+      ],
+      "definition": "Maintaining dataset versions, metadata and quality checks."
+    },
+    {
+      "id": "llm-as-judge",
+      "name": "LLM-as-a-judge",
+      "kind": "knowledge",
+      "aliases": [],
+      "capabilities": [
+        "evaluation"
+      ],
+      "definition": "Using model-produced judgments as an evaluation signal requiring validation."
     }
   ]
 }

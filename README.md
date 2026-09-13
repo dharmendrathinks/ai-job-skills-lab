@@ -8,7 +8,7 @@
 
 Learn from the engineering problems organizations advertise. Turn inspected job
 requirements into learning priorities, useful open-source work, product hypotheses
-and engineering experiments for Dharmendra Thinks.
+and engineering experiments you can explain and share.
 
 > What engineering problems are organizations hiring people to solve, and which
 > are worth learning, building for, validating commercially, or explaining through
@@ -40,6 +40,16 @@ Use the [learning operations guide](docs/research/learning-operations.md) for bo
 detailed analysis, 30-day skill views, path selection, progress and cited questions.
 Extraction coverage and human-quality review are shown separately; a completed
 implementation does not mean every retained listing has been analysed.
+
+Explore three starter curricula—structured outputs, document assistants and
+reliable tool workflows—with a syllabus, exercises, completion checks and inspected
+resource links. The **Skills tab remains independent**, grouping catalog skills
+by engineering topic and offering frequency sorting, evidence and comparable-window
+trends. Unresolved source phrases remain available in Observed terms.
+
+Read the [curated workspace guide](docs/research/learning-workspace.md). The
+curricula are editorial drafts pending maintainer and learner review; the offline
+demo works without accounts, model calls or private research data.
 
 ## What it does
 
@@ -166,8 +176,9 @@ Generate the two local reports from existing results:
 .venv/bin/python -m tools.research_ops report --limit 1000
 ```
 
-Open `reports/jobs.html` for the jobs list and `reports/projects.html` for
-My learning path, Skills, Projects, YouTube and Progress tabs. Both files have offline search, filters
+Open `reports/jobs.html` for the jobs list and `reports/workspace.html` for
+My learning path, Skills, Projects, YouTube and Progress tabs. `projects.html`
+remains a compatibility redirect, preserving bookmarked fragments. Both report pages have offline search, filters
 and a Clear filters button. Search and filters apply to the selected brief tab.
 Reports are private, Git-ignored managed copies; their underlying data stays in
 the private research workspace. This command does not collect or generate new

@@ -80,9 +80,9 @@ def persist(store, path, state):
             valid = False
         if not valid:
             backup_path.unlink()  # conservative whole-copy invalidation
-    # Both linked views disappear before the state advertises removal. A failed
-    # second write removes the first too; this is not a multi-file/fsync guarantee.
-    from tools.research_report_files import remove_views, write, NAMES
+    # All linked views disappear before the state advertises removal. A failed
+    # write removes earlier views too; this is not a multi-file/fsync guarantee.
+    from tools.research_report_files import remove_views, write, NAMES, LEGACY_NAMES
     remove_views(store)
     save_state(path, state)
     reports = [(a['payload']['created_at'], key, a['payload'])
@@ -90,10 +90,17 @@ def persist(store, path, state):
     if reports:
         payload = max(reports)[2]
         try:
-            if payload.get('schema_version') == 2:
-                require(set(payload['pages']) == set(NAMES), 'invalid report pages')
+            if payload.get('schema_version') in (2, 3):
+                pages = payload['pages']
+                if payload['schema_version'] == 2:
+                    require(set(pages) == set(LEGACY_NAMES), 'invalid legacy report pages')
+                    from tools.research_reports import legacy_redirect
+                    # Project a legacy payload without rewriting its immutable record.
+                    pages = {'jobs.html': pages['jobs.html'], 'workspace.html': pages['projects.html'],
+                             'projects.html': legacy_redirect()}
+                require(set(pages) == set(NAMES), 'invalid report pages')
                 for name in NAMES:
-                    write(store, name, payload['pages'][name])
+                    write(store, name, pages[name])
             else:
                 write(store, 'research-report.html', payload['html'])
         except Exception:
@@ -102,7 +109,7 @@ def persist(store, path, state):
 
 
 def materialize(store, html):
-    # Retained legacy helper; v2 reports use fixed jobs/projects destinations.
+    # Retained legacy helper; newer reports use fixed managed destinations.
     from tools.research_report_files import write
     return write(store, 'research-report.html', html)
 

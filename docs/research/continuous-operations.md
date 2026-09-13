@@ -91,7 +91,7 @@ choose work, record observed/user-reported outcomes and review profile proposals
 ```
 
 For the default AI workspace these are `reports/jobs.html` and
-`reports/projects.html` under the development checkout. This location is an
+`reports/workspace.html` under the development checkout. This location is an
 explicit user-approved exception for generated views only: corpus, profiles,
 credentials, state and journals remain outside the checkout. `reports/` stays
 Git-ignored. Files have 0600 permissions and the directory 0700. Do not force-add
@@ -104,7 +104,9 @@ and collection scope/receipts. The second file has My learning path, Skills, Pro
 outcomes and latest decision status. Rejected, accepted and deferred project
 briefs remain inspectable through filters; superseded revisions are excluded.
 The 1–1000 limit applies independently to jobs, project briefs and YouTube briefs,
-with per-tab total/overflow displayed; YouTube shares `projects.html`, not a third file.
+with per-tab total/overflow displayed; YouTube shares `workspace.html`.
+`projects.html` is a compatibility redirect to the workspace and preserves old
+bookmarked fragments. With JavaScript disabled it provides a manual link.
 Search and filters cover the generated entries, not entries beyond that limit.
 
 Both pages use responsive typography, separate color accents, metric cards and
@@ -144,15 +146,16 @@ A missing binding fails closed and needs reconciliation of the existing managed
 copies; never delete markers to bypass it. Moving the checkout requires deliberate
 location migration, not editing source data to redirect file writes.
 
-The `offline-report` artifact now has payload version 2 with both HTML pages and
+The `offline-report` artifact now has payload version 3 with both HTML pages, the compatibility redirect and
 counts, retaining transitive evidence/decision dependencies. Regenerating replaces
-v1 and removes the old private `research-report.html`. Ordinary persistence removes
+older payloads and removes the old private `research-report.html`. Ordinary persistence removes
 stale copies before state replacement, then materializes valid pages atomically
-one file at a time; failure removes a partially written pair. Interrupted temporary
+one file at a time; failure removes a partially written set. Interrupted temporary
 files are removed on next access. There is no multi-file/fsync/power-loss guarantee.
-Withdrawal or expiry removes both pages conservatively when their artifact becomes
-invalid; regenerate from survivors. Existing v1 artifacts remain readable until
-regeneration. Do not downgrade the writer after creating v2 report artifacts.
+Withdrawal or expiry removes all three files conservatively when their artifact becomes
+invalid; regenerate from survivors. Existing v1 artifacts remain readable; v2 artifacts are projected into the new
+destinations without rewriting their records. Do not downgrade the writer after
+creating v3 report artifacts.
 
 Each page is bounded to 16 MB; lower the generation limit if needed. The browser
 may retain an already-open view; close it after withdrawal/expiry. No browser-cache

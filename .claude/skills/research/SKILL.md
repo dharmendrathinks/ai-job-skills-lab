@@ -293,3 +293,14 @@ Use deterministic `ask --intent count` for counts and bounded cited explanation
 for questions. No vector database or paid fallback is needed. Before retrying an
 ambiguous learning intent, inspect it and supply an actual operator retry reason;
 never fabricate review text to automate retries. Publication/outreach remain gated.
+
+
+### Curated offline learning
+
+The [curated workspace guide](../../../docs/research/learning-workspace.md) adds
+`research_decisions curricula` and `curriculum-inspect`, which need no private
+Store or model. `path-propose --curriculum ID` creates an unselected editorial
+LearningPath v2; optional snapshot adaptation uses the existing qualified worker.
+Keep the Skills tab independently useful. Source phrases awaiting normalization
+remain visible; skill trends require the reviewed cohort checks. Never infer a
+selection or completed lesson from browser navigation or a generated handoff.

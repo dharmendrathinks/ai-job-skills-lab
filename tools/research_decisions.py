@@ -44,7 +44,7 @@ def inspect_brief(store, key):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('action', choices=['context-import', 'context-acquire', 'radar-import', 'profile-propose', 'profile-review', 'brief', 'inspect', 'decide', 'outcome', 'reconsider', 'history', 'outcome-profile', 'interchange-preview', 'interchange-release', 'interchange-import', 'interchange-inspect', 'skills', 'skill-history', 'skill-map', 'path-propose', 'path-compare', 'path-select', 'path-decision', 'path-briefs', 'progress', 'progress-profile', 'ask', 'learning-inspect'])
+    parser.add_argument('action', choices=['context-import', 'context-acquire', 'radar-import', 'profile-propose', 'profile-review', 'brief', 'inspect', 'decide', 'outcome', 'reconsider', 'history', 'outcome-profile', 'interchange-preview', 'interchange-release', 'interchange-import', 'interchange-inspect', 'skills', 'skill-history', 'skill-map', 'path-propose', 'path-compare', 'path-select', 'path-decision', 'path-briefs', 'progress', 'progress-profile', 'ask', 'learning-inspect', 'curricula', 'curriculum-inspect'])
     parser.add_argument('--input', help='Private reviewed JSON bundle')
     parser.add_argument('--repo', help='Read-only Git object source; no checkout or execution')
     parser.add_argument('--report', help='Explicit schema-3.0 report JSON; never a database')
@@ -54,6 +54,9 @@ def main():
     parser.add_argument('--reviewer')
     parser.add_argument('--kind', choices=list(SECTIONS))
     parser.add_argument('--snapshot')
+    parser.add_argument('--curriculum', help='Versioned curated AI learning path')
+    parser.add_argument('--preferences', help='Private JSON planning preferences; never application profile data')
+    parser.add_argument('--cohort', help='Reviewed equal-window cohort for skill trends')
     parser.add_argument('--context', action='append', default=[])
     parser.add_argument('--profile')
     parser.add_argument('--refresh', action='store_true')
@@ -70,14 +73,25 @@ def main():
     args = parser.parse_args()
     try:
         require(not template_errors(ROOT), 'public template preflight failed')
+        if args.action in ('curricula', 'curriculum-inspect'):
+            from tools.research_curricula import inspect_curriculum
+            if args.action == 'curriculum-inspect': require(args.curriculum or args.id, '--curriculum required')
+            print(json.dumps(inspect_curriculum(args.curriculum or args.id if args.action == 'curriculum-inspect' else None), ensure_ascii=True, indent=2))
+            return 0
         store = Store(private_state_path(ROOT, dict(os.environ)))
         if args.action in ('skills', 'skill-history', 'skill-map', 'path-propose', 'path-compare', 'path-select', 'path-decision', 'path-briefs', 'progress', 'progress-profile', 'ask', 'learning-inspect'):
             from tools.research_skills import snapshot as skill_snapshot, monthly, review_mapping
             from tools.research_learning import propose_path, select_path, record_progress, progress_profile, path_decision, compare_path
             if args.action == 'skills': result = skill_snapshot(store, days=args.days, basis=args.basis, source=args.source, responsibility=args.responsibility)
-            elif args.action == 'skill-history': result = monthly(store, args.days)
+            elif args.action == 'skill-history': result = monthly(store, args.days, basis=args.basis, cohort=args.cohort)
             elif args.action == 'skill-map': result = review_mapping(store, read_input(args.input))
-            elif args.action == 'path-propose': result = propose_path(store, args.snapshot, args.skill, args.context, args.profile, retry_review=args.retry_review)
+            elif args.action == 'path-propose':
+                if args.curriculum:
+                    from tools.research_curricula import propose_curriculum
+                    result = propose_curriculum(store, args.curriculum, args.snapshot, read_input(args.preferences) if args.preferences else None, contexts=args.context, retry_review=args.retry_review)
+                else:
+                    require(not args.preferences, '--preferences currently requires --curriculum')
+                    result = propose_path(store, args.snapshot, args.skill, args.context, args.profile, retry_review=args.retry_review)
             elif args.action == 'path-compare': result = compare_path(store, args.id, retry_review=args.retry_review)
             elif args.action == 'path-select': result = select_path(store, args.id, args.reviewer)
             elif args.action == 'path-decision': result = path_decision(store, read_input(args.input))

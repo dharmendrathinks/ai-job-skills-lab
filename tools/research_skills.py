@@ -86,7 +86,7 @@ def latest_analysis(state, observations, *, detailed=False):
     return chosen
 
 
-def skill_payload(state, now, *, days=30, basis='capture', end=None, source=None, responsibility=None):
+def skill_payload(state, now, *, days=30, basis='capture', end=None, source=None, responsibility=None, receipt_ids=None):
     require(type(days) is int and 1 <= days <= 366 and basis in ('capture', 'publication'), 'invalid skill window')
     require(responsibility in (None, 'applied', 'mixed', 'research-heavy', 'unknown'), 'invalid responsibility slice')
     end = timestamp(end) if isinstance(end, str) else end or now
@@ -96,7 +96,7 @@ def skill_payload(state, now, *, days=30, basis='capture', end=None, source=None
     # Filter revisions BEFORE choosing latest in the window. New captures must
     # not retroactively replace historical-window evidence.
     for key, a in arts.items():
-        if a['kind'] == 'observation' and (not source or a['payload']['source'] == source):
+        if a['kind'] == 'observation' and (not source or a['payload']['source'] == source) and (receipt_ids is None or a['payload']['receipt'] in receipt_ids):
             p = a['payload']; date = p['captured_at'] if basis == 'capture' else p['posted_at']
             if date is None: missing_dates += 1
             if date is not None and start <= timestamp(date) < end and timestamp(p['captured_at']) < end:
@@ -122,6 +122,7 @@ def skill_payload(state, now, *, days=30, basis='capture', end=None, source=None
     for key, a in sorted(arts.items(), key=lambda pair: (pair[1]['payload'].get('reviewed_at', ''), pair[0])):
         if a['kind'] == 'skill-mapping': mappings[a['payload']['from_id']] = (key, a['payload']['to_id'])
     cat = {s['id']: s for s in catalog()['skills']}
+    aliases = {(normalized(alias), s['kind']): s['id'] for s in cat.values() for alias in [s['name'], *s['aliases']]}
     skills = {}; denominator = set(); analyzed = set(); classified = Counter(); dependencies = set(scoped)
     evidence = {}; opening_skills = {}
     versions = set(); missing_description = 0
@@ -143,9 +144,13 @@ def skill_payload(state, now, *, days=30, basis='capture', end=None, source=None
                 mid = m['skill_id']; mapping = mappings.get(mid)
                 if mapping:
                     dependencies.add(mapping[0]); mid = mapping[1]
+                projected = None
+                if not mapping and m['normalization'] == 'unresolved':
+                    projected = aliases.get((normalized(m['surface']), m['kind']))
+                    if projected: mid = projected
                 entry = cat.get(mid)
                 s = skills.setdefault(mid, {'id': mid, 'name': entry['name'] if entry else m['name'],
-                    'kind': m['kind'], 'normalization': 'reviewed-mapping' if mapping else m['normalization'],
+                    'kind': m['kind'], 'normalization': 'reviewed-mapping' if mapping else 'catalog-projection' if projected else m['normalization'],
                     'definition': entry['definition'] if entry else 'Source wording; normalization needs review.',
                     'capabilities': entry['capabilities'] if entry else [],
                     'openings': set(), 'reported_employers': set(), 'verified_employers': set(),
@@ -155,7 +160,8 @@ def skill_payload(state, now, *, days=30, basis='capture', end=None, source=None
                 if row['employer_domain']: s['verified_employers'].add(row['employer_domain'])
                 eid = digest([aid, index]); s['evidence'].append(eid); opening_skills[opening].add(mid)
                 evidence[eid] = {'analysis': aid, 'observation': oid, 'opening': opening, 'skill': mid,
-                    'quote': m['quote'], 'surface': m['surface'], 'section_context': m['section_context'],
+                    'quote': m['quote'], 'surface': m['surface'], 'original_skill_id': m['skill_id'],
+                    'original_catalog_revision': m['catalog_revision'], 'section_context': m['section_context'],
                     'modality': m['modality'], 'source': row['source'], 'url': row['url'],
                     'title': row['title'], 'employer': row['employer_name'], 'captured_at': row['captured_at'],
                     'posted_at': row['posted_at'], 'responsibility_class': a['responsibility_class']}
@@ -168,7 +174,7 @@ def skill_payload(state, now, *, days=30, basis='capture', end=None, source=None
         s['cooccurs'] = dict(sorted(s['cooccurs'].items()))
     # All receipts in the time window matter, including failures and empty runs.
     receipts = {k:a['payload'] for k,a in arts.items() if a['kind'] == 'receipt' and
-                (not source or a['payload']['source'] == source) and start <= timestamp(a['payload']['finished_at']) < end}
+                (not source or a['payload']['source'] == source) and (receipt_ids is None or k in receipt_ids) and start <= timestamp(a['payload']['finished_at']) < end}
     dependencies.update(receipts)
     dependencies.update(k for k,a in arts.items() if a['kind'] == 'board-link' and a['payload']['observation'] in selected)
     collection_days = sorted({timestamp(r['finished_at']).date().isoformat() for r in receipts.values()})
@@ -190,7 +196,8 @@ def skill_payload(state, now, *, days=30, basis='capture', end=None, source=None
                 'Required/preferred/unspecified counts can overlap; total counts each opening once.',
                 'Reported employer names are not verified identities. Normalized aliases do not prove semantic correctness.',
                 'Collection gaps, partial receipts and extraction versions prevent unqualified trend claims.',
-                'Exact spans pass deterministic validation; human semantic review remains separate.']}, sorted(dependencies)
+                'Exact spans pass deterministic validation; human semantic review remains separate.',
+                'This new snapshot projects exact typed aliases through its recorded catalog revision; original analyses and prior snapshots are unchanged.']}, sorted(dependencies)
 
 
 def snapshot(store, **kwargs):
@@ -218,12 +225,68 @@ def review_mapping(store, row):
         return {'mapping': key}
 
 
-def monthly(store, days=30):
+def history_payload(state, now, days=30, *, basis='capture', comparison=None):
+    """Derive skill change only from the same frozen receipts checked by P5."""
+    from tools.research_coverage import analysis_version
+    issues = []; dependencies = []; windows = []
+    if comparison:
+        basis = comparison['basis']
+        if comparison['status'] != 'comparable-sample': issues.extend(comparison['collection_issues'])
+        if comparison['capability_comparison'] != 'comparable-within-sample': issues.append('Missing or changed analysis prevents comparison.')
+        periods = [w['period'] for w in comparison['windows']]
+        protocol_ids = set(comparison['protocols'])
+    else:
+        periods = [{'to':(now-timedelta(days=days*offset)).isoformat()} for offset in (1,0)]
+        protocol_ids = None
+        issues.append('No reviewed comparable cohort; windows are descriptive observations only.')
+    for period in periods:
+        window_days = days
+        selected = None
+        if comparison:
+            duration = timestamp(period['to']) - timestamp(period['from'])
+            require(duration.total_seconds() % 86400 == 0, 'skill windows must cover whole days')
+            window_days = duration.days
+            selected = {a['payload']['receipt'] for a in state['artifacts'].values()
+                        if a['kind'] == 'capture-assessment' and a['payload']['protocol'] in protocol_ids}
+        window, deps = skill_payload(state, now, days=window_days, end=period['to'], basis=basis, receipt_ids=selected)
+        windows.append(window); dependencies += deps
+        if window['counts']['pending_or_legacy_openings']: issues.append('Detailed skill analysis does not cover every opening in both windows.')
+        if not window['counts']['in_domain_denominator']: issues.append('Both windows need analysed in-domain openings.')
+        analyses = {e['analysis'] for e in window['evidence'].values()}
+        if any(analysis_version(state, state['artifacts'][a]['payload']) is None for a in analyses):
+            issues.append('Extraction version is unknown.')
+    if windows[0]['catalog_digest'] != windows[1]['catalog_digest'] or windows[0]['analysis_versions'] != windows[1]['analysis_versions']:
+        issues.append('Catalog or extraction revisions differ between windows.')
+    revisions = [{e['original_catalog_revision'] for e in w['evidence'].values()} for w in windows]
+    if revisions[0] != revisions[1]: issues.append('Original normalization revisions differ between windows.')
+    indicators = None
+    if not issues:
+        indicators = []
+        for sid in sorted(set(windows[0]['skills']) | set(windows[1]['skills'])):
+            previous, current = [w['skills'].get(sid) for w in windows]
+            if any(s and s['normalization'] == 'unresolved' for s in (previous,current)): continue
+            counts = [s['openings'] if s else 0 for s in (previous,current)]
+            shares = [n / w['counts']['in_domain_denominator'] for n,w in zip(counts,windows)]
+            indicators.append({'skill':sid, 'name':(current or previous)['name'], 'previous':counts[0],
+                'current':counts[1], 'percentage_points':(shares[1]-shares[0])*100})
+        indicators.sort(key=lambda s:(-s['percentage_points'],s['name'].casefold()))
+    return {'schema_version':2,'windows':windows,'basis':basis,'change_indicators':indicators,
+            'status':'comparable-within-sample' if indicators is not None else 'descriptive-observations-only',
+            'issues':sorted(set(issues)),
+            'limitation':'Sample observations, not worldwide demand or hiring. Unreviewed terms receive no change indicators.' if indicators is not None else
+                'Collection or analysis is not comparable; no growth or decline is inferred.'}, sorted(set(dependencies))
+
+
+def monthly(store, days=30, *, basis='capture', cohort=None):
+    from tools.research_outcomes import artifact
+    comparison_id = None
+    if cohort:
+        from tools.research_coverage import compare
+        comparison_id = compare(store, cohort)['comparison']
     with store.transaction() as state:
-        now = store.clock()
-        windows = [skill_payload(state, now, days=days, end=now - timedelta(days=days * offset)) for offset in (1, 0)]
-        payload = {'schema_version': 1, 'windows': [w[0] for w in windows], 'change_indicators': None,
-                   'status': 'descriptive-observations-only',
-                   'limitation': 'Use a reviewed complete stable cohort for changes; partial feeds never become growth evidence.'}
-        key = store.put(state, 'skill-history', payload, [d for _, deps in windows for d in deps])
-        return {'history': key, 'status': payload['status']}
+        require('domain_pack' not in state, 'skill history requires the AI workspace')
+        comparison = artifact(state, comparison_id, ('cohort-comparison',)) if comparison_id else None
+        payload, deps = history_payload(state, store.clock(), days, basis=basis, comparison=comparison)
+        if comparison_id: deps.append(comparison_id); payload['comparison'] = comparison_id
+        key = store.put(state, 'skill-history', payload, deps)
+        return {'history':key, 'status':payload['status']}

@@ -768,7 +768,7 @@ payload-v2 reports with a fixed CSP-hashed UI script. No provider, model, archit
 or phase scope changes. See [operations](docs/research/continuous-operations.md).
 
 The subsequent approved refinement keeps exactly two HTML files: jobs list, and
-Projects / YouTube experiments tabs in `projects.html`. Each brief tab has separate
+Projects / YouTube experiments tabs in `workspace.html`. Each brief tab has separate
 counts, filters and limits while sharing lifecycle invalidation. No YouTube
 capability or existing evidence is removed; historical learning and product-hypothesis briefs
 remain in the review inbox.

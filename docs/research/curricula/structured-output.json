@@ -1,0 +1,104 @@
+{
+  "id": "structured-output",
+  "title": "Build a structured-output AI feature",
+  "summary": "Turn short notes into useful records, and learn why valid JSON can still be wrong.",
+  "outcome": "A note-to-records application, error cases and an evaluation report.",
+  "level": "Start here",
+  "topics": [
+    "foundations",
+    "llm-applications",
+    "evaluation"
+  ],
+  "skills": [
+    "python",
+    "pydantic",
+    "structured-output",
+    "json-schema",
+    "llm-evaluation"
+  ],
+  "prerequisites": [
+    "Run a Python script and explain a dictionary.",
+    "Use the JSON, testing and API refreshers if these are unfamiliar."
+  ],
+  "teaching_question": "When does a valid record still misrepresent a note?",
+  "lessons": [
+    {
+      "id": "schema",
+      "title": "Define what a useful record means",
+      "objective": "Specify a task record without guessing missing information.",
+      "explanation": "Start with examples you own: a clear task, an ambiguous request and a note containing no task. Separate required content from nullable information. A schema constrains structure; it cannot establish whether the note supports a field.",
+      "example": "record = {\"task\": \"Review the deployment guide\", \"owner\": None,\n          \"source\": \"Please review the deployment guide.\"}\nassert record[\"owner\"] is None\n# An absent owner stays unknown; a note without a task yields no record.",
+      "exercise": "Write six notes and their expected records first. Define the schema, including what happens when no task is present. Implement the contract using Pydantic or a small explicit validator.",
+      "completion_check": "Valid examples pass; missing required fields and invalid types fail; an absent owner is preserved without invention.",
+      "artifact": "A schema, six owned notes and expected records.",
+      "hours_min": 2,
+      "hours_max": 3,
+      "resources": [
+        "models"
+      ],
+      "prerequisites": []
+    },
+    {
+      "id": "integration",
+      "title": "Put a model behind a small interface",
+      "objective": "Connect extraction to validation through a replaceable adapter.",
+      "explanation": "First return a fixed response to test the route from note to record. Then use a separately configured compatible model adapter if one is available. Keep model-generated content as data and record which adapter produced it. Stub results never establish extraction accuracy.",
+      "example": "import json\ndef parse_response(raw):\n    value = json.loads(raw)\n    if not isinstance(value, dict):\n        raise ValueError(\"Expected an object\")\n    return value\nassert parse_response('{\"owner\": null}')[\"owner\"] is None",
+      "exercise": "Build a CLI that reads one note and calls the adapter. Validate its response against the previous lesson’s contract. Exercise a fixed valid response, malformed JSON and a timeout.",
+      "completion_check": "All three response paths have explicit outcomes. The report identifies whether the transport was stubbed or a model was actually used.",
+      "artifact": "A testable CLI and response-adapter contract.",
+      "hours_min": 3,
+      "hours_max": 5,
+      "resources": [
+        "mocks"
+      ],
+      "prerequisites": [
+        "schema"
+      ]
+    },
+    {
+      "id": "failures",
+      "title": "Explain and contain invalid results",
+      "objective": "Handle an invalid response without silently fixing its meaning.",
+      "explanation": "Keep the original response and a structured error separate from accepted records. A retry can repeat a mistake or spend more resources; set a finite retry policy rather than hiding it inside parsing. Accepting a correction should be a deliberate review step.",
+      "example": "def check_source(record, note):\n    quote = record.get(\"source\")\n    if not isinstance(quote, str) or not quote or quote not in note:\n        raise ValueError(\"Source text is absent from the note\")\n    return record",
+      "exercise": "Add unknown-field, invalid-type, absent-source and timeout cases. Show an actionable error for each. Add a review step before replacing an existing accepted record.",
+      "completion_check": "Rejected responses never become accepted records, and repeating a failed call cannot overwrite a previous result.",
+      "artifact": "An error table and failure-handling tests.",
+      "hours_min": 2,
+      "hours_max": 4,
+      "resources": [
+        "validators"
+      ],
+      "prerequisites": [
+        "integration"
+      ]
+    },
+    {
+      "id": "evaluation",
+      "title": "Measure usefulness on held-out notes",
+      "objective": "Distinguish structural validity from supported, useful extraction.",
+      "explanation": "Freeze a small held-out note set before changing the prompt. Measure valid-record rate, correctly extracted fields and unsupported fields separately. Keep a development set for iteration so the final check measures unseen cases. Compare against a simple deterministic baseline.",
+      "example": "def exact_field_agreement(expected, actual, fields):\n    return sum(expected.get(k) == actual.get(k) for k in fields) / len(fields)\nassert exact_field_agreement({\"owner\": None}, {\"owner\": \"Sam\"}, [\"owner\"]) == 0",
+      "exercise": "Create 20 owned notes, reserving eight for the final check. Record baseline failures, make one change using the other twelve, then evaluate the reserved eight once. Use fixture-only labels if no model ran.",
+      "completion_check": "The report includes denominators, unsupported-field examples, a baseline and held-out results under recorded runtime conditions.",
+      "artifact": "A runnable evaluation command and a concise failure report.",
+      "hours_min": 3,
+      "hours_max": 5,
+      "resources": [
+        "tests"
+      ],
+      "prerequisites": [
+        "failures"
+      ]
+    }
+  ],
+  "schema_version": 1,
+  "revision": "structured-output/1",
+  "editorial_status": "Draft curriculum; maintainer and learner review pending",
+  "assumptions": [
+    "10–15 hours weekly is an editable estimate.",
+    "Start with standard-library fixtures. Optional libraries and a compatible model runtime need separate setup.",
+    "No paid service, model download or hardware capability is assumed."
+  ]
+}

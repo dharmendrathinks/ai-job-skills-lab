@@ -31,7 +31,7 @@ Research supports treating skill extraction as a distinct task with explicit ann
 Keep the two existing files:
 
 - **`jobs.html`:** inspect job descriptions, requirements and their evidence.
-- **`projects.html`:** become the learning workspace, with **My learning path, Skills, Projects, YouTube and Progress** tabs. Open on the learning path.
+- **`workspace.html`:** become the learning workspace, with **My learning path, Skills, Projects, YouTube and Progress** tabs. Open on the learning path.
 
 Before selecting a path, show up to three justified options. After selection, foreground one active path and its next practical milestone. Do not fill a recommendation quota when evidence is weak.
 
@@ -168,3 +168,14 @@ to draft learning paths, shared project/teaching briefs and independently source
 progress. Remaining extraction batches and the evidence gates above must be
 reported separately from feature delivery; generating a path does not select it
 or record actual learning.
+
+## Curated workspace refinement — 2026-09-13
+
+The learning workspace now includes three versioned curricula for developers moving
+into AI, with foundation refreshers, syllabus navigation and lesson-level resources,
+examples, exercises and checks. Skills remains an independent grouped explorer;
+frequency and eligible historical change remain separate from learning order.
+LearningPath v2 freezes curriculum content and optional qualified adaptations while
+preserving v1 paths and progress. See [implementation and commands](docs/research/learning-workspace.md).
+Maintainer editorial review and the five-learner acceptance study remain pending;
+code and fixture results must not be described as those reviews.

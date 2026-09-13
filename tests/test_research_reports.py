@@ -171,7 +171,7 @@ class ReportTests(unittest.TestCase):
         for section in ('jobs','projects'):
             self.assertEqual(Path(result[section]['path']).stat().st_mode & 0o777,0o600)
         self.store.withdraw(self.obs)
-        self.assertFalse((target/'jobs.html').exists());self.assertFalse((target/'projects.html').exists())
+        self.assertFalse((target/'jobs.html').exists());self.assertFalse((target/'workspace.html').exists())
 
     def test_expiry_and_legacy_migration_remove_all_views(self):
         self.store=Store(self.root/'expires',clock=lambda:self.now)
@@ -207,12 +207,12 @@ class ReportTests(unittest.TestCase):
         from tools import research_report_files as files
         original=files.write
         def fail(store,name,html):
-            if name=='projects.html':raise OSError('owned failure')
+            if name=='workspace.html':raise OSError('owned failure')
             return original(store,name,html)
         with patch.object(files,'write',side_effect=fail):
             with self.assertRaises(OSError):report(self.store)
         self.assertFalse((self.store.home/'jobs.html').exists())
-        self.assertFalse((self.store.home/'projects.html').exists())
+        self.assertFalse((self.store.home/'workspace.html').exists())
 
     def test_limit_counts_and_absent_projects(self):
         self.store.import_bundle(bundle('second','req-2'))
@@ -235,7 +235,7 @@ class ReportTests(unittest.TestCase):
         self.assertGreater(result['jobs']['shown'],100)
         with self.assertRaises(ValueError):report(self.store,1001)
 
-    def test_youtube_tab_independent_limit_and_two_files(self):
+    def test_youtube_tab_independent_limit_and_compatibility_redirect(self):
         self.brief('project',1);self.brief('project',2)
         self.brief('youtube',1);self.brief('youtube',2)
         self.brief('learning');self.brief('product')
@@ -250,7 +250,43 @@ class ReportTests(unittest.TestCase):
         self.assertEqual(html.count('data-kind="project"'),1)
         self.assertEqual(html.count('data-kind="youtube"'),1)
         self.assertIn('YouTube experiments · 2',html)
-        self.assertEqual({p.name for p in self.store.home.glob('*.html')},{'jobs.html','projects.html'})
+        self.assertEqual({p.name for p in self.store.home.glob('*.html')},{'jobs.html','workspace.html','projects.html'})
+        self.assertEqual(Path(result['path']).name,'workspace.html')
+        self.assertIn('<title>Skills &amp; Learning Workspace · AI Job Skills Lab</title>',html)
+
+    def test_legacy_report_is_projected_without_rewriting_and_withdraws_all_views(self):
+        legacy={'schema_version':2,'revision':1,'created_at':self.now.isoformat(),
+                'pages':{'jobs.html':'Owned old jobs','projects.html':'Owned old workspace'},'counts':{}}
+        with self.store.transaction() as state:
+            key=self.store.put(state,'offline-report',legacy,[self.obs])
+        self.assertEqual((self.store.home/'workspace.html').read_text(),'Owned old workspace')
+        redirect=(self.store.home/'projects.html').read_text()
+        self.assertIn('window.location.replace',redirect)
+        self.assertNotIn('Owned old workspace',redirect)
+        with self.store.transaction() as state:self.assertEqual(state['artifacts'][key]['payload'],legacy)
+        self.store.withdraw(self.obs)
+        for name in ('jobs.html','workspace.html','projects.html'):
+            self.assertFalse((self.store.home/name).exists())
+
+    def test_redirect_preserves_query_and_fragment_with_fixed_local_destination(self):
+        import shutil
+        from tools.research_reports import REDIRECT_SCRIPT, legacy_redirect
+        html=legacy_redirect()
+        sh=base64.b64encode(hashlib.sha256(REDIRECT_SCRIPT.encode()).digest()).decode()
+        self.assertIn(sh,html);self.assertIn('<noscript>',html)
+        node=shutil.which('node')
+        if not node:self.skipTest('Node unavailable for redirect behavior check')
+        script="""
+const assert = require('node:assert/strict');
+for (const [search, hash] of [['', ''], ['', '#tab-skill'], ['?view=terms', '#skill-unresolved-owned'], ['', '#lesson%20one']]) {
+  let destination;
+  const window = {location: {search, hash, replace(value) {destination = value;}}};
+  REDIRECT
+  assert.equal(destination, 'workspace.html' + search + hash);
+}
+""".replace('REDIRECT',REDIRECT_SCRIPT)
+        result=subprocess.run([node,'-e',script],capture_output=True,text=True,timeout=20)
+        self.assertEqual(result.returncode,0,result.stderr)
 
     def test_hidden_youtube_brief_withdrawal_invalidates_report_pair(self):
         self.brief('project');video=self.brief('youtube')

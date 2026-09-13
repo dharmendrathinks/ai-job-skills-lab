@@ -5,6 +5,13 @@ It extends the active seven-phase roadmap using the existing Python helpers,
 qualified worker, context acquisition, private manifest and managed report pair.
 No new database, web server, embedding provider or paid dependency is required.
 
+## Curated workspace update
+
+The [curated workspace guide](learning-workspace.md) adds three offline curricula,
+readable lessons, an independent Skills explorer, gated skill trends and optional
+qualified adaptation. LearningPath v2 coexists with v1; selection/progress contracts
+stay unchanged. The older field table below describes the original v1 interfaces.
+
 ## The practical workflow
 
 Use the existing Python environment and a matching qualified Codex binary. A newer
@@ -39,7 +46,7 @@ automatically retried. Existing v1 operation plans retain their semantics; set
 `skill_details: true` in a reviewed AI operation plan to use the new extraction.
 Unattended activation still needs its separate qualification.
 
-The two HTML files remain in Git-ignored `reports/`. `projects.html` opens on
+The two report pages and the `projects.html` compatibility redirect remain in Git-ignored `reports/`. `workspace.html` opens on
 My learning path, with Skills, Projects, YouTube and Progress tabs. With no selected
 path, it shows at most three available options; selecting one foregrounds that
 effort. Static controls only browse. Tell Codex to select/record and regenerate

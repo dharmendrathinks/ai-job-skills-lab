@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "revision": "skill-topics/1",
+  "basis": "Editorial learning navigation; not job evidence or a demand ranking.",
+  "topics": [
+    {
+      "id": "foundations",
+      "title": "Software foundations",
+      "description": "Python, data contracts, APIs and tests.",
+      "prerequisites": []
+    },
+    {
+      "id": "llm-applications",
+      "title": "LLM applications",
+      "description": "Structured outputs and useful model-powered features.",
+      "prerequisites": [
+        "foundations"
+      ]
+    },
+    {
+      "id": "retrieval-data",
+      "title": "Retrieval and data",
+      "description": "Find, prepare and cite relevant information.",
+      "prerequisites": [
+        "foundations"
+      ]
+    },
+    {
+      "id": "agents-tools",
+      "title": "Agents and tools",
+      "description": "Connect models to bounded application workflows.",
+      "prerequisites": [
+        "llm-applications"
+      ]
+    },
+    {
+      "id": "evaluation",
+      "title": "Evaluation",
+      "description": "Measure behavior and learn from failures.",
+      "prerequisites": [
+        "foundations"
+      ]
+    },
+    {
+      "id": "deployment-observability",
+      "title": "Deployment and observability",
+      "description": "Operate systems and explain their behavior.",
+      "prerequisites": [
+        "foundations"
+      ]
+    },
+    {
+      "id": "security",
+      "title": "Security",
+      "description": "Control authority and handle untrusted inputs.",
+      "prerequisites": [
+        "foundations"
+      ]
+    },
+    {
+      "id": "model-training",
+      "title": "Model training and research",
+      "description": "Understand model adaptation and experimental methods.",
+      "prerequisites": [
+        "foundations",
+        "evaluation"
+      ]
+    }
+  ],
+  "assignments": {
+    "python": "foundations",
+    "typescript": "foundations",
+    "javascript": "foundations",
+    "sql": "foundations",
+    "postgresql": "retrieval-data",
+    "langgraph": "agents-tools",
+    "langchain": "llm-applications",
+    "pytorch": "model-training",
+    "docker": "deployment-observability",
+    "kubernetes": "deployment-observability",
+    "aws": "deployment-observability",
+    "azure": "deployment-observability",
+    "gcp": "deployment-observability",
+    "airflow": "retrieval-data",
+    "mlflow": "model-training",
+    "opentelemetry": "deployment-observability",
+    "pgvector": "retrieval-data",
+    "redis": "retrieval-data",
+    "vllm": "deployment-observability",
+    "pydantic": "foundations",
+    "rag": "retrieval-data",
+    "hybrid-search": "retrieval-data",
+    "embeddings": "retrieval-data",
+    "reranking": "retrieval-data",
+    "structured-output": "llm-applications",
+    "tool-calling": "agents-tools",
+    "prompt-injection": "security",
+    "model-evaluation": "evaluation",
+    "llm-evaluation": "evaluation",
+    "retrieval-evaluation": "retrieval-data",
+    "data-pipelines": "retrieval-data",
+    "fine-tuning": "model-training",
+    "prompt-engineering": "llm-applications",
+    "ci-cd": "deployment-observability",
+    "observability": "deployment-observability",
+    "mcp": "agents-tools",
+    "evaluation-datasets": "evaluation",
+    "json-schema": "foundations",
+    "git": "foundations",
+    "llms": "llm-applications",
+    "ai-agents": "agents-tools",
+    "vector-databases": "retrieval-data",
+    "elasticsearch": "retrieval-data",
+    "mysql": "retrieval-data",
+    "terraform": "deployment-observability",
+    "aws-bedrock": "deployment-observability",
+    "aws-cdk": "deployment-observability",
+    "aws-cloudfront": "deployment-observability",
+    "aws-cognito": "security",
+    "aws-ecr": "deployment-observability",
+    "aws-s3": "retrieval-data",
+    "datadog": "deployment-observability",
+    "langfuse": "deployment-observability",
+    "temporal": "deployment-observability",
+    "http-apis": "foundations",
+    "webhooks": "foundations",
+    "streaming": "llm-applications",
+    "sse": "foundations",
+    "schema-design": "foundations",
+    "data-validation": "foundations",
+    "retry-logic": "deployment-observability",
+    "prompt-management": "llm-applications",
+    "prompt-caching": "deployment-observability",
+    "token-budgets": "deployment-observability",
+    "async-python": "foundations",
+    "infrastructure-as-code": "deployment-observability",
+    "dataset-management": "retrieval-data",
+    "llm-as-judge": "evaluation"
+  }
+}

@@ -18,66 +18,78 @@ NOTICE = 'SYNTHETIC OFFLINE DEMO — fictional jobs and author-written drafts; n
 
 
 def demo_state(now):
-    state = {'schema_version': 1, 'artifacts': {}, 'withdrawn': []}
-
-    def put(kind, payload, dependencies=()):
-        row = {'schema_version': 1, 'kind': kind, 'payload': payload,
-               'dependencies': sorted(dependencies), 'use_until': None}
-        key = digest(row); state['artifacts'][key] = row
-        return key
-
-    fixture = json.loads((ROOT / 'examples/offline-demo.json').read_text())['bundle']
-    captured = (now - timedelta(hours=1)).isoformat()
-    policy = put('policy', {**fixture['policy'], 'reviewed_at': captured})
-    receipt = put('receipt', {**fixture['receipt'], 'started_at': captured, 'finished_at': captured}, [policy])
-    row = fixture['observations'][0]
-    observation = put('observation', {**row, 'schema_version': 1, 'source': fixture['policy']['source'],
-        'captured_at': captured, 'description_sha256': digest(row['description']), 'receipt': receipt}, [receipt])
-    output = {'ai_domain': 'in-domain', 'responsibility_class': 'applied',
-        'claims': [{'kind': 'responsibility', 'modality': 'unspecified',
-            'quote': 'Build retrieval pipelines in Python.', 'capabilities': ['retrieval-knowledge'], 'tools': ['Python']}],
-        'unknowns': [NOTICE], 'skill_mentions': [{'surface': 'Python', 'quote': 'Build retrieval pipelines in Python.',
-            'section_context': '', 'kind': 'technology', 'modality': 'unspecified'}]}
-    labels = normalize_output(output, observation, row['description'], now)
-    analysis = put('analysis', {**labels, 'ai_domain': 'in-domain', 'method': 'synthetic-fixture',
-        'reviewer': 'Author-written offline presentation fixture; no model execution'}, [observation])
-    skills, deps = skill_payload(state, now)
-    sid = put('skill-snapshot', skills, deps)
-    market, deps = aggregate(state)
-    mid = put('snapshot', market, deps)
-    path = put('learning-path', {'schema_version': 1, 'created_at': now.isoformat(),
-        'status': 'synthetic-example', 'skill_snapshot': sid, 'market_snapshot': mid, 'contexts': [],
-        'profile': None, 'selection_limits': [NOTICE], 'proposal': {
-            'title': 'Demo: build a small retrieval evaluation harness', 'disposition': 'propose',
-            'experiment': 'Compare a keyword baseline on ten author-owned questions, including missing answers.',
-            'why_now': 'Illustrates the learn → build → teach workflow; not a real recommendation.',
-            'skills': ['python'], 'prerequisites': ['Basic Python and test assertions'],
-            'market_evidence': list(skills['evidence']), 'assumptions': ['Two to four hours; CPU only; no paid API.'],
-            'teaching_question': 'When does a simple retrieval baseline fail?', 'limitations': [NOTICE],
-            'milestones': [{'id': 'evaluate', 'title': 'Measure a baseline before changing it',
-                'understand': 'Separate retrieval misses from unanswered questions.',
-                'implement': 'Write a small Python scorer over documents you own.',
-                'self_check': 'Can you explain a failed query without changing the held-out questions?',
-                'artifact': 'A reusable test harness and a failure table.', 'tests': 'Known answer, missing answer and misleading match.',
-                'resources': [], 'hours_min': 2, 'hours_max': 4,
-                'demonstrates': 'Only results actually measured under recorded conditions.',
-                'does_not_demonstrate': 'Production reliability or general mastery.'}]}}, [sid, mid])
-    for kind, title, sections in [
-        ('project', 'Demo project: inspect alternatives before starting', {
-            'problem': 'Make retrieval failures visible while learning Python.',
-            'alternatives': 'No repository inspected in this offline example; inspect contribution options first.',
-            'bounded_deliverable': 'A small scorer, fixed questions and reproducible failure cases.',
-            'tests': 'Compare exact-match baseline, missing-answer cases and held-out questions.'}),
-        ('youtube', 'Demo experiment: where a retrieval baseline fails', {
-            'story': 'Problem → baseline → held-out test → observed failure → fix → limitations.',
-            'experiment': 'Use the same harness as the learning path; record actual outcomes before scripting results.',
-            'audience_validation': 'No discussion evidence inspected. Audience demand remains unknown.'}),
-    ]:
-        put('brief', {'kind': kind, 'created_at': now.isoformat(), 'learning_path': path,
-            'status': 'synthetic-example', 'notice': NOTICE, 'proposal': {
-                'title': title, 'disposition': 'insufficient-evidence', 'capabilities': ['retrieval-knowledge'],
-                'sections': sections, 'market_claims': [{'analysis': analysis, 'quote': 'Build retrieval pipelines in Python.'}],
-                'context_claims': [], 'alternatives': [], 'limitations': [NOTICE]}}, [path])
+    from tools.research_curricula import curriculum_payload
+    from tools.research_skills import catalog, history_payload
+    state = {'schema_version':1,'artifacts':{},'withdrawn':[]}
+    def put(kind,payload,dependencies=()):
+        row={'schema_version':1,'kind':kind,'payload':payload,'dependencies':sorted(dependencies),'use_until':None}
+        key=digest(row);state['artifacts'][key]=row;return key
+    fixture=json.loads((ROOT/'examples/offline-demo.json').read_text())['bundle']
+    cat={s['id']:s for s in catalog()['skills']}
+    bundles=[['python','pydantic','structured-output','llm-evaluation'],
+        ['python','rag','embeddings','retrieval-evaluation'],['python','tool-calling','observability','prompt-injection'],
+        ['typescript','json-schema','llms'],['aws','docker','opentelemetry'],['sql','postgresql','data-pipelines']]
+    # Two owned synthetic windows; no real collection, employer or quality claim.
+    for age in (40,2):
+        captured=(now-timedelta(days=age)).isoformat()
+        policy=put('policy',{**fixture['policy'],'reviewed_at':captured})
+        receipt=put('receipt',{**fixture['receipt'],'started_at':captured,'finished_at':captured},[policy])
+        for i in range(12):
+            skill_ids=bundles[i%len(bundles)][:]
+            if age==2 and i%2==0: skill_ids += ['tool-calling','evaluation-datasets']
+            skill_ids=list(dict.fromkeys(skill_ids))
+            words=[cat[k]['name'] for k in skill_ids]
+            if i==0: words+=['context routing experiments']
+            description='Owned synthetic role. Practise '+', '.join(words)+'.'
+            row=fixture['observations'][0]
+            observation=put('observation',{**row,'native_id':'demo-role-'+str(i),'employer_name':'Example team '+str(i+1),
+                'employer_requisition':'demo-'+str(i),'title':('Applied AI Engineer' if i%2 else 'AI Product Developer')+' · fictional',
+                'url':'https://example.com/jobs/demo-'+str(i),'schema_version':1,'source':fixture['policy']['source'],
+                'captured_at':captured,'description':description,'description_sha256':digest(description),
+                'source_revision':'demo-'+str(age)+'-'+str(i),'receipt':receipt},[receipt])
+            mentions=[{'surface':cat[k]['name'],'quote':description,'section_context':'','kind':cat[k]['kind'],'modality':'unspecified'} for k in skill_ids]
+            if i==0:mentions.append({'surface':'context routing experiments','quote':description,'section_context':'','kind':'practice','modality':'unspecified'})
+            output={'ai_domain':'in-domain','responsibility_class':'applied','claims':[{'kind':'responsibility','modality':'unspecified',
+                'quote':description,'capabilities':['ai-product-engineering'],'tools':[]}],'unknowns':[NOTICE],'skill_mentions':mentions}
+            labels=normalize_output(output,observation,description,now)
+            put('analysis',{**labels,'ai_domain':'in-domain','method':'synthetic-fixture','reviewer':'Author-written synthetic example'},[observation])
+    skills,deps=skill_payload(state,now);sid=put('skill-snapshot',skills,deps)
+    market,deps=aggregate(state);mid=put('snapshot',market,deps)
+    payload=curriculum_payload('structured-output',snapshot_id=sid,snapshot=skills)
+    payload.update(created_at=now.isoformat(),status='synthetic-example',market_snapshot=mid)
+    payload['proposal']['limitations'].append(NOTICE)
+    path=put('learning-path',payload,[sid,mid])
+    put('learning-selection',{'schema_version':1,'path':path,'reviewer':'Fictional learner in the synthetic demo','selected_at':now.isoformat()},[path])
+    events=[('schema','completed','Fictional example: defined six owned records and checked missing owners.'),
+        ('integration','failure','Fictional example: a malformed JSON response was rejected; transport integration still needs work.')]
+    for milestone,event,summary in events:
+        put('learning-progress',{'schema_version':1,'path':path,'milestone':milestone,'event':event,'basis':'self-reported',
+            'summary':summary,'observer':'Synthetic learner','occurred_at':now.isoformat(),'recorded_at':now.isoformat(),
+            'evidence':[],'conditions':[NOTICE],'capabilities':[],'result_quotes':[],'supersedes':None},[])
+    for kind in ('project','youtube'):
+        put('brief',{'kind':kind,'created_at':now.isoformat(),'learning_path':path,'status':'synthetic-example','notice':NOTICE,
+            'proposal':{'title':('Demo project: ' if kind=='project' else 'Demo experiment: ')+payload['proposal']['title'],
+                'disposition':'practice' if kind=='project' else 'experiment','capabilities':['ai-product-engineering'],
+                'sections':{'Problem':payload['curriculum']['summary'],'Deliverable':payload['curriculum']['outcome'],
+                    'Experiment':'Compare structural validation and supported field extraction on held-out owned notes.',
+                    'Results':'No real results. Progress entries are fictional presentation examples.',
+                    'Teaching question':payload['proposal']['teaching_question']},
+                'market_claims':[],'context_claims':[],'alternatives':[],'limitations':[NOTICE]}},[path])
+    history,deps=history_payload(state,now)
+    # A clearly marked illustrative comparison, never passed off as a qualified cohort.
+    windows=history['windows']; previous,current=windows
+    changes=[]
+    for skill in sorted(set(previous['skills'])|set(current['skills'])):
+        a=previous['skills'].get(skill);b=current['skills'].get(skill)
+        if any(s and s['normalization']=='unresolved' for s in (a,b)):continue
+        counts=[v['openings'] if v else 0 for v in (a,b)]
+        changes.append({'skill':skill,'name':(b or a)['name'],'previous':counts[0],'current':counts[1],
+            'percentage_points':100*(counts[1]/current['counts']['in_domain_denominator']-counts[0]/previous['counts']['in_domain_denominator'])})
+    changes.sort(key=lambda c:(-c['percentage_points'],c['name']))
+    history.update(change_indicators=changes,status='SYNTHETIC comparison illustration — not a qualified real cohort',issues=[NOTICE],
+        demo_unavailable_example='Unavailable example: a missing capture, partial feed or changed analysis revision suppresses all change indicators.',
+        limitation=NOTICE)
+    put('skill-history',history,deps)
     return state
 
 
@@ -88,7 +100,7 @@ def generate_demo(reports_root=None):
     root.mkdir(mode=0o700, parents=True, exist_ok=True)
     target = Path(tempfile.mkdtemp(prefix='demo-', dir=root))
     now = datetime.now(timezone.utc)
-    pages, _, _ = render(demo_state(now), now.isoformat(), 20)
+    pages, _, _ = render(demo_state(now), now.isoformat(), 1000)
     for name, html in pages.items():
         path = target / name
         with path.open('x', encoding='utf-8') as output:

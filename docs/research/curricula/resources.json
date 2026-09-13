@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "revision": "resources/1",
+  "resources": {
+    "json": {
+      "id": "json",
+      "title": "Python: working with JSON",
+      "url": "https://docs.python.org/3/library/json.html",
+      "section": "Basic usage",
+      "why": "Practise the boundary between JSON text and Python values.",
+      "checked_on": "2026-09-13",
+      "inspection": "Primary page inspected; example execution is separate.",
+      "access": "Free reading; external website needs internet."
+    },
+    "models": {
+      "id": "models",
+      "title": "Pydantic: defining and validating models",
+      "url": "https://docs.pydantic.dev/latest/concepts/models/",
+      "section": "Basic model usage; validating data",
+      "why": "Understand required fields, validation and serialization before adding a model call.",
+      "checked_on": "2026-09-13",
+      "inspection": "Primary page inspected; example execution is separate.",
+      "access": "Free reading; external website needs internet."
+    },
+    "validators": {
+      "id": "validators",
+      "title": "Pydantic: field and model validators",
+      "url": "https://docs.pydantic.dev/latest/concepts/validators/",
+      "section": "Field validators",
+      "why": "Learn where business constraints belong in a typed record.",
+      "checked_on": "2026-09-13",
+      "inspection": "Primary page inspected; example execution is separate.",
+      "access": "Free reading; external website needs internet."
+    },
+    "tests": {
+      "id": "tests",
+      "title": "Python: a basic unit test",
+      "url": "https://docs.python.org/3/library/unittest.html",
+      "section": "Basic example",
+      "why": "Turn an expected result and a failure case into a repeatable check.",
+      "checked_on": "2026-09-13",
+      "inspection": "Primary page inspected; example execution is separate.",
+      "access": "Free reading; external website needs internet."
+    },
+    "mocks": {
+      "id": "mocks",
+      "title": "Python: testing with replacement responses",
+      "url": "https://docs.python.org/3/library/unittest.mock.html",
+      "section": "Quick guide; side_effect",
+      "why": "Exercise timeouts and invalid responses without making external calls.",
+      "checked_on": "2026-09-13",
+      "inspection": "Primary page inspected; example execution is separate.",
+      "access": "Free reading; external website needs internet."
+    },
+    "http": {
+      "id": "http",
+      "title": "Python: HTTP request interfaces",
+      "url": "https://docs.python.org/3/library/urllib.request.html",
+      "section": "urlopen; Request",
+      "why": "Inspect request construction and explicit timeouts; use a fake transport for exercises.",
+      "checked_on": "2026-09-13",
+      "inspection": "Primary page inspected; example execution is separate.",
+      "access": "Free reading; external website needs internet."
+    },
+    "rag": {
+      "id": "rag",
+      "title": "Hugging Face: how retrieval fits into RAG",
+      "url": "https://huggingface.co/learn/cookbook/en/advanced_rag",
+      "section": "Retriever; split documents into chunks",
+      "why": "Read the retrieval and chunking explanation. The optional full notebook requires additional libraries and model hardware.",
+      "checked_on": "2026-09-13",
+      "inspection": "Primary page inspected; example execution is separate.",
+      "access": "Free reading; external website needs internet."
+    },
+    "tools": {
+      "id": "tools",
+      "title": "Hugging Face: what tools are",
+      "url": "https://huggingface.co/learn/agents-course/en/unit1/tools",
+      "section": "What is a Tool?; how tools are given to an LLM",
+      "why": "Connect a named function, an argument contract and a model-visible description.",
+      "checked_on": "2026-09-13",
+      "inspection": "Primary page inspected; example execution is separate.",
+      "access": "Free reading; external website needs internet."
+    },
+    "cycle": {
+      "id": "cycle",
+      "title": "Hugging Face: the agent execution cycle",
+      "url": "https://huggingface.co/learn/agents-course/en/unit1/agent-steps-and-structure",
+      "section": "Thought–Action–Observation cycle",
+      "why": "Follow the feedback loop before implementing one with a step budget.",
+      "checked_on": "2026-09-13",
+      "inspection": "Primary page inspected; example execution is separate.",
+      "access": "Free reading; external website needs internet."
+    },
+    "traces": {
+      "id": "traces",
+      "title": "OpenTelemetry: instrumenting Python",
+      "url": "https://opentelemetry.io/docs/languages/python/instrumentation/",
+      "section": "Creating spans; adding attributes; recording exceptions",
+      "why": "Map a request and its tool calls to related trace events; exporting telemetry is optional.",
+      "checked_on": "2026-09-13",
+      "inspection": "Primary page inspected; example execution is separate.",
+      "access": "Free reading; external website needs internet."
+    },
+    "injection": {
+      "id": "injection",
+      "title": "OWASP: prompt injection",
+      "url": "https://genai.owasp.org/llmrisk/llm01-prompt-injection/",
+      "section": "Description; prevention and mitigation strategies",
+      "why": "Identify why untrusted retrieved text cannot grant a tool permission.",
+      "checked_on": "2026-09-13",
+      "inspection": "Primary page inspected; example execution is separate.",
+      "access": "Free reading; external website needs internet."
+    }
+  }
+}

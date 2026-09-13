@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "revision": "foundations/1",
+  "lessons": [
+    {
+      "id": "python-json",
+      "title": "Read and validate a small record",
+      "objective": "Separate text, Python values and an application contract.",
+      "explanation": "A JSON parser answers whether text has valid syntax. Your application still needs to decide whether the values are useful. Missing information should stay missing instead of acquiring a guessed default.",
+      "example": "import json\nrecord = json.loads('{\"task\": \"Review draft\", \"owner\": null}')\nassert isinstance(record[\"task\"], str)\nassert record[\"owner\"] is None",
+      "exercise": "Parse three records: a valid task, malformed JSON and a task with no owner. Give each failure a distinct explanation.",
+      "completion_check": "You can distinguish a JSON syntax error from an invalid application record and preserve an unknown owner.",
+      "artifact": "Three small records and a parser test.",
+      "hours_min": 1,
+      "hours_max": 2,
+      "resources": [
+        "json"
+      ],
+      "prerequisites": []
+    },
+    {
+      "id": "testing",
+      "title": "Make a failure reproducible",
+      "objective": "Express a successful behavior and its failure boundary as tests.",
+      "explanation": "Write the expected result before modifying the implementation. A test with a single example only supports that example; add cases that exercise a different failure mechanism.",
+      "example": "import unittest\nclass RecordTests(unittest.TestCase):\n    def test_unknown_owner(self):\n        record = {\"task\": \"Review draft\", \"owner\": None}\n        self.assertIsNone(record[\"owner\"])\n\nif __name__ == \"__main__\":\n    unittest.main()",
+      "exercise": "Write an assertion for a valid record and one for malformed input. Introduce a bug deliberately and check that a test catches it.",
+      "completion_check": "Both tests pass for the correct code, and the intentionally broken version fails the relevant test.",
+      "artifact": "A repeatable local test command.",
+      "hours_min": 1,
+      "hours_max": 2,
+      "resources": [
+        "tests"
+      ],
+      "prerequisites": [
+        "python-json"
+      ]
+    },
+    {
+      "id": "api-boundary",
+      "title": "Separate an API from its caller",
+      "objective": "Make an integration testable without network access.",
+      "explanation": "Pass the transport into your application function. The application consumes a response contract; a real adapter later handles credentials, timeouts and provider-specific fields. The fake verifies wiring, not model quality.",
+      "example": "def extract(note, transport):\n    response = transport({\"input\": note})\n    return response[\"record\"]\n\nfake = lambda request: {\"record\": {\"task\": request[\"input\"]}}\nassert extract(\"Review draft\", fake)[\"task\"] == \"Review draft\"",
+      "exercise": "Replace the fake with one that raises TimeoutError. Decide what the caller should display and ensure no partial result is accepted.",
+      "completion_check": "The same application interface handles a success and a timeout using injected transports.",
+      "artifact": "An adapter boundary with a timeout test.",
+      "hours_min": 1,
+      "hours_max": 2,
+      "resources": [
+        "http"
+      ],
+      "prerequisites": [
+        "testing"
+      ]
+    }
+  ]
+}

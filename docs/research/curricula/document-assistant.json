@@ -1,0 +1,104 @@
+{
+  "id": "document-assistant",
+  "title": "Build an evidence-grounded document assistant",
+  "summary": "Find the right passage, cite it, and make missing answers visible.",
+  "outcome": "A document assistant with traceable sources and a retrieval evaluation set.",
+  "level": "Build on foundations",
+  "topics": [
+    "retrieval-data",
+    "llm-applications",
+    "evaluation"
+  ],
+  "skills": [
+    "python",
+    "rag",
+    "embeddings",
+    "retrieval-evaluation",
+    "evaluation-datasets"
+  ],
+  "prerequisites": [
+    "Work with Python lists and dictionaries.",
+    "Complete the testing refresher; structured-output practice is useful but optional."
+  ],
+  "teaching_question": "Which answer failures begin with retrieving the wrong passage?",
+  "lessons": [
+    {
+      "id": "documents",
+      "title": "Prepare documents with stable citations",
+      "objective": "Keep each passage connected to its original document.",
+      "explanation": "Use a few documents you own. Split on paragraph boundaries first and preserve offsets and document identifiers. Very small chunks can lose context; very large chunks can bury the answer. Inspect a boundary example before choosing a more complex splitter.",
+      "example": "text = \"Refunds take five days.\\n\\nContact support for damaged items.\"\nchunks = []\nstart = 0\nfor part in text.split(\"\\n\\n\"):\n    chunks.append({\"text\": part, \"start\": start, \"end\": start + len(part)})\n    start += len(part) + 2\nassert all(text[c[\"start\"]:c[\"end\"]] == c[\"text\"] for c in chunks)",
+      "exercise": "Prepare five short documents and preserve each chunk’s document ID and offsets. Include an answer that spans two paragraphs and inspect whether your split loses necessary context.",
+      "completion_check": "Every chunk resolves to exact original text, and the boundary case has a documented treatment.",
+      "artifact": "A small document collection and citation-preserving chunker.",
+      "hours_min": 2,
+      "hours_max": 3,
+      "resources": [
+        "rag"
+      ],
+      "prerequisites": []
+    },
+    {
+      "id": "retrieval",
+      "title": "Measure a keyword baseline",
+      "objective": "Return ranked passages before introducing embeddings.",
+      "explanation": "A token-overlap baseline makes retrieval behavior inspectable. It often misses paraphrases and rewards irrelevant word overlap; those failures establish useful comparison cases. Choose a stable tie-break and return no result when every score is zero.",
+      "example": "import re\ndef tokens(s):\n    return set(re.findall(r\"\\w+\", s.casefold()))\ndef score(question, passage):\n    return len(tokens(question) & tokens(passage))\nassert score(\"refund time\", \"refund time is five days\") == 2",
+      "exercise": "Write ten questions and their relevant document IDs. Return the top three passages using the baseline, then inspect one paraphrase failure. Embeddings are an optional follow-up experiment, not a prerequisite.",
+      "completion_check": "You can reproduce which relevant passage was missed and calculate recall at three with an explicit denominator.",
+      "artifact": "A retriever and question-to-document labels.",
+      "hours_min": 3,
+      "hours_max": 4,
+      "resources": [
+        "rag"
+      ],
+      "prerequisites": [
+        "documents"
+      ]
+    },
+    {
+      "id": "answers",
+      "title": "Cite answers and abstain on missing evidence",
+      "objective": "Separate retrieved material from an instruction to the model.",
+      "explanation": "Pass only selected passages to an answer adapter, keep their IDs and require an explicit missing-answer result. Citation existence is only a structural check: a human still needs to inspect whether the cited passage supports the answer. Retrieved text cannot authorize actions.",
+      "example": "def check_citations(answer, passages):\n    allowed = {p[\"id\"] for p in passages}\n    if answer[\"status\"] == \"answered\":\n        if not answer[\"citations\"] or not set(answer[\"citations\"]) <= allowed:\n            raise ValueError(\"Missing or unknown citation\")\n    return answer",
+      "exercise": "Use a fixed answer adapter first. Test an answerable question, an absent answer, an invented citation and a passage containing an instruction to ignore the user. Label model-backed results separately.",
+      "completion_check": "Unknown citation IDs are rejected; absent answers remain explicit; source text never grants tool authority.",
+      "artifact": "An answer contract with citation and abstention cases.",
+      "hours_min": 3,
+      "hours_max": 5,
+      "resources": [
+        "injection"
+      ],
+      "prerequisites": [
+        "retrieval"
+      ]
+    },
+    {
+      "id": "retrieval-eval",
+      "title": "Find whether retrieval or answering failed",
+      "objective": "Evaluate the two stages separately on frozen questions.",
+      "explanation": "Label the relevant passages before judging generated answers. A missing passage is a retrieval failure; an unsupported answer despite a good passage is an answer failure. Include edited and deleted documents so citations cannot silently point to stale content.",
+      "example": "def recall_at_k(relevant, retrieved):\n    if not relevant:\n        return None  # Evaluate unanswerable questions separately.\n    return len(set(relevant) & set(retrieved)) / len(set(relevant))\nassert recall_at_k([\"a\", \"b\"], [\"a\", \"c\"]) == 0.5",
+      "exercise": "Reserve eight questions for final evaluation. Compare retrieval and answer failures, make one development-set change, and report the held-out outcome plus a missing-answer case.",
+      "completion_check": "The report distinguishes recall, supported answers and correct abstention, and states whether a real model ran.",
+      "artifact": "A retrieval/answer failure matrix and reproducible checks.",
+      "hours_min": 3,
+      "hours_max": 5,
+      "resources": [
+        "tests"
+      ],
+      "prerequisites": [
+        "answers"
+      ]
+    }
+  ],
+  "schema_version": 1,
+  "revision": "document-assistant/1",
+  "editorial_status": "Draft curriculum; maintainer and learner review pending",
+  "assumptions": [
+    "10–15 hours weekly is an editable estimate.",
+    "Start with standard-library fixtures. Optional libraries and a compatible model runtime need separate setup.",
+    "No paid service, model download or hardware capability is assumed."
+  ]
+}
