@@ -36,7 +36,10 @@
       "resources": [
         "rag"
       ],
-      "prerequisites": []
+      "prerequisites": [],
+      "expected_result": "The two example chunks reproduce exact slices of the original text. The practice kit adds repeated text, blank paragraphs and Unicode cases; IDs identify a location in one document revision.",
+      "common_mistake": "Calling strip() before calculating offsets, or using text.find(part) for repeated paragraphs. Both can point a citation at the wrong location.",
+      "reflection": "If the first paragraph changes tomorrow, how will you identify the original revision behind an old citation?"
     },
     {
       "id": "retrieval",
@@ -54,7 +57,10 @@
       ],
       "prerequisites": [
         "documents"
-      ]
+      ],
+      "expected_result": "The overlap score is 2. For a question with two relevant passages and only one among the top three, recall at three is 1/2, not 1/3.",
+      "common_mistake": "Dividing relevant hits by the number retrieved when reporting recall. That computes a different quantity; write the relevant-passage denominator first.",
+      "reflection": "Give one paraphrase with no shared tokens and explain why this baseline misses it."
     },
     {
       "id": "answers",
@@ -72,7 +78,10 @@
       ],
       "prerequisites": [
         "retrieval"
-      ]
+      ],
+      "expected_result": "An answered response needs at least one ID from the supplied passages. A missing-answer response should contain no invented answer. Manually check support even when all citation IDs exist.",
+      "common_mistake": "Equating a real citation with a supported answer. The passage can exist and still say something different from the answer.",
+      "reflection": "How would you evaluate a correct citation attached to a false answer?"
     },
     {
       "id": "retrieval-eval",
@@ -90,11 +99,14 @@
       ],
       "prerequisites": [
         "answers"
-      ]
+      ],
+      "expected_result": "The example reports 0.5: one of two relevant passages was retrieved. An unanswerable question returns None for recall and belongs in the abstention results.",
+      "common_mistake": "Blaming the answer model when the required passage was never retrieved, or mixing unanswerable questions into retrieval recall.",
+      "reflection": "Choose a failed question: what would you need to inspect to locate the failure in retrieval or answering?"
     }
   ],
   "schema_version": 1,
-  "revision": "document-assistant/1",
+  "revision": "document-assistant/2",
   "editorial_status": "Draft curriculum; maintainer and learner review pending",
   "assumptions": [
     "10–15 hours weekly is an editable estimate.",

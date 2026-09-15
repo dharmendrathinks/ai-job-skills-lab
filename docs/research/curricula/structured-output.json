@@ -36,7 +36,10 @@
       "resources": [
         "models"
       ],
-      "prerequisites": []
+      "prerequisites": [],
+      "expected_result": "The record keeps owner=None. In the practice kit, six tests exercise the contract. They initially fail until you implement solution.py.",
+      "common_mistake": "Coercing 7 into a task string or inserting a guessed owner to make validation pass. Validation should expose invalid input rather than silently change its meaning.",
+      "reflection": "Why can this validator accept a well-shaped record whose task is unsupported by the note?"
     },
     {
       "id": "integration",
@@ -54,7 +57,10 @@
       ],
       "prerequisites": [
         "schema"
-      ]
+      ],
+      "expected_result": "The JSON example finishes without output. A response containing [] must raise ValueError; malformed JSON fails during parsing. Neither case should yield an accepted record.",
+      "common_mistake": "Testing only a successful fixed response. Without invalid JSON and a simulated timeout, you have not checked the integration failure paths.",
+      "reflection": "What evidence distinguishes a test of your wiring from a test of extraction accuracy?"
     },
     {
       "id": "failures",
@@ -72,7 +78,10 @@
       ],
       "prerequisites": [
         "integration"
-      ]
+      ],
+      "expected_result": "A source quote present verbatim in the note is accepted. An absent or empty quote raises ValueError. Matching a substring still does not establish that the task follows from it.",
+      "common_mistake": "Retrying a failed call until some valid-looking record appears, then discarding the earlier responses. Keep attempts and the finite retry policy inspectable.",
+      "reflection": "Can you construct a valid quote that does not support the extracted task?"
     },
     {
       "id": "evaluation",
@@ -90,11 +99,14 @@
       ],
       "prerequisites": [
         "failures"
-      ]
+      ],
+      "expected_result": "The example returns 0 for an invented owner where None was expected. On your final eight notes, report counts as n/8 and list unsupported fields separately.",
+      "common_mistake": "Changing the prompt after seeing the held-out failures and reporting the same set as unseen. After that change, those examples become development data.",
+      "reflection": "Which error matters more to your application: a missing task or an invented owner, and how will you report each?"
     }
   ],
   "schema_version": 1,
-  "revision": "structured-output/1",
+  "revision": "structured-output/2",
   "editorial_status": "Draft curriculum; maintainer and learner review pending",
   "assumptions": [
     "10–15 hours weekly is an editable estimate.",

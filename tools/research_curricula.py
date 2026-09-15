@@ -36,11 +36,14 @@ def validate_lessons(lessons, resources):
     seen = set()
     for lesson in lessons:
         fields(lesson, ['id','title','objective','explanation','example','exercise','completion_check','artifact',
-                        'hours_min','hours_max','resources','prerequisites'])
+                        'hours_min','hours_max','resources','prerequisites'],
+                       ['expected_result', 'common_mistake', 'reflection'])
         require(re.fullmatch(r'[a-z][a-z0-9-]{0,63}', lesson['id']) and lesson['id'] not in seen, 'invalid lesson identity')
         require(set(lesson['prerequisites']) <= seen, 'lesson prerequisite must precede it')
         seen.add(lesson['id'])
         for key in ('title','objective','explanation','example','exercise','completion_check','artifact'): text(lesson[key], 4000)
+        for key in ('expected_result', 'common_mistake', 'reflection'):
+            if key in lesson: text(lesson[key], 1500)
         require(type(lesson['hours_min']) is int and type(lesson['hours_max']) is int and
                 1 <= lesson['hours_min'] <= lesson['hours_max'] <= 100, 'invalid lesson effort')
         require(1 <= len(lesson['resources']) <= 2 and set(lesson['resources']) <= set(resources), 'lesson needs inspected resources')

@@ -17,6 +17,7 @@ class Element {
     if(key.startsWith('data-')) this.dataset[key.slice(5).replace(/-([a-z])/g,(_,c)=>c.toUpperCase())]=String(value);
   }
   getAttribute(key){return this.attrs[key]??null;}
+  hasAttribute(key){return key in this.attrs;}
   append(child){
     if(child.parentElement) child.remove();
     child.parentElement=this;this.children.push(child);
@@ -86,12 +87,20 @@ function fixture(hash='') {
   const handoff=add(project,'details',{class:'handoff'});
   const field=add(handoff,'textarea');field.value='A named request with an internal reference.';
   const copy=add(handoff,'button',{'data-copy':''});const status=add(handoff,'span',{class:'copy-status'});
+  const progress=add(one,'details',{class:'handoff','data-progress-request':'','data-path':'owned-path',
+    'data-lesson':'one','data-title':'Owned first lesson'});
+  const event=add(progress,'select',{class:'progress-event'});event.value='attempt';
+  const summary=add(progress,'textarea',{class:'progress-summary'});
+  const prepare=add(progress,'button',{'data-prepare-progress':''});prepare.hidden=true;
+  const prepared=add(progress,'textarea',{class:'prepared-request'});
+  const copyProgress=add(progress,'button',{'data-copy':''});const progressStatus=add(progress,'span',{class:'copy-status'});
   add(results,'div',{id:'no-results'});
   const location={_hash:hash,get hash(){return this._hash},set hash(v){this._hash=v.startsWith('#')?v:'#'+v}};
   const window={location,events:{},addEventListener(n,fn){this.events[n]=fn;}};
   const navigator={clipboard:{writeText:async()=>{throw new Error('Unavailable for file URLs');}}};
   vm.runInNewContext(source,{document,window,navigator});
-  return {document,window,python,sql,rag,unknown,trend,view,sort,project,one,two,enclosing,copy,field,status,filter,link,results};
+  return {document,window,python,sql,rag,unknown,trend,view,sort,project,one,two,enclosing,copy,field,status,filter,link,results,
+    event,summary,prepare,prepared,copyProgress,progressStatus};
 }
 (async()=>{
   let f=fixture('#skill-unresolved');
@@ -113,9 +122,19 @@ function fixture(hash='') {
   f.two.events.toggle();assert.equal(f.one.open,false);
   f.window.location.hash='#brief-owned';f.window.events.hashchange();assert.equal(f.project.hidden,false);
   await f.copy.events.click();assert.equal(f.field.selected,true);assert.match(f.status.textContent,/keyboard/);
+  assert.equal(f.prepare.hidden,false);
+  await f.copyProgress.events.click();assert.match(f.progressStatus.textContent,/Describe what/);
+  assert.equal(f.prepared.value,'');
+  f.summary.value='I ran the parser tests; one case still fails.';f.event.value='failure';f.prepare.events.click();
+  assert.match(f.prepared.value,/record failure for Owned first lesson/);
+  assert.match(f.prepared.value,/self-reported/);assert.match(f.prepared.value,/Lesson: one/);
+  f.summary.value='Correction: two tests still fail.';
+  await f.copyProgress.events.click();assert.equal(f.prepared.selected,true);
+  assert.match(f.prepared.value,/two tests still fail/);assert.doesNotMatch(f.prepared.value,/one case/);
   f.window.location.hash='#skill-python';f.window.events.hashchange();assert.equal(f.view.value,'browse');assert.equal(f.python.hidden,false);
   f.window.location.hash='#brief-owned';f.window.events.hashchange();assert.equal(f.project.hidden,false); // Back/forward route.
   f.window.location.hash='#%E0%A4%A';assert.doesNotThrow(()=>f.window.events.hashchange());
   f=fixture('#lesson-two');assert.equal(f.two.open,true);assert.equal(f.enclosing.open,true); // Reload into collapsed content.
+  assert.equal(f.summary.value,''); // No hidden persistence of learner notes.
   console.log('Grouping, sorting, subviews, deep links, reload, Back, lesson disclosure and clipboard fallback passed.');
 })().catch(error=>{console.error(error);process.exitCode=1;});

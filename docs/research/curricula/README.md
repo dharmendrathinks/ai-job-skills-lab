@@ -12,6 +12,17 @@ or two resource IDs. Prerequisite IDs must refer to earlier lessons. Keep the
 examples runnable with the standard library where possible; clearly identify
 optional libraries, model setup and hardware needs.
 
+Current lessons include `expected_result`, `common_mistake` and `reflection`.
+Keep the expected result specific enough to distinguish a successful run from an
+empty or failed one. Run each example as its own file, not just in a shared Python
+namespace. Older frozen lessons without these optional fields remain readable.
+
+`practice/<curriculum>/` contains the original first-lesson starter, its tests and
+a separately runnable reference. Keep contracts aligned across all three files.
+Starter tests should fail until the learner implements the function; reference
+tests must pass. Add cases for plausible mistakes, not only the example shown in
+the lesson. Run `python3 -m unittest tests.test_research_practice` after changes.
+
 Resources live in `resources.json`. Record a descriptive title, the exact section,
 why it helps, the inspected date, inspection limits and access requirements.
 Read the primary page before updating its checked date. Write original summaries;

@@ -215,7 +215,7 @@ The canonical P2–5 rules and source permissions remain in force.
    operator review, use `resolve`, then resume. Never retry quota failures through
    another provider, API credential, paid tier or hidden fallback.
 3. Inspect `inbox` and managed `report`. The report command generates separate
-   jobs/projects HTML in ignored `reports/`; the second file has Projects and
+   jobs/workspace HTML with a projects.html compatibility redirect in ignored `reports/`; the second file has Projects and
    YouTube experiments tabs with hash-authorized offline search/filter/reset
    controls. The second file now opens on My learning path and includes Skills and Progress; secondary product hypotheses and the inbox remain available. Only `inbox --acknowledge` records displayed
    items; it is not acceptance, observed work or capability evidence. Use P4 for
@@ -304,3 +304,15 @@ LearningPath v2; optional snapshot adaptation uses the existing qualified worker
 Keep the Skills tab independently useful. Source phrases awaiting normalization
 remain visible; skill trends require the reviewed cohort checks. Never infer a
 selection or completed lesson from browser navigation or a generated handoff.
+
+
+## Offline first-exercise practice
+
+Use `research_demo --first-visit` for onboarding without fictional progress.
+`python3 -m tools.research_practice --curriculum ID --output NEW_DIRECTORY` copies
+only original repository-authored first-lesson code, tests, a reference and a blank
+work log outside this checkout. It opens no Store and performs no inference.
+See `docs/research/quickstart.md` for the canonical walkthrough. Browser progress
+forms prepare a self-reported request only; review actual results, dates and
+completion checks before invoking the existing progress workflow. Never treat
+exporting, running sample tests or generating a request as recorded completion.

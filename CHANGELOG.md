@@ -2,6 +2,8 @@
 
 ## Project rename — 2026-09-11
 
+- Add first-visit onboarding, three offline starter/test/reference kits, expected lesson results and troubleshooting, and lesson-specific progress request forms.
+
 - Rename the learning report to `workspace.html`; preserve `projects.html` bookmarks with a local redirect and retain legacy report recovery.
 
 - Renamed the product, repository and development folder to AI Job Skills Lab

@@ -7,14 +7,18 @@ Clone the repository you have access to, then run from its root with Python 3.10
 ```sh
 git clone https://github.com/dharmendrathinks/ai-job-skills-lab.git
 cd ai-job-skills-lab
-python3 -m tools.research_demo
+python3 -m tools.research_demo --first-visit
 ```
 
 While the repository is private, cloning requires collaborator access. Open the
 printed `jobs.html` and `workspace.html` paths in a browser. Each run creates a
 fresh `reports/demo-…/` directory, leaving existing reports untouched. The second
-report shows a learning path, Python skill evidence, a project draft and a linked
-YouTube experiment. Try title search, All content search, filters and Clear filters.
+report starts with no selected path and no recorded work. Open **New here?**, then
+**Validate a useful record**. Read the example and its expected result. Use
+**Get starter code and tests for this exercise** to begin locally.
+
+For a separate demonstration of an active path, fictional progress and linked
+project/video drafts, run `python3 -m tools.research_demo` without the flag.
 
 Every page is labelled **synthetic**. The job, annotations and drafts are written
 examples, not model output, real demand or completed experiments. Missing repository
@@ -22,6 +26,50 @@ and discussion evidence stays explicit. This exercises the actual report rendere
 it does not evaluate extraction quality or demonstrate successful project outcomes.
 No job requests, research store, qualifications, profile, credentials or network
 calls are created. Delete that printed demo directory when finished.
+
+## Finish your first exercise without an account
+
+From the repository root:
+
+```sh
+python3 -m tools.research_practice --curriculum structured-output --output ../structured-output-practice
+cd ../structured-output-practice
+python3 -m unittest -v test_solution
+```
+
+The initial test run fails with `NotImplementedError`. That is the starting point:
+read the contract in `solution.py`, implement it, and rerun the command. Preserve
+unknown owners, reject missing fields and invalid values, and avoid silently
+changing input. Add one case of your own before comparing with `reference.py`.
+To check the reference separately, run `python3 -m unittest -v reference`.
+
+You need only Python 3.10+; the kit installs nothing and calls no model. If
+`python3` is not your Python command, substitute the command for your installed
+Python 3.10+ interpreter in these examples. An existing output directory is never
+overwritten: choose a new name to export another copy.
+
+Record the command, actual outcome and remaining questions in `work-log.md`.
+Passing the small kit is a first step; finish the lesson's full exercise and
+completion check before claiming it complete. The other kit IDs are
+`document-assistant` and `tool-workflow`.
+
+## Track an ongoing path, when you want to
+
+Learning and the work log do not require Codex. For the managed research workflow,
+open **Plan this learning path with Codex**, copy the request into a Codex session
+in this checkout, and supply your goals and available time. Review the proposal
+and explicitly choose whether to select it. Then regenerate the report:
+
+```sh
+python3 -m tools.research_ops report --limit 1000
+```
+
+On a saved path, **Record this lesson** lets you describe an attempt, failure,
+test or completion and prepare a specific request. Copying it does not save it.
+Review it in Codex, record only actual work, then regenerate and reload the report.
+Form fields clear on reload; keep your durable notes in the practice work log.
+Details about the direct CLI and private storage are in the
+[learning workspace guide](learning-workspace.md).
 
 ## Enable real analysis on the supported runtime
 

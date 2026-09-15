@@ -37,14 +37,17 @@
       "resources": [
         "tools"
       ],
-      "prerequisites": []
+      "prerequisites": [],
+      "expected_result": "lookup(\"guide\") returns the owned item; an unknown item raises ValueError. The practice kit requires the dispatcher to reject missing or unexpected arguments before lookup.",
+      "common_mistake": "Using getattr or eval on a tool name supplied in a call. Keep an explicit allowlist and validate the complete envelope and argument contract.",
+      "reflection": "Which layer rejects a proposed write when the only declared tool is read-only lookup?"
     },
     {
       "id": "loop",
       "title": "Build an execution loop with a stopping rule",
       "objective": "Feed observations back while keeping an explicit step budget.",
       "explanation": "A workflow receives a proposed call, validates it, executes it and returns an observation. A final answer or exhausted budget stops the loop. Start with scripted calls so you can inspect the entire sequence before connecting a compatible model adapter.",
-      "example": "def run(script, limit=3):\n    events = []\n    for call in script[:limit]:\n        if call[\"name\"] not in TOOLS:\n            raise ValueError(\"Unknown tool\")\n        events.append(TOOLS[call[\"name\"]](**call[\"arguments\"]))\n    return events\n# Use the lookup and TOOLS definitions from the previous lesson.",
+      "example": "def lookup(item_id):\n    if item_id not in {\"guide\", \"faq\"}:\n        raise ValueError(\"Unknown item\")\n    return {\"id\": item_id, \"text\": \"Owned example\"}\n\nTOOLS = {\"lookup\": lookup}\n\ndef run(script, limit=3):\n    events = []\n    for call in script[:limit]:\n        if call[\"name\"] not in TOOLS:\n            raise ValueError(\"Unknown tool\")\n        events.append(TOOLS[call[\"name\"]](**call[\"arguments\"]))\n    return events\n\ncalls = [{\"name\": \"lookup\", \"arguments\": {\"item_id\": \"guide\"}}]\nassert run(calls) == [{\"id\": \"guide\", \"text\": \"Owned example\"}]",
       "exercise": "Run a scripted successful lookup followed by a final response. Add a repeated-call script and verify it stops at the budget. Make the stop reason part of the output.",
       "completion_check": "Success, invalid call and budget exhaustion produce distinguishable outcomes; no hidden infinite loop remains.",
       "artifact": "A bounded execution loop and trace of its steps.",
@@ -55,7 +58,10 @@
       ],
       "prerequisites": [
         "tool-contract"
-      ]
+      ],
+      "expected_result": "The standalone example records exactly one lookup result. In the full exercise, add distinct final-answer and budget-exhausted stop reasons; a sliced list alone cannot distinguish them.",
+      "common_mistake": "Calling a truncated trace a successful task. Reaching the step budget means the workflow stopped, not that it answered the question.",
+      "reflection": "What state should a repeated-call script return when its budget ends before a final answer?"
     },
     {
       "id": "permissions",
@@ -73,7 +79,10 @@
       ],
       "prerequisites": [
         "loop"
-      ]
+      ],
+      "expected_result": "The example rejects an action absent from approved_ids. In the exercise, bind approval to the exact proposed action and target; use a separate record of applied action IDs.",
+      "common_mistake": "Treating the illustrative action-ID lookup as a complete authorization system, or assuming a timeout proves a write did not happen.",
+      "reflection": "A write times out after dispatch. How can you reconcile its state before considering another attempt?"
     },
     {
       "id": "workflow-eval",
@@ -91,11 +100,14 @@
       ],
       "prerequisites": [
         "permissions"
-      ]
+      ],
+      "expected_result": "The event includes request, step, tool and outcome. Your complete suite should provide one bounded trace per scenario, including failures, plus the final task outcome.",
+      "common_mistake": "Logging full private tool payloads, or treating a successful tool call as proof the complete user task succeeded.",
+      "reflection": "Can another developer explain the failed task using only your trace and test fixture?"
     }
   ],
   "schema_version": 1,
-  "revision": "tool-workflow/1",
+  "revision": "tool-workflow/2",
   "editorial_status": "Draft curriculum; maintainer and learner review pending",
   "assumptions": [
     "10–15 hours weekly is an editable estimate.",

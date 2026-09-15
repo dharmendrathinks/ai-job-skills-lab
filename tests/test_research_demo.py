@@ -8,6 +8,16 @@ from tools.research_demo import generate_demo, NOTICE
 
 
 class DemoTests(unittest.TestCase):
+    def test_first_visit_has_no_selected_path_or_fictional_progress(self):
+        with tempfile.TemporaryDirectory() as directory:
+            paths=generate_demo(directory,started=False)
+            html=Path(paths['workspace.html']).read_text()
+            self.assertNotIn('ACTIVE LEARNING PATH',html)
+            self.assertNotIn('Fictional example:',html)
+            self.assertIn('id="first-visit" open',html)
+            self.assertIn('No progress recorded yet',html)
+            self.assertEqual(html.count('Start the first lesson →'),3)
+
     def test_offline_demo_has_connected_views_without_touching_existing_reports(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

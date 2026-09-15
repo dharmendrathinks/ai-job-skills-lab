@@ -16,6 +16,7 @@ Use Python 3.10+ (the repository virtual environment is suitable):
 
 ```sh
 python3 -m tools.research_demo
+python3 -m tools.research_demo --first-visit
 python3 -m tools.research_decisions curricula
 python3 -m tools.research_decisions curriculum-inspect --curriculum structured-output
 ```
@@ -25,6 +26,21 @@ fictional job evidence, illustrative progress, and an explicitly synthetic trend
 comparison. It opens no Store and makes no model or network calls. The trend
 illustration is not a qualified cohort; it also explains an unavailable scenario.
 The two curriculum inspection commands do not open a private Store either.
+
+The `--first-visit` variant omits the selected path, fictional work and generated
+briefs. It opens the onboarding guide and keeps Skills available independently.
+See the [first-exercise walkthrough](quickstart.md#finish-your-first-exercise-without-an-account).
+
+Each curriculum offers a first-lesson practice kit. For example:
+
+```sh
+python3 -m tools.research_practice --curriculum structured-output --output ../structured-output-practice
+```
+
+This exports only repository-authored starter code, tests, a separate reference
+solution, instructions and a blank work log. It requires a new output directory
+outside the checkout and never overwrites existing work. It does not open a Store,
+run the exported code, call a model, install packages or record progress.
 
 Create an unselected curriculum draft in your normal private research workspace:
 
@@ -98,6 +114,13 @@ Clipboard failure selects the request for keyboard copying. No browser action
 records selection, completion or capability. Deep links open the containing tab
 and disclosures; refresh and Back use the same fragment routing. With JavaScript
 disabled all generated content remains available through native disclosures.
+
+Saved curriculum lessons also provide a **Record this lesson** form. Its inputs
+prepare a named request containing the path, lesson, event and learner's account.
+The request treats that account as self-reported, asks for missing conditions and
+dates, and requires checking completion before saving. The form has no persistent
+storage; copy the request or keep work in the kit's work log before reloading.
+With JavaScript disabled, its generic request still supports a guided conversation.
 
 LearningPath v2 freezes the curriculum, resources, foundation lessons, preferences
 and optional adaptation/evidence references. Existing v1 paths remain readable;

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "revision": "foundations/1",
+  "revision": "foundations/2",
   "lessons": [
     {
       "id": "python-json",
@@ -8,7 +8,7 @@
       "objective": "Separate text, Python values and an application contract.",
       "explanation": "A JSON parser answers whether text has valid syntax. Your application still needs to decide whether the values are useful. Missing information should stay missing instead of acquiring a guessed default.",
       "example": "import json\nrecord = json.loads('{\"task\": \"Review draft\", \"owner\": null}')\nassert isinstance(record[\"task\"], str)\nassert record[\"owner\"] is None",
-      "exercise": "Parse three records: a valid task, malformed JSON and a task with no owner. Give each failure a distinct explanation.",
+      "exercise": "Parse a valid task with an unknown owner, malformed JSON and a syntactically valid object with an empty task. Accept the unknown owner; give the syntax and application-contract failures distinct explanations.",
       "completion_check": "You can distinguish a JSON syntax error from an invalid application record and preserve an unknown owner.",
       "artifact": "Three small records and a parser test.",
       "hours_min": 1,
@@ -16,7 +16,10 @@
       "resources": [
         "json"
       ],
-      "prerequisites": []
+      "prerequisites": [],
+      "expected_result": "The assertions finish without output. An unknown owner is None; malformed JSON raises JSONDecodeError before your application validator runs.",
+      "common_mistake": "Treating a missing owner as a parse failure. A record may be structurally valid while some information remains unknown.",
+      "reflection": "What extra rule would reject a syntactically valid record with an empty task?"
     },
     {
       "id": "testing",
@@ -34,7 +37,10 @@
       ],
       "prerequisites": [
         "python-json"
-      ]
+      ],
+      "expected_result": "Save the example as example.py and run python3 example.py. It reports one passing test. Replace None with a name and rerun to see a failure.",
+      "common_mistake": "Writing a test that only checks the value you just typed instead of calling the behavior you want to verify. This first example demonstrates the test runner; your exercise must call your parser.",
+      "reflection": "If your parser always returned an empty dictionary, which test would fail?"
     },
     {
       "id": "api-boundary",
@@ -52,7 +58,10 @@
       ],
       "prerequisites": [
         "testing"
-      ]
+      ],
+      "expected_result": "The success assertion passes. The timeout fake should raise TimeoutError; test that outcome explicitly before deciding how the caller presents it.",
+      "common_mistake": "Catching every exception and returning an empty record. That makes an integration failure indistinguishable from a successful empty result.",
+      "reflection": "How will a caller distinguish no task found from transport failure?"
     }
   ]
 }

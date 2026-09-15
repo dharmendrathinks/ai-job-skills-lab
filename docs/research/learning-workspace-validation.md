@@ -64,3 +64,31 @@ Before describing the experience as release-polished, inspect the final offline
 demo at desktop, tablet and phone widths; check overflow, focus, deep links and
 clipboard fallback in an actual browser. No learner study, accessibility
 certification or model-adaptation quality review has been performed in this change.
+
+## Follow-up — 2026-09-14
+
+The first-visit demo now starts with no selected path or fictional progress.
+Onboarding links directly to a first lesson and its offline practice kit. All
+15 lessons have expected-result, common-mistake and reflection guidance; each
+worked example was executed as a standalone Python file. The three starter kits
+were exported to temporary directories, their intended initial failures confirmed,
+and their reference solutions run against the same tests. Existing work is not
+overwritten. Exporting opens no research Store and makes no network/model call.
+
+The JavaScript fixture also checks lesson-specific progress requests: empty input
+cannot be copied as a result, a changed account is reflected before copying, the
+request remains self-reported, and reload clears form inputs. No progress event
+is written by these controls. Empty and three-opening sample cases have explicit
+denominator explanations. No new real job analysis was performed.
+
+A separate native Chrome window successfully displayed the revised active-path
+demo. Its desktop screenshot and accessibility tree showed the syllabus, expected
+results, hint, reflection, progress disclosure and next/previous links. After
+attempting device-preview controls, the tool returned only the window title and
+reported screenshots unavailable; reconnecting and resetting the tool did not
+restore inspection. Final first-visit/mobile/tablet/zoom visual acceptance remains
+pending. Do not infer that the automated DOM tests cover those checks.
+
+The [learner acceptance protocol](learner-acceptance.md) supplies six tasks,
+five blank participant records, acceptance targets and a browser checklist. No
+participant sessions or independent maintainer curriculum review were performed.

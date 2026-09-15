@@ -18,7 +18,25 @@ def resource_card(resource, *, optional=False):
     return '<div class="resource"><span class="eyebrow">' + ('GO DEEPER' if optional else 'READ THIS SECTION') + '</span><h4>' + link + '</h4><p><strong>' + e(resource['section']) + '</strong></p><p>' + e(resource['why']) + '</p><p class="meta">Checked ' + e(resource['checked_on']) + ' · ' + e(resource['access']) + '</p></div>'
 
 
-def lesson_view(lessons, resources, prefix, *, current=None, progress=None):
+def progress_request(path_id, lesson):
+    from tools.research_reports import e
+    return ('<details class="handoff progress-request" data-progress-request data-path="' + e(path_id) +
+        '" data-lesson="' + e(lesson['id']) + '" data-title="' + e(lesson['title']) + '">'
+        '<summary>Record this lesson</summary><p>Describe work you actually did. This prepares a request for Codex; '
+        'it does not save progress. These fields clear when the page reloads.</p>'
+        '<label>What happened?<select class="progress-event"><option value="attempt">I tried the exercise</option>'
+        '<option value="failure">I hit a failure</option><option value="test">I ran a test</option>'
+        '<option value="completed">I met the completion check</option></select></label>'
+        '<label>Your result<textarea class="progress-summary" maxlength="3000" placeholder="What did you run? What happened? What remains uncertain?"></textarea></label>'
+        '<button type="button" data-prepare-progress hidden>Prepare request</button>'
+        '<label>Request to review with Codex<textarea readonly class="prepared-request">' +
+        e('Help me record actual work for '+lesson['title']+'. Path reference: '+path_id+'. Lesson: '+lesson['id']+
+          '. Ask what I tried, the actual result, and when it happened. Check the completion criteria before saving.') +
+        '</textarea></label><button type="button" data-copy>Copy request</button>'
+        '<span role="status" aria-live="polite" class="copy-status"></span></details>')
+
+
+def lesson_view(lessons, resources, prefix, *, current=None, progress=None, path_id=None, practice_target=None):
     from tools.research_reports import e
     progress = progress or {}
     nav = '<nav class="syllabus" aria-label="Lesson syllabus"><span class="eyebrow">YOUR SYLLABUS</span><ol>'
@@ -28,13 +46,23 @@ def lesson_view(lessons, resources, prefix, *, current=None, progress=None):
         nav += '<li><a href="#' + e(target) + '">' + e(m['title']) + '</a><small>' + ('Recorded complete' if done else str(m['hours_min']) + '–' + str(m['hours_max']) + ' hours') + '</small></li>'
         panels += '<details class="lesson" data-lesson id="' + e(target) + '"' + (' open' if m['id'] == (current or lessons[0]['id']) else '') + '><summary><span class="eyebrow">LESSON ' + str(i) + ' / ' + str(len(lessons)) + '</span><h3>' + e(m['title']) + '</h3><span class="meta">' + str(m['hours_min']) + '–' + str(m['hours_max']) + ' hours estimated</span></summary><div class="lesson-body"><p class="objective">' + e(m['objective']) + '</p><p>' + e(m['explanation']) + '</p>'
         if m.get('prerequisites'): panels += '<p class="meta">Builds on: ' + e(', '.join(next(l['title'] for l in lessons if l['id'] == pre) for pre in m['prerequisites'])) + '</p>'
-        panels += '<h4>Worked example</h4><pre class="example"><code>' + e(m['example']) + '</code></pre><h4>Try it yourself</h4><p>' + e(m['exercise']) + '</p>'
+        if i == 1 and practice_target:
+            panels += '<p><a href="#'+e(practice_target)+'">Get starter code and tests for this exercise →</a></p>'
+        panels += '<h4>Worked example</h4><p class="meta">Save as example.py and run <code>python3 example.py</code>. Python 3.10+; no extra packages.</p><pre class="example"><code>' + e(m['example']) + '</code></pre>'
+        if m.get('expected_result'): panels += '<div class="expected-result"><h4>What you should see</h4><p>'+e(m['expected_result'])+'</p></div>'
+        panels += '<h4>Try it yourself</h4><p>' + e(m['exercise']) + '</p>'
+        if m.get('common_mistake'): panels += '<details class="lesson-hint"><summary>Stuck? Check this common mistake</summary><p>'+e(m['common_mistake'])+'</p></details>'
         panels += ''.join(resource_card(resources[r], optional=j > 0) for j,r in enumerate(m['resources']))
         panels += '<div class="completion-check"><h4>Ready to move on when…</h4><p>' + e(m['completion_check']) + '</p><p><strong>You’ll have:</strong> ' + e(m['artifact']) + '</p></div>'
         if progress.get(m['id']):
             event = progress[m['id']]
             panels += '<p class="notice">Recorded ' + e(event['event']) + ' · ' + e(event['basis']) + ': ' + e(event['summary']) + '</p>'
-        panels += '</div></details>'
+        if m.get('reflection'): panels += '<h4>Explain it back</h4><p>'+e(m['reflection'])+'</p>'
+        if path_id: panels += progress_request(path_id, m)
+        panels += '<nav class="lesson-navigation" aria-label="Lesson navigation">'
+        if i > 1: panels += '<a href="#'+e(prefix+'-'+lessons[i-2]['id'])+'">← Previous lesson</a>'
+        if i < len(lessons): panels += '<a href="#'+e(prefix+'-'+lessons[i]['id'])+'">Next: '+e(lessons[i]['title'])+' →</a>'
+        panels += '</nav></div></details>'
     return '<div class="lesson-layout">' + nav + '</ol></nav><div class="lessons">' + panels + '</div></div>'
 
 
@@ -46,7 +74,13 @@ def curriculum_card(path, resources):
         '<div class="eyebrow">CURATED PATH · ' + e(path['level']) + '</div><h2>' + e(path['title']) + '</h2><p class="lead">' + e(path['summary']) + '</p>'
         '<div class="chips">' + chip(str(len(path['lessons'])) + ' lessons') + chip(str(hours[0]) + '–' + str(hours[1]) + ' hours estimated', 'blue') + '</div>'
         '<p><strong>You’ll build:</strong> ' + e(path['outcome']) + '</p><p class="meta">' + e(' '.join(path['prerequisites'])) + '</p>'
-        '<details class="curriculum-body"><summary>Explore the syllabus and lessons</summary>' + lesson_view(path['lessons'], resources, identity) + '</details>'
+        '<p class="path-actions"><a class="primary-action" href="#'+identity+'-'+path['lessons'][0]['id']+'">Start the first lesson →</a></p>'
+        '<details class="practice-kit" id="practice-'+path['id']+'"><summary>Get the offline practice kit</summary><p>From the repository root, run:</p>'
+        '<pre><code>python3 -m tools.research_practice --curriculum '+path['id']+' --output ../'+path['id']+'-practice</code></pre>'
+        '<p>Open README.md in the new folder. You’ll get starter code, tests, a separate reference solution and a work log. '
+        'The first test run deliberately fails until you implement the function. Use a different output folder if it already exists.</p>'
+        '<p class="meta">First-lesson practice · Python 3.10+ · no account, model or packages. Running the kit does not record completion.</p></details>'
+        '<details class="curriculum-body"><summary>Explore the syllabus and lessons</summary>' + lesson_view(path['lessons'], resources, identity, practice_target='practice-'+path['id']) + '</details>'
         + handoff('Propose a learning path from the '+path['title']+' curriculum ('+path['id']+'). Use research_decisions path-propose --curriculum '+path['id']+'. Ask about my goals and available time before adapting it. Do not select it or record progress until I choose.', 'Plan this learning path with Codex')
         + '<p class="meta">' + e(path['editorial_status']) + ' · Resource links require internet; lessons and examples read offline.</p></article>')
 
@@ -63,8 +97,27 @@ def introductions(snapshot, book, active=False):
         start = roadmap.index('<div class="section-heading">')
         end = roadmap.index('</div>',start)+6
         roadmap = roadmap[:start]+roadmap[end:]
+    start = ('<details class="first-visit" id="first-visit"'+('' if active else ' open')+'><summary>New here? Start with one small exercise</summary>'
+        '<ol class="getting-started"><li><strong>Choose a starting point.</strong> New to applied AI? '
+        '<a href="#curriculum-structured-output-schema">Validate a useful record</a>. Already comfortable with records? '
+        '<a href="#curriculum-document-assistant-documents">Prepare documents for citations</a> or '
+        '<a href="#curriculum-tool-workflow-tool-contract">validate a tool call</a>.</li>'
+        '<li><strong>Try it locally.</strong> Open the path’s offline practice kit. Implement its first function, run the tests and inspect the reference after your attempt.</li>'
+        '<li><strong>Keep what you learned.</strong> Write the actual result in the kit’s work log. To track an ongoing path here, use Plan this learning path with Codex, choose it, then record your work and regenerate.</li></ol>'
+        '<p>Learning does not require Codex or job data. You can also <a href="#tab-skill">browse Skills independently</a>. '
+        'The report itself does not save selections or completed work.</p></details>')
+    roadmap = roadmap.replace('</section>', start+'</section>')
     counts = snapshot['counts']; known = sum(s['normalization'] != 'unresolved' for s in snapshot.get('skills', {}).values())
-    skills = '<section class="workspace-intro" data-tab-section="skill"><div class="section-heading"><span class="eyebrow">THE SKILL EXPLORER</span><h2>What are teams asking for?</h2><p>Explore skills independently of a learning path. Follow a count back to the captured job requirements.</p></div><p class="coverage-line"><strong>' + str(known) + ' catalog skills</strong> · ' + str(len(snapshot.get('skills', {})) - known) + ' source terms awaiting review · ' + str(counts.get('in_domain_denominator',0)) + ' analysed AI openings</p><div class="skill-toolbar"><label>View<select id="skill-view"><option value="browse">Browse skills</option><option value="trends">Trends</option><option value="terms">Observed terms</option></select></label><label>Sort<select id="skill-sort"><option value="grouped">Topic, then frequency</option><option value="frequency">Frequency across topics</option><option value="alphabetical">Name A–Z</option></select></label></div><p class="meta" id="skill-view-help">Counts describe this analysed sample. Learning topics are editorial navigation.</p></section>'
+    skills = '<section class="workspace-intro" data-tab-section="skill"><div class="section-heading"><span class="eyebrow">THE SKILL EXPLORER</span><h2>Skills in this captured sample</h2><p>Explore skills independently of a learning path. Follow a count back to the captured job requirements.</p></div><p class="coverage-line"><strong>' + str(known) + ' catalog skills</strong> · ' + str(len(snapshot.get('skills', {})) - known) + ' source terms awaiting review · ' + str(counts.get('in_domain_denominator',0)) + ' analysed AI openings</p><div class="skill-toolbar"><label>View<select id="skill-view"><option value="browse">Browse skills</option><option value="trends">Trends</option><option value="terms">Observed terms</option></select></label><label>Sort<select id="skill-sort"><option value="grouped">Topic, then frequency</option><option value="frequency">Frequency across topics</option><option value="alphabetical">Name A–Z</option></select></label></div><p class="meta" id="skill-view-help">Counts describe this analysed sample. Learning topics are editorial navigation.</p></section>'
+    denominator = counts.get('in_domain_denominator', 0)
+    coverage = ('<details class="sample-context" open><summary>Read these counts in context</summary>'
+        '<p><strong>'+str(denominator)+' analysed AI openings</strong> contribute to these skill counts. '
+        + ('There are no analysed AI openings in this window yet.' if not denominator else
+           'One opening changes a skill’s observed share by about '+format(100/denominator,'.1f')+' percentage points.')+
+        '</p><p>'+str(counts.get('pending_or_legacy_openings',0))+' openings still lack detailed skill analysis. '
+        'Unreviewed source terms are listed separately. Neither a frequent skill nor a larger sample establishes the right next lesson for you.</p>'
+        '<p>Use Browse skills to inspect this sample. Use Trends for comparisons that passed the separate collection and analysis checks.</p></details>')
+    skills = skills.replace('<div class="skill-toolbar">',coverage+'<div class="skill-toolbar">')
     return roadmap + skills
 
 
@@ -151,7 +204,7 @@ def cards(state, now, limit, *, days=30, basis='capture', brief_ids=None):
             adaptation = row['adaptation']
             card += '<details><summary>Adapted to your goals · review pending</summary><p>'+e(adaptation['project_context'])+'</p><ul>'+''.join('<li>'+e(item['emphasis'])+'</li>' for item in adaptation['lesson_emphasis'])+'</ul></details>'
         if row.get('curriculum'):
-            card += lesson_view(row['curriculum']['lessons'], row['resource_library'], 'path-'+key, current=next_step['id'] if next_step else None, progress=by_milestone)
+            card += lesson_view(row['curriculum']['lessons'], row['resource_library'], 'path-'+key, current=next_step['id'] if next_step else None, progress=by_milestone, path_id=key)
         else:
             for index,m in enumerate(p['milestones'],1):
                 card += '<details class="lesson" data-lesson id="path-' + key + '-' + e(m['id']) + '"' + (' open' if next_step and next_step['id'] == m['id'] else '') + '><summary><span class="eyebrow">MILESTONE ' + str(index) + '</span><h3>' + e(m['title']) + '</h3><span class="meta">' + str(m['hours_min']) + '–' + str(m['hours_max']) + ' hours</span></summary><div class="lesson-body"><p class="objective">' + e(m['understand']) + '</p><h4>Build</h4><p>' + e(m['implement']) + '</p><div class="completion-check"><h4>Check yourself</h4><p>' + e(m['self_check']) + '</p><p><strong>You’ll have:</strong> ' + e(m['artifact']) + '</p></div><h4>Test and compare</h4><p>' + e(m['tests']) + '</p>'

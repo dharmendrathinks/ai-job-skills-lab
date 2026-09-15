@@ -34,6 +34,8 @@ quality acceptance and several activation gates remain open. Start with the
 
 ## Learn, build and teach
 
+Start with the [first-exercise walkthrough](docs/research/quickstart.md#finish-your-first-exercise-without-an-account): generate a first-visit demo, export an offline practice kit, and run its tests using only Python. No Codex session or research data is needed to start learning.
+
 The [learning delivery plan](PLAN_LEARN_BUILD_TEACH.md) connects specific skills
 from job descriptions to one practical learning effort and its teaching experiment.
 Use the [learning operations guide](docs/research/learning-operations.md) for bounded

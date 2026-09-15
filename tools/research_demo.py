@@ -17,7 +17,7 @@ from tools.research_reports import render
 NOTICE = 'SYNTHETIC OFFLINE DEMO — fictional jobs and author-written drafts; no model inference, market demand or completed work.'
 
 
-def demo_state(now):
+def demo_state(now, *, started=True):
     from tools.research_curricula import curriculum_payload
     from tools.research_skills import catalog, history_payload
     state = {'schema_version':1,'artifacts':{},'withdrawn':[]}
@@ -54,6 +54,8 @@ def demo_state(now):
             labels=normalize_output(output,observation,description,now)
             put('analysis',{**labels,'ai_domain':'in-domain','method':'synthetic-fixture','reviewer':'Author-written synthetic example'},[observation])
     skills,deps=skill_payload(state,now);sid=put('skill-snapshot',skills,deps)
+    if not started:
+        return state  # first visit: no selected path, recorded work or generated briefs
     market,deps=aggregate(state);mid=put('snapshot',market,deps)
     payload=curriculum_payload('structured-output',snapshot_id=sid,snapshot=skills)
     payload.update(created_at=now.isoformat(),status='synthetic-example',market_snapshot=mid)
@@ -93,14 +95,14 @@ def demo_state(now):
     return state
 
 
-def generate_demo(reports_root=None):
+def generate_demo(reports_root=None, *, started=True):
     # A fresh output directory prevents touching live reports or replaying a store.
     root = Path(reports_root) if reports_root is not None else ROOT / 'reports'
     if root.is_symlink(): raise ValueError('demo output root must not be a symlink')
     root.mkdir(mode=0o700, parents=True, exist_ok=True)
     target = Path(tempfile.mkdtemp(prefix='demo-', dir=root))
     now = datetime.now(timezone.utc)
-    pages, _, _ = render(demo_state(now), now.isoformat(), 1000)
+    pages, _, _ = render(demo_state(now, started=started), now.isoformat(), 1000)
     for name, html in pages.items():
         path = target / name
         with path.open('x', encoding='utf-8') as output:
@@ -110,5 +112,9 @@ def generate_demo(reports_root=None):
 
 
 if __name__ == '__main__':
+    import argparse
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--first-visit',action='store_true',help='start without a selected path or fictional progress')
+    args=parser.parse_args()
     print(NOTICE)
-    print(json.dumps(generate_demo(), indent=2))
+    print(json.dumps(generate_demo(started=not args.first_visit), indent=2))

@@ -123,8 +123,33 @@
     const siblings = lesson.parentElement.querySelectorAll(':scope > [data-lesson]');
     siblings.forEach(other => { if (other !== lesson) other.open = false; });
   }));
+  function prepareProgress(container) {
+    const summary = container.querySelector('.progress-summary').value.trim();
+    const status = container.querySelector('.copy-status');
+    if (!summary) {
+      status.textContent = 'Describe what you tried and the actual result first.';
+      container.querySelector('.progress-summary').focus();
+      return false;
+    }
+    const event = container.querySelector('.progress-event').value;
+    container.querySelector('.prepared-request').value =
+      `Help me record ${event} for ${container.dataset.title}.\n` +
+      `Path reference: ${container.dataset.path}\nLesson: ${container.dataset.lesson}\n` +
+      `My account of the work:\n${summary}\n\n` +
+      'Treat this account as self-reported unless you inspect reproduced evidence. Ask when it happened and clarify missing conditions. ' +
+      'For completion, compare the actual result with the lesson completion check. Review the current record before saving, then regenerate the workspace report. ' +
+      'Do not infer mastery or change my profile.';
+    status.textContent = 'Request prepared. Review it, then copy it to Codex. Progress is not saved here.';
+    return true;
+  }
+  all('[data-prepare-progress]').forEach(button => {
+    button.hidden = false;
+    button.addEventListener('click', () => prepareProgress(button.closest('.handoff')));
+  });
   all('[data-copy]').forEach(button => button.addEventListener('click', async () => {
-    const container = button.closest('.handoff'); const field = container.querySelector('textarea');
+    const container = button.closest('.handoff');
+    if (container.hasAttribute('data-progress-request') && !prepareProgress(container)) return;
+    const field = container.querySelector('.prepared-request') || container.querySelector('textarea');
     const status = container.querySelector('.copy-status');
     try {
       if (typeof navigator === 'undefined' || !navigator.clipboard?.writeText) throw new Error('Clipboard unavailable');
